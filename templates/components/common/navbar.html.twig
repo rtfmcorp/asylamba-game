@@ -1,224 +1,226 @@
-<div id="nav">
-	<div class="box left">
-		<a href="#" class="square sh" data-target="change-bases">
-			<img src="{{ asset('media/common/nav-base.png') }}" alt="" />
-		</a>
-		<a href="{{ path('bases') }}" class="current-base {% if app.request.get('_route') == 'bases' %}active{% endif %}">
-			<img src="{{ asset('media/map/place/place' ~ current_base_image ~ '.png') }}" alt="{{ current_base_name }}" />
-			{{ current_base_name }}
-		</a>
-		<a href="{{ path('switchbase', {'baseId': next_base_id}) }}" class="square">
-			<img src="{{ asset('media/common/next-base.png') }}" alt="base suivante" />
-		</a>
-	</div>
-
-	<div class="box left-2">
-		<a href="{{ path('profile') }}" class="square hb rb {% if app.request.get('_route') == 'profile' %}active{% endif %}" title="profil">
-			<img src="{{ asset('media/common/nav-profil.png') }}" alt="" />
-		</a>
-		<a href="{{ path('fleet') }}" class="square hb rb {% if app.request.get('_route') == 'fleet' %}active{% endif %}" title="amirauté">
-			<img src="{{ asset('media/common/nav-fleet.png') }}" alt="" />
-		</a>
-		<a href="{{ path('map') }}" class="square hb rb {% if app.request.get('_route') == 'map' %}active{% endif %}" title="galaxie">
-			<img src="{{ asset('media/common/nav-map.png') }}" alt="" />
-		</a>
-		<a href="{{ path('financial') }}" class="square hb rb {% if app.request.get('_route') == 'financial' %}active{% endif %}" title="finances">
-			<img src="{{ asset('media/common/nav-financial.png') }}" alt="" />
-		</a>
-		<a href="{{ path('technology') }}" class="square hb rb {% if app.request.get('_route') == 'technology' %}active{% endif %}" title="université">
-			<img src="{{ asset('media/common/nav-techno.png') }}" alt="" />
-		</a>
-		<a href="{{ path('faction') }}" class="square hb rb {% if app.request.get('_route') == 'faction' %}active{% endif %}" title="faction">
-			<img src="{{ asset('media/common/nav-faction.png') }}" alt="" />
-		</a>
-	</div>
-
-	<div class="box left-3">
-		<a href="{{ path('rank') }}" class="square hb rb {% if app.request.get('_route') == 'rank' %}active{% endif %}" title="classements">
-			<img src="{{ asset('media/common/nav-rank.png') }}" alt="" />
-		</a>
-		<a href="{{ path('embassy') }}" class="square hb rb {% if app.request.get('_route') == 'embassy' %}active{% endif %}" title="ambassades">
-			<img src="{{ asset('media/common/nav-embassy.png') }}" alt="" />
-		</a>
-		<a href="{{ path('list_conversations') }}" class="square hb rb {% if app.request.get('_route') == 'list_conversations' %}active{% endif %}" title="messagerie">
-			<img src="{{ asset('media/common/nav-message.png') }}" alt="" />
-			{% if conversations_count > 0 %}
-				<span class="number">{{ conversations_count }}</span>
-			{% endif %}
-		</a>
-
-		<a href="{{ path('list_conversations') }}" id="general-notif-container" class="square sh" data-target="new-notifications">
-			<img src="{{ asset('media/common/nav-notif.png') }}" alt="" />
-			{% if current_player_notifications|length > 0 %}
-				<span class="number">{{ current_player_notifications|length }}</span>;
-			{% endif %}
-		</a>
-	</div>
-
-	<div class="box right">
-		{% if true == app.session.get('admin') %}
-			<a href="{{ path('admin') }}" class="square {% if app.request.get('_route') == 'admin' %}active{% endif %}">
-				<img src="{{ asset('media/common/tool-admin.png') }}" alt="" />
+{% apply spaceless %}
+	<div id="nav">
+		<div class="box left">
+			<a href="#" class="square sh" data-target="change-bases">
+				<img src="{{ asset('media/common/nav-base.png') }}" alt="" />
 			</a>
-		{% endif %}
-
-		{# old logic : ((bool)$request->cookies->get('p' . Params::REDIRECT_CHAT, Params::$params[Params::REDIRECT_CHAT]) #}
-		<a href="https://discordapp.com/channels/132106417703354378/132106417703354378" target="_blank" class="square">
-			<img src="{{ asset('media/common/nav-chat.png') }}" alt="" />
-		</a>
-
-		{% if app.session.get('playerInfo').get('stepTutorial') > 0 %}
-			<a href="#" class="hide-slpash square sh {% if app.session.get('playerInfo').get('stepDone') %}active flashy{% endif %}" data-target="tutorial">
-				<img src="{{ asset('media/common/tool-star.png') }}" alt="tutoriel" />
-				<span class="number">{{ app.session.get('playerInfo').get('stepTutorial') }}</span>
+			<a href="{{ path('bases') }}" class="current-base {% if app.request.get('_route') == 'bases' %}active{% endif %}">
+				<img src="{{ asset('media/map/place/place' ~ current_base_image ~ '.png') }}" alt="{{ current_base_name }}" />
+				{{ current_base_name }}
 			</a>
-		{% endif %}
-		<a href="#" class="square sh" data-target="bug-tracker">
-			<img src="{{ asset('media/common/tool-bugtracker.png') }}" alt="" />
-		</a>
-
-		<a href="{{ path('params') }}" class="square hb lb {% if app.request.get('_route') == 'params' %}active{% endif %}" title="paramètres">
-			<img src="{{ asset('media/common/tool-param.png') }}" alt="" />
-		</a>
-
-		<a href="#" class="square sh" data-target="disconnect-box"><img src="{{ asset('media/common/tool-exit.png') }}" alt="" /></a>
+			<a href="{{ path('switchbase', {'baseId': next_base_id}) }}" class="square">
+				<img src="{{ asset('media/common/next-base.png') }}" alt="base suivante" />
+			</a>
 		</div>
 
-	{# Display OVERBOX NAV #}
-
-	{# Changement de base #}
-	{% set orbital_bases = app.session.get('playerBase').get('ob') %}
-	<div class="overbox" id="change-bases">
-		<h2>Changer de bases</h2>
-		<div class="overflow">
-			{% for i in range(0, orbital_bases.size() - 1) %}
-				{% set orbital_base = orbital_bases.get(i) %}
-				<a href="{{ path('switchbase', {'baseId': orbital_base.get('id')}) }}"
-				   {% if orbital_base.get('id') == app.session.get('playerParams').get('base') %}class="active"{% endif %}>
-					<em>{{ orbital_base.get('type')|scalar_base_type }}</em>
-					<strong>{{ orbital_base.get('name') }}</strong>
-				</a>
-			{% endfor %}
-			</div>
+		<div class="box left-2">
+			<a href="{{ path('profile') }}" class="square hb rb {% if app.request.get('_route') == 'profile' %}active{% endif %}" title="profil">
+				<img src="{{ asset('media/common/nav-profil.png') }}" alt="" />
+			</a>
+			<a href="{{ path('fleet') }}" class="square hb rb {% if app.request.get('_route') == 'fleet' %}active{% endif %}" title="amirauté">
+				<img src="{{ asset('media/common/nav-fleet.png') }}" alt="" />
+			</a>
+			<a href="{{ path('map') }}" class="square hb rb {% if app.request.get('_route') == 'map' %}active{% endif %}" title="galaxie">
+				<img src="{{ asset('media/common/nav-map.png') }}" alt="" />
+			</a>
+			<a href="{{ path('financial') }}" class="square hb rb {% if app.request.get('_route') == 'financial' %}active{% endif %}" title="finances">
+				<img src="{{ asset('media/common/nav-financial.png') }}" alt="" />
+			</a>
+			<a href="{{ path('technology') }}" class="square hb rb {% if app.request.get('_route') == 'technology' %}active{% endif %}" title="université">
+				<img src="{{ asset('media/common/nav-techno.png') }}" alt="" />
+			</a>
+			<a href="{{ path('faction') }}" class="square hb rb {% if app.request.get('_route') == 'faction' %}active{% endif %}" title="faction">
+				<img src="{{ asset('media/common/nav-faction.png') }}" alt="" />
+			</a>
 		</div>
 
-	{# Notification #}
-	<div class="overbox" id="new-notifications">
-		<h2>Notifications</h2>
-		{% if current_player_notifications|length > 1 %}
-			<a class="link-title" href="{{ path('read_all_notifications') }}">tout marquer comme lu</a>
-		{% endif %}
-		<div class="overflow">
-			{% if current_player_notifications|length > 0 %}
-				{% for notification in current_player_notifications %}
-				<div class="notif unreaded" data-notif-id="{{ notification.id }}">
-					<h4 class="read-notif switch-class-parent" data-class="open">{{ notification.title }}</h4>
-					<div class="content">{{ notification.content }}</div>
-					<div class="footer">
-						<a class="ajax-action" data-ajax-target="{{ path('archive_notification', {'id': notification.id }) }}">archiver</a> ou
-						<a class="ajax-action" data-ajax-target="{{ path('delete_notification', {'id': notification.id }) }}">supprimer</a><br />
-						— {{ notification.dSending|date }}
-						</div>
-					</div>
-				{% endfor %}
-			{% else %}
-				<p class="info">Aucune nouvelle notification.</p>
-			{% endif %}
-			</div>
-		<a href="{{ path('list_conversations') }}" class="more-link">toutes vos notifications</a>
-		</div>
-
-	{# ROADMAP #}
-	{#
-	$S_RMM_1 = $roadmapManager->getCurrentSession();
-	$roadmapManager->newSession();
-	$roadmapManager->load(array('statement' => RoadMap::DISPLAYED), array('dCreation', 'DESC'), array(0, 10));
-
-	<div class="overbox" id="roadmap">
-		<h2>Dernières mises à jour effectuées</h2>
-		<div class="overflow">
-			for ($i = 0; $i < $roadmapManager->size(); $i++) {
-			echo ($i > 0) ? '<hr />' : NULL;
-			<p>
-				<em>' . $roadmapManager->get($i)->dCreation. '</em>
-				echo $roadmapManager->get($i)->pContent;
-				</p>
-			}
-			</div>
-		</div>
-
-	$roadmapManager->changeSession($S_RMM_1);
-	#}
-
-	{# TUTORIAL #}
-	{% set tutorial_step = app.session.get('playerInfo').get('stepTutorial') %}
-
-	{% if tutorial_step > 0 %}
-		<div class="overbox" id="tutorial">
-			<h2>Tutoriel</h2>
-
-			<div class="overflow">
-				<h3>
-					<span class="number">
-						{{ tutorial_step }}
-					</span>
-					{{ tutorial_info(tutorial_step, 'title') }}
-				</h3>
-				<p>{{ tutorial_info(tutorial_step, 'description') }}</p>
-
-				<p>
-					Récompense :<br />
-					{% set credit_reward = tutorial_info(tutorial_step, 'creditReward') %}
-					{% set resource_reward = tutorial_info(tutorial_step, 'resourceReward') %}
-					{% set ship_reward = tutorial_info(tutorial_step, 'shipReward') %}
-
-					{% if credit_reward > 0 %}
-						&nbsp;&nbsp;&nbsp;- {{ credit_reward }} crédits<br />
-					{% endif %}
-
-					{% if resource_reward > 0 %}
-						&nbsp;&nbsp;&nbsp;- {{ resource_reward }} ressources<br />
-					{% endif %}
-
-					{% for key in ship_reward|keys %}
-						{% set value = ship_reward[key] %}
-						{% if value > 0 %}
-							&nbsp;&nbsp;&nbsp;- {{ value }} {{ ship_name(key) }}{{ value|plural }}<br />
-						{% endif %}
-					{% endfor %}
-				</p>
-			</div>
-
-			<form action="{{ path('tutorial_validatestep') }}" method="post">
-				{% if true == app.session.get('playerInfo').get('stepDone') %}
-					<input class="outside-button" type="submit" value="valider l\'étape {{ tutorial_step }}" />
-				{% else %}
-					<input class="outside-button disabled" type="submit" value="étape en cours" disabled />
+		<div class="box left-3">
+			<a href="{{ path('rank') }}" class="square hb rb {% if app.request.get('_route') == 'rank' %}active{% endif %}" title="classements">
+				<img src="{{ asset('media/common/nav-rank.png') }}" alt="" />
+			</a>
+			<a href="{{ path('embassy') }}" class="square hb rb {% if app.request.get('_route') == 'embassy' %}active{% endif %}" title="ambassades">
+				<img src="{{ asset('media/common/nav-embassy.png') }}" alt="" />
+			</a>
+			<a href="{{ path('list_conversations') }}" class="square hb rb {% if app.request.get('_route') == 'list_conversations' %}active{% endif %}" title="messagerie">
+				<img src="{{ asset('media/common/nav-message.png') }}" alt="" />
+				{% if conversations_count > 0 %}
+					<span class="number">{{ conversations_count }}</span>
 				{% endif %}
-			</form>
+			</a>
+
+			<a href="{{ path('list_conversations') }}" id="general-notif-container" class="square sh" data-target="new-notifications">
+				<img src="{{ asset('media/common/nav-notif.png') }}" alt="" />
+				{% if current_player_notifications|length > 0 %}
+					<span class="number">{{ current_player_notifications|length }}</span>;
+				{% endif %}
+			</a>
 		</div>
-	{% endif %}
 
-	<div class="overbox" id="bug-tracker">
-		<h2>Bug tracker</h2>
-		<p>Si vous trouvez des bugs ou avez des idées d\'améliorations, nous vous invitons à les poster sur le forum principal.</p>
-		<a class="outside-button" href="#" target="_blank">Reporter un bug</a>
-		<a class="outside-button" href="#" target="_blank">Proposer une amélioration</a>
-		<p>Pour les bugs que vous pensez critiques, vous pouvez envoyer un email directement à support@asylamba.com.</p>
-		<a class="outside-button" href="mailto:support@asylamba.com">Envoyer un email</a>
-	</div>
+		<div class="box right">
+			{% if true == app.session.get('admin') %}
+				<a href="{{ path('admin') }}" class="square {% if app.request.get('_route') == 'admin' %}active{% endif %}">
+					<img src="{{ asset('media/common/tool-admin.png') }}" alt="" />
+				</a>
+			{% endif %}
 
-	<div class="overbox" id="disconnect-box">
-		<a href="{{ path('logout') }}">Se déconnecter</a>
-		<hr />
-		<a href="#" class="sh" data-target="roadmap">Dernières mises à jour</a>
-		<a href="{{ path('sponsorship') }}">Parrainage</a>
-		<hr />
-		<a target="_blank" href="#">Discuter sur le forum</a>
-		<a target="_blank" href="#">Consulter le wiki</a>
-		<hr />
-		<a target="_blank" href="#">Rejoindre la page Facebook</a>
-		<a target="_blank" href="#">Nous suivre sur Google+</a>
-		<a target="_blank" href="#">Nous suivre sur Twitter</a>
+			{# old logic : ((bool)$request->cookies->get('p' . Params::REDIRECT_CHAT, Params::$params[Params::REDIRECT_CHAT]) #}
+			<a href="https://discordapp.com/channels/132106417703354378/132106417703354378" target="_blank" class="square">
+				<img src="{{ asset('media/common/nav-chat.png') }}" alt="" />
+			</a>
+
+			{% if app.session.get('playerInfo').get('stepTutorial') > 0 %}
+				<a href="#" class="hide-slpash square sh {% if app.session.get('playerInfo').get('stepDone') %}active flashy{% endif %}" data-target="tutorial">
+					<img src="{{ asset('media/common/tool-star.png') }}" alt="tutoriel" />
+					<span class="number">{{ app.session.get('playerInfo').get('stepTutorial') }}</span>
+				</a>
+			{% endif %}
+			<a href="#" class="square sh" data-target="bug-tracker">
+				<img src="{{ asset('media/common/tool-bugtracker.png') }}" alt="" />
+			</a>
+
+			<a href="{{ path('params') }}" class="square hb lb {% if app.request.get('_route') == 'params' %}active{% endif %}" title="paramètres">
+				<img src="{{ asset('media/common/tool-param.png') }}" alt="" />
+			</a>
+
+			<a href="#" class="square sh" data-target="disconnect-box"><img src="{{ asset('media/common/tool-exit.png') }}" alt="" /></a>
+			</div>
+
+		{# Display OVERBOX NAV #}
+
+		{# Changement de base #}
+		{% set orbital_bases = app.session.get('playerBase').get('ob') %}
+		<div class="overbox" id="change-bases">
+			<h2>Changer de bases</h2>
+			<div class="overflow">
+				{% for i in range(0, orbital_bases.size() - 1) %}
+					{% set orbital_base = orbital_bases.get(i) %}
+					<a href="{{ path('switchbase', {'baseId': orbital_base.get('id')}) }}"
+					   {% if orbital_base.get('id') == app.session.get('playerParams').get('base') %}class="active"{% endif %}>
+						<em>{{ orbital_base.get('type')|scalar_base_type }}</em>
+						<strong>{{ orbital_base.get('name') }}</strong>
+					</a>
+				{% endfor %}
+				</div>
+			</div>
+
+		{# Notification #}
+		<div class="overbox" id="new-notifications">
+			<h2>Notifications</h2>
+			{% if current_player_notifications|length > 1 %}
+				<a class="link-title" href="{{ path('read_all_notifications') }}">tout marquer comme lu</a>
+			{% endif %}
+			<div class="overflow">
+				{% if current_player_notifications|length > 0 %}
+					{% for notification in current_player_notifications %}
+					<div class="notif unreaded" data-notif-id="{{ notification.id }}">
+						<h4 class="read-notif switch-class-parent" data-class="open">{{ notification.title }}</h4>
+						<div class="content">{{ notification.content }}</div>
+						<div class="footer">
+							<a class="ajax-action" data-ajax-target="{{ path('archive_notification', {'id': notification.id }) }}">archiver</a> ou
+							<a class="ajax-action" data-ajax-target="{{ path('delete_notification', {'id': notification.id }) }}">supprimer</a><br />
+							— {{ notification.dSending|date }}
+							</div>
+						</div>
+					{% endfor %}
+				{% else %}
+					<p class="info">Aucune nouvelle notification.</p>
+				{% endif %}
+				</div>
+			<a href="{{ path('list_conversations') }}" class="more-link">toutes vos notifications</a>
+			</div>
+
+		{# ROADMAP #}
+		{#
+		$S_RMM_1 = $roadmapManager->getCurrentSession();
+		$roadmapManager->newSession();
+		$roadmapManager->load(array('statement' => RoadMap::DISPLAYED), array('dCreation', 'DESC'), array(0, 10));
+
+		<div class="overbox" id="roadmap">
+			<h2>Dernières mises à jour effectuées</h2>
+			<div class="overflow">
+				for ($i = 0; $i < $roadmapManager->size(); $i++) {
+				echo ($i > 0) ? '<hr />' : NULL;
+				<p>
+					<em>' . $roadmapManager->get($i)->dCreation. '</em>
+					echo $roadmapManager->get($i)->pContent;
+					</p>
+				}
+				</div>
+			</div>
+
+		$roadmapManager->changeSession($S_RMM_1);
+		#}
+
+		{# TUTORIAL #}
+		{% set tutorial_step = app.session.get('playerInfo').get('stepTutorial') %}
+
+		{% if tutorial_step > 0 %}
+			<div class="overbox" id="tutorial">
+				<h2>Tutoriel</h2>
+
+				<div class="overflow">
+					<h3>
+						<span class="number">
+							{{ tutorial_step }}
+						</span>
+						{{ tutorial_info(tutorial_step, 'title') }}
+					</h3>
+					<p>{{ tutorial_info(tutorial_step, 'description') }}</p>
+
+					<p>
+						Récompense :<br />
+						{% set credit_reward = tutorial_info(tutorial_step, 'creditReward') %}
+						{% set resource_reward = tutorial_info(tutorial_step, 'resourceReward') %}
+						{% set ship_reward = tutorial_info(tutorial_step, 'shipReward') %}
+
+						{% if credit_reward > 0 %}
+							&nbsp;&nbsp;&nbsp;- {{ credit_reward }} crédits<br />
+						{% endif %}
+
+						{% if resource_reward > 0 %}
+							&nbsp;&nbsp;&nbsp;- {{ resource_reward }} ressources<br />
+						{% endif %}
+
+						{% for key in ship_reward|keys %}
+							{% set value = ship_reward[key] %}
+							{% if value > 0 %}
+								&nbsp;&nbsp;&nbsp;- {{ value }} {{ ship_name(key) }}{{ value|plural }}<br />
+							{% endif %}
+						{% endfor %}
+					</p>
+				</div>
+
+				<form action="{{ path('tutorial_validatestep') }}" method="post">
+					{% if true == app.session.get('playerInfo').get('stepDone') %}
+						<input class="outside-button" type="submit" value="valider l\'étape {{ tutorial_step }}" />
+					{% else %}
+						<input class="outside-button disabled" type="submit" value="étape en cours" disabled />
+					{% endif %}
+				</form>
+			</div>
+		{% endif %}
+
+		<div class="overbox" id="bug-tracker">
+			<h2>Bug tracker</h2>
+			<p>Si vous trouvez des bugs ou avez des idées d\'améliorations, nous vous invitons à les poster sur le forum principal.</p>
+			<a class="outside-button" href="#" target="_blank">Reporter un bug</a>
+			<a class="outside-button" href="#" target="_blank">Proposer une amélioration</a>
+			<p>Pour les bugs que vous pensez critiques, vous pouvez envoyer un email directement à support@asylamba.com.</p>
+			<a class="outside-button" href="mailto:support@asylamba.com">Envoyer un email</a>
+		</div>
+
+		<div class="overbox" id="disconnect-box">
+			<a href="{{ path('logout') }}">Se déconnecter</a>
+			<hr />
+			<a href="#" class="sh" data-target="roadmap">Dernières mises à jour</a>
+			<a href="{{ path('sponsorship') }}">Parrainage</a>
+			<hr />
+			<a target="_blank" href="#">Discuter sur le forum</a>
+			<a target="_blank" href="#">Consulter le wiki</a>
+			<hr />
+			<a target="_blank" href="#">Rejoindre la page Facebook</a>
+			<a target="_blank" href="#">Nous suivre sur Google+</a>
+			<a target="_blank" href="#">Nous suivre sur Twitter</a>
+		</div>
 	</div>
-</div>
+{% endapply %}

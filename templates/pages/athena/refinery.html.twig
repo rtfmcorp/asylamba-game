@@ -1,0 +1,89 @@
+{% extends 'layouts/athena/current_base.html.twig' %}
+
+{% set refining_bonus = app.session.get('playerBonus').get(constant('App\\Modules\\Zeus\\Model\\PlayerBonus::REFINERY_REFINING')) %}
+
+{% block content %}
+	<div class="component building">
+		<div class="head skin-1">
+			<img src="{{ asset('media/orbitalbase/refinery.png') }}" alt="" />
+			<h2>
+				{{ get_building_info(constant('App\\Modules\\Athena\\Resource\\OrbitalBaseResource::REFINERY'), 'frenchName') }}
+			</h2>
+			<em>Niveau {{ current_base.getLevelRefinery() }}</em>
+		</div>
+		<div class="fix-body">
+			<div class="body">
+
+				{# @TODO factorize with toolbar.html.twig #}
+				<div class="number-box">
+					<span class="label">production par relève</span>
+					<span class="value">
+						{% set production = get_base_production(current_base) %}
+						{{ production|number }}
+
+						{% if refining_bonus > 0 %}
+							<span class="bonus">+{{ ((production * refining_bonus) / 100)|number }}</span>
+						{% endif %}
+						<img alt="ressources" src="{{ asset('media/resources/resource.png') }}" class="icon-color">
+					</span>
+				</div>
+
+				<hr />
+
+				<div class="number-box grey">
+					<span class="label">coefficient ressource de la planète</span>
+					<span class="value">{{ current_base.planetResources }} %</span>
+					</div>
+
+				<div class="number-box {% if refining_bonus == 0 %}grey{% endif %}">
+					<span class="label">bonus technologique de production</span>
+					<span class="value">{{ refining_bonus }} %</span>
+					</div>
+
+				</div>
+			</div>
+		</div>
+
+	<div class="component">
+		<div class="head skin-5">
+			<h2>Contrôle du raffinage</h2>
+			</div>
+		<div class="fix-body">
+			<div class="body">
+				<h4>Production par relève</h4>
+				<ul class="list-type-1">
+					{% set refinery_level = current_base.levelRefinery %}
+					{% set min_level = (refinery_level < 3) ? 1 : refinery_level - 2 %}
+					{% set max_level = (refinery_level > 35) ? 41 : refinery_level + 5 %}
+
+					{% for level in range(min_level, max_level - 1) %}
+						<li {% if refinery_level == level %}class="strong"{% endif %}>
+							<span class="label">niveau {{ level }}</span>
+							<span class="value">
+								{% set production = get_base_production(current_base, level) %}
+								{{ production|number }}
+								{%- if refining_bonus > 0 -%}
+									<span class="bonus">+{{ ((production * refining_bonus) / 100)|number }}</span>
+								{%- endif -%}
+								<img class="icon-color" src="{{ asset('media/resources/resource.png') }}" alt="crédits" />
+							</span>
+						</li>
+					{% endfor %}
+				</ul>
+			</div>
+		</div>
+	</div>
+
+	<div class="component">
+		<div class="head skin-2">
+			<h2>À propos</h2>
+		</div>
+		<div class="fix-body">
+			<div class="body">
+				<p class="long-info">
+					{{ get_building_info(constant('App\\Modules\\Athena\\Resource\\OrbitalBaseResource::REFINERY'), 'description')|raw }}
+				</p>
+			</div>
+		</div>
+	</div>
+{% endblock content %}

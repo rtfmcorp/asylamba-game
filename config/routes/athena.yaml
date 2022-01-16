@@ -4,6 +4,10 @@ switchbase:
     defaults:
         page: 'current'
 
+base_situation:
+    path: /overview
+    controller: App\Modules\Athena\Infrastructure\Controller\RefineryController
+
 bases:
     path: /bases
     controller: App\Modules\Athena\Infrastructure\Controller\BasesController
@@ -20,6 +24,14 @@ refinery:
     path: /refinery
     controller: App\Modules\Athena\Infrastructure\Controller\RefineryController
 
+recycling:
+    path: /recycling
+    controller: App\Modules\Athena\Infrastructure\Controller\RefineryController
+
+storage:
+    path: /storage
+    controller: App\Modules\Athena\Infrastructure\Controller\RefineryController
+
 dock1:
     path: /dock1
     controller: App\Modules\Athena\Infrastructure\Controller\RefineryController
@@ -30,4 +42,16 @@ dock2:
 
 technosphere:
     path: /technosphere
+    controller: App\Modules\Athena\Infrastructure\Controller\RefineryController
+
+trade_market:
+    path: /trade-market
+    controller: App\Modules\Athena\Infrastructure\Controller\RefineryController
+
+spatioport:
+    path: /spatioport
+    controller: App\Modules\Athena\Infrastructure\Controller\RefineryController
+
+school:
+    path: /school
     controller: App\Modules\Athena\Infrastructure\Controller\RefineryController

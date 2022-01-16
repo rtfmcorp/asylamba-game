@@ -1,0 +1,149 @@
+<div id="subnav">
+	<button class="move-side-bar top" data-dir="up"> </button>
+	<div class="overflow">
+		<a href="{{ path('base_situation') }}" class="item {% if app.request.get('_route') == 'base_situation' %}active{% endif %}">
+			<span class="picto">
+				<img src="{{ asset('media/orbitalbase/situation.png') }}" alt="" />
+			</span>
+			<span class="content skin-1">
+				<span>Vue de situation</span>
+			</span>
+		</a>
+
+		{% if current_base.levelGenerator > 0 %}
+			<a href="{{ path('generator') }}" class="item {% if app.request.get('_route') == 'generator' %}active{% endif %}">
+				<span class="picto">
+					<img src="{{ asset('media/orbitalbase/generator.png') }}" alt="" />
+					<span class="number">{{ current_base.levelGenerator }}</span>
+				</span>
+				<span class="content skin-1">
+					<span>
+						{{ get_building_info(constant('App\\Modules\\Athena\\Resource\\OrbitalBaseResource::GENERATOR'), 'frenchName') }}
+					</span>
+				</span>
+			</a>
+		{% endif %}
+
+		{% if current_base.levelDock1 > 0 %}
+			<a href="{{ path('dock1') }}" class="item {% if app.request.get('_route') == 'dock1' %}active{% endif %}">
+				<span class="picto">
+					<img src="{{ asset('media/orbitalbase/dock1.png') }}" alt="" />
+					<span class="number">{{ current_base.levelDock1 }}</span>
+				</span>
+				<span class="content skin-1">
+					<span>
+						{{ get_building_info(constant('App\\Modules\\Athena\\Resource\\OrbitalBaseResource::DOCK1'), 'frenchName') }}
+					</span>
+				</span>
+			</a>
+		{% endif %}
+
+		{% if current_base.levelDock2 > 0 %}
+			<a href="{{ path('dock2') }}" class="item {% if app.request.get('_route') == 'dock2' %}active{% endif %}">
+				<span class="picto">
+					<img src="{{ asset('media/orbitalbase/dock2.png') }}" alt="" />
+					<span class="number">{{ current_base.levelDock2 }}</span>
+				</span>
+				<span class="content skin-1">
+					<span>
+						{{ get_building_info(constant('App\\Modules\\Athena\\Resource\\OrbitalBaseResource::DOCK2'), 'frenchName') }}
+					</span>
+				</span>
+			</a>
+		{% endif %}
+
+		{% if current_base.levelTechnosphere > 0 %}
+			<a href="{{ path('technosphere') }}" class="item {% if app.request.get('_route') == 'technosphere' %}active{% endif %}">
+				<span class="picto">
+					<img src="{{ asset('media/orbitalbase/technosphere.png') }}" alt="" />
+					<span class="number">{{ current_base.levelTechnosphere }}</span>
+				</span>
+				<span class="content skin-1">
+					<span>
+						{{ get_building_info(constant('App\\Modules\\Athena\\Resource\\OrbitalBaseResource::TECHNOSPHERE'), 'frenchName') }}
+					</span>
+				</span>
+			</a>
+		{% endif %}
+
+		{% if current_base.levelCommercialPlateforme > 0 %}
+			<a href="{{ path('trade_market') }}" class="item {% if app.request.get('_route') == 'trade_market' %}active{% endif %}">
+				<span class="picto">
+					<img src="{{ asset('media/orbitalbase/commercialplateforme.png') }}" alt="" />
+					<span class="number">{{ current_base.levelCommercialPlateforme }}</span>
+				</span>
+				<span class="content skin-1">
+					<span>
+						{{ get_building_info(constant('App\\Modules\\Athena\\Resource\\OrbitalBaseResource::COMMERCIAL_PLATEFORME'), 'frenchName') }}
+					</span>
+				</span>
+			</a>
+		{% endif %}
+
+		{% if current_base.levelSpatioport > 0 %}
+			<a href="{{ path('spatioport') }}" class="item {% if app.request.get('_route') == 'spatioport' %}active{% endif %}">
+				<span class="picto">
+					<img src="{{ asset('media/orbitalbase/spatioport.png') }}" alt="" />
+					<span class="number">{{ current_base.levelSpatioport }}</span>
+				</span>
+				<span class="content skin-1">
+					<span>
+						{{ get_building_info(constant('App\\Modules\\Athena\\Resource\\OrbitalBaseResource::SPATIOPORT'), 'frenchName') }}
+					</span>
+				</span>
+			</a>
+		{% endif %}
+
+		{% if current_base.levelRecycling > 0 %}
+			<a href="{{ path('recycling') }}" class="item {% if app.request.get('_route') == 'recycling' %}active{% endif %}">
+				<span class="picto">
+					<img src="{{ asset('media/orbitalbase/recycling.png') }}" alt="" />
+					<span class="number">{{ current_base.levelRecycling }}</span>
+				</span>
+				<span class="content skin-1">
+					<span>
+						{{ get_building_info(constant('App\\Modules\\Athena\\Resource\\OrbitalBaseResource::RECYCLING'), 'frenchName') }}
+					</span>
+				</span>
+			</a>
+		{% endif %}
+
+		{% if current_base.levelRefinery > 0 %}
+			<a href="{{ path('refinery') }}" class="item {% if app.request.get('_route') == 'refinery' %}active{% endif %}">
+				<span class="picto">
+					<img src="{{ asset('media/orbitalbase/refinery.png') }}" alt="" />
+					<span class="number">{{ current_base.levelRefinery }}</span>
+				</span>
+				<span class="content skin-1">
+					<span>
+						{{ get_building_info(constant('App\\Modules\\Athena\\Resource\\OrbitalBaseResource::REFINERY'), 'frenchName') }}
+					</span>
+				</span>
+			</a>
+		{% endif %}
+
+		{% if current_base.levelStorage > 0 %}
+			<a href="{{ path('storage') }}" class="item {% if app.request.get('_route') == 'storage' %}active{% endif %}">
+				<span class="picto">
+						<img src="{{ asset('media/orbitalbase/storage.png') }}" alt="" />
+						<span class="number">{{ current_base.levelStorage }}</span>
+					</span>
+				<span class="content skin-1">
+					<span>
+						{{ get_building_info(constant('App\\Modules\\Athena\\Resource\\OrbitalBaseResource::STORAGE'), 'frenchName') }}
+					</span>
+				</span>
+			</a>
+		{% endif %}
+
+		<a href="{{ path('school') }}" class="item {% if app.request.get('_route') == 'school' %}active{% endif %}">
+			<span class="picto">
+				<img src="{{ asset('media/orbitalbase/school.png') }}" alt="" />
+			</span>
+			<span class="content skin-1">
+				<span>Ecole de Commandement</span>
+			</span>
+			</a>
+		</div>
+	<button class="move-side-bar bottom" data-dir="down"> </button>
+</div>

@@ -4,8 +4,9 @@
 	{% set flashMessages = app.session.flashBag.all() %}
 	{% for type in flashMessages|keys %}
 		{% for message in flashMessages[type] %}
-		<li data-type='{{ type }}'>
-			{{ message }}
-		</li>
+			<li data-type='{{ type }}'>
+				{{ message }}
+			</li>
+		{% endfor %}
 	{% endfor %}
 </ul>

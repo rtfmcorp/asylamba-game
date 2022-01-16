@@ -1,311 +1,313 @@
-<div id="tools">
-	{# left #}
-	<div class="box left" style="left: 25px; right: auto;">
-		<span class="releve-timer resource-link sh" data-target="tools-calendar" style="width: 35px; text-align: center;">
-			{{ get_game_timer('i') }}:{{ get_game_timer('s') }}
-		</span>
-	</div>
-
-	<div class="box left">
-		<a href="#" class="resource-link sh" data-target="tools-refinery">
-			{{ current_base.resourcesStorage|number }}
-			<img class="icon-color" src="{{ asset('media/resources/resource.png') }}" alt="ressources" />
-		</a>
-
-		{% set building_queues_count = current_base.buildingQueues|length %}
-		<a href="#" class="square sh" data-target="tools-generator">
-			<img src="{{ asset('media/orbitalbase/generator.png') }}" alt="" />
-			{% if building_queues_count > 0 %}
-				<span class="number">{{ building_queues_count }}</span>
-			{% endif %}
-		</a>
-
-		{% set technology_queues_count = current_base.technoQueues|length %}
-		<a href="#" class="square sh" data-target="tools-technosphere">
-			<img src="{{ asset('media/orbitalbase/technosphere.png') }}" alt="" />
-			{% if technology_queues_count > 0 %}
-				<span class="number">{{ technology_queues_count }}</span>
-			{% endif %}
-		</a>
-
-		<a href="#" class="square sh" data-target="tools-dock1">
-			<img src="{{ asset('media/orbitalbase/dock1.png') }}" alt="" />
-			{% if current_dock1_ship_queues|length > 0 %}
-				<span class="number">{{ current_dock1_ship_queues|length }}</span>
-			{% endif %}
-		</a>
-
-		<a href="#" class="square sh" data-target="tools-dock2">
-			<img src="{{ asset('media/orbitalbase/dock2.png') }}" alt="" />
-			{% if current_dock2_ship_queues|length > 0 %}
-				<span class="number">{{ current_dock2_ship_queues|length }}</span>
-			{% endif %}
-		</a>
-	</div>
-
-	{# right #}
-	<div class="box right">
-		{% set incoming_commanders_count = incoming_commanders|length %}
-		<a href="#" class="square sh" data-target="tools-incoming-attack">
-			<img src="{{ asset('media/common/nav-fleet-defense.png') }}" alt="" />
-			{% if incoming_commanders_count > 0 %}
-				<span class="number">{{ incoming_commanders_count }}</span>
-			{% endif %}
-		</a>
-
-		{% set outgoing_commanders_count = outgoing_commanders|length %}
-		<a href="#" class="square sh" data-target="tools-outgoing-attack">
-			<img src="{{ asset('media/common/nav-fleet-attack.png') }}" alt="" />
-			{% if outgoing_commanders_count > 0 %}
-				<span class="number">{{ outgoing_commanders_count }}</span>
-			{% endif %}
-		</a>
-
-		<span class="resource-link" style="width: 120px;">
-			{{ current_player.credit|number }}
-			 <img class="icon-color" src="{{ asset('media/resources/credit.png') }}" alt="crédits" />
-		</span>
-	</div>
-
-	{# overboxes #}
-	<div class="overbox left-pic" id="tools-calendar">
-		<h2>
-			SEG{{ get_game_date('seg')}} REL{{ get_game_date('rel')}},
-			{{ get_game_date('seg')|ordinal_number }} strate
-		</h2>
-	</div>
-
-	<div class="overbox left-pic" id="tools-refinery">
-		<h2>Raffinerie</h2>
-		<div class="overflow">
-			<div class="number-box">
-				<span class="label">production par relève</span>
-				<span class="value">
-					{% set production = current_base|get_production() %}
-					{% set refining_bonus = app.session.get('playerBonus').get(constant('App\\Modules\\Zeus\\Model\\PlayerBonus::REFINERY_REFINING')) %}
-					{{ production|number }}
-					{% if refining_bonus > 0 %}
-						<span class="bonus">+{{ ((production * refining_bonus) / 100)|number }}</span>
-					{% endif %}
-					 <img alt="ressources" src="{{ asset('media/resources/resource.png') }}" class="icon-color">
-				</span>
-				</div>
-
-			<div class="number-box grey">
-				<span class="label">ressources en stock</span>
-				<span class="value">
-					{{ current_base.resourcesStorage|number }}
-					<img alt="ressources" src="{{ asset('media/resources/resource.png') }}" class="icon-color">
-				</span>
-				<span class="progress-bar hb bl" title="remplissage : {{ current_base|base_storage_percent }}%">
-					<span style="width:{{ current_base|base_storage_percent }}%;" class="content"></span>
-				</span>
-				</div>
-
-			<a href="{{ path('refinery') }}" class="more-link">vers la raffinerie</a>
+{% apply spaceless %}
+	<div id="tools">
+		{# left #}
+		<div class="box left" style="left: 25px; right: auto;">
+			<span class="releve-timer resource-link sh" data-target="tools-calendar" style="width: 35px; text-align: center;">
+				{{ get_game_timer('i') }}:{{ get_game_timer('s') }}
+			</span>
 		</div>
-	</div>
 
-	<div class="overbox left-pic" id="tools-generator">
-		<h2>Générateur</h2>
-		<div class="overflow">
-			{% if building_queues_count > 0 %}
-				{% set queue = current_base.buildingQueues[0] %}
-				{% set queue_time = queue|building_queue_time %}
-				{% set queue_duration = queue|queue_duration %}
-				<div class="queue">
-					<div class="item active progress"
-						 data-progress-no-reload="true"
-						 data-progress-output="lite"
-						 data-progress-current-time="{{ queue_duration }}"
-						 data-progress-total-time="{{ queue_time }}"
-					>
-						<img class="picto" src="{{ asset('media/orbitalbase/' ~ queue|queue_picture ~ '.png') }}" alt="" />
-						<strong>
-							{{ queue|queue_name }}
-							<span class="level">niv. {{ queue.targetLevel }}</span>
-						</strong>
+		<div class="box left">
+			<a href="#" class="resource-link sh" data-target="tools-refinery">
+				{{ current_base.resourcesStorage|number }}
+				<img class="icon-color" src="{{ asset('media/resources/resource.png') }}" alt="ressources" />
+			</a>
 
-						<em>
-							<span class="progress-text">{{ queue_duration|lite_seconds }}</span>
-						</em>
+			{% set building_queues_count = current_base.buildingQueues|length %}
+			<a href="#" class="square sh" data-target="tools-generator">
+				<img src="{{ asset('media/orbitalbase/generator.png') }}" alt="" />
+				{% if building_queues_count > 0 %}
+					<span class="number">{{ building_queues_count }}</span>
+				{% endif %}
+			</a>
 
-						<span class="progress-container">
-							<span style="width: {{ (queue_time - queue_duration)|percent(queue_time) }}%;" class="progress-bar">
-							</span>
-						</span>
+			{% set technology_queues_count = current_base.technoQueues|length %}
+			<a href="#" class="square sh" data-target="tools-technosphere">
+				<img src="{{ asset('media/orbitalbase/technosphere.png') }}" alt="" />
+				{% if technology_queues_count > 0 %}
+					<span class="number">{{ technology_queues_count }}</span>
+				{% endif %}
+			</a>
+
+			<a href="#" class="square sh" data-target="tools-dock1">
+				<img src="{{ asset('media/orbitalbase/dock1.png') }}" alt="" />
+				{% if current_dock1_ship_queues|length > 0 %}
+					<span class="number">{{ current_dock1_ship_queues|length }}</span>
+				{% endif %}
+			</a>
+
+			<a href="#" class="square sh" data-target="tools-dock2">
+				<img src="{{ asset('media/orbitalbase/dock2.png') }}" alt="" />
+				{% if current_dock2_ship_queues|length > 0 %}
+					<span class="number">{{ current_dock2_ship_queues|length }}</span>
+				{% endif %}
+			</a>
+		</div>
+
+		{# right #}
+		<div class="box right">
+			{% set incoming_commanders_count = incoming_commanders|length %}
+			<a href="#" class="square sh" data-target="tools-incoming-attack">
+				<img src="{{ asset('media/common/nav-fleet-defense.png') }}" alt="" />
+				{% if incoming_commanders_count > 0 %}
+					<span class="number">{{ incoming_commanders_count }}</span>
+				{% endif %}
+			</a>
+
+			{% set outgoing_commanders_count = outgoing_commanders|length %}
+			<a href="#" class="square sh" data-target="tools-outgoing-attack">
+				<img src="{{ asset('media/common/nav-fleet-attack.png') }}" alt="" />
+				{% if outgoing_commanders_count > 0 %}
+					<span class="number">{{ outgoing_commanders_count }}</span>
+				{% endif %}
+			</a>
+
+			<span class="resource-link" style="width: 120px;">
+				{{ current_player.credit|number }}
+				 <img class="icon-color" src="{{ asset('media/resources/credit.png') }}" alt="crédits" />
+			</span>
+		</div>
+
+		{# overboxes #}
+		<div class="overbox left-pic" id="tools-calendar">
+			<h2>
+				SEG{{ get_game_date('seg')}} REL{{ get_game_date('rel')}},
+				{{ get_game_date('seg')|ordinal_number }} strate
+			</h2>
+		</div>
+
+		<div class="overbox left-pic" id="tools-refinery">
+			<h2>Raffinerie</h2>
+			<div class="overflow">
+				<div class="number-box">
+					<span class="label">production par relève</span>
+					<span class="value">
+						{% set production = get_base_production(current_base) %}
+						{% set refining_bonus = app.session.get('playerBonus').get(constant('App\\Modules\\Zeus\\Model\\PlayerBonus::REFINERY_REFINING')) %}
+						{{ production|number }}
+						{% if refining_bonus > 0 %}
+							<span class="bonus">+{{ ((production * refining_bonus) / 100)|number }}</span>
+						{% endif %}
+						 <img alt="ressources" src="{{ asset('media/resources/resource.png') }}" class="icon-color">
+					</span>
 					</div>
-				</div>
-			{% else %}
-				<p class="info">Aucun bâtiment en construction pour le moment.</p>
-			{% endif %}
 
-			<a href="{{ path('generator') }}" class="more-link">vers le générateur</a>
-		</div>
-	</div>
-
-	<div class="overbox left-pic" id="tools-dock1">
-		<h2>Chantier Alpha</h2>
-		<div class="overflow">
-			{% if current_dock1_ship_queues|length > 0 %}
-				{% set queue = current_dock1_ship_queues[0] %}
-				<div class="queue">
-					<div class="item active progress"
-						 data-progress-no-reload="true"
-						 data-progress-output="lite"
-						 data-progress-current-time="{{ queue|queue_duration }}"
-						 data-progress-total-time="{{ queue.quantity * queue|ship_queue_time }}"
-					>
-						<img class="picto" src="{{ asset('media/ship/picto/' ~ queue|ship_queue_picture ~ '.png') }}" alt="" />
-						<strong>
-							{{ queue.quantity }} {{ queue|ship_queue_name ~ queue.quantity|plural }}
-						</strong>
-
-						<em><span class="progress-text">{{ queue|queue_duration|lite_seconds }}</span></em>
-
-						<span class="progress-container">
-							<span style="width: {{ (queue.quantity * queue|ship_queue_time - queue|queue_duration)|percent(queue.quantity * queue|ship_queue_time) }}%;" class="progress-bar">
-							</span>
-						</span>
+				<div class="number-box grey">
+					<span class="label">ressources en stock</span>
+					<span class="value">
+						{{ current_base.resourcesStorage|number }}
+						<img alt="ressources" src="{{ asset('media/resources/resource.png') }}" class="icon-color">
+					</span>
+					<span class="progress-bar hb bl" title="remplissage : {{ current_base|base_storage_percent }}%">
+						<span style="width:{{ current_base|base_storage_percent }}%;" class="content"></span>
+					</span>
 					</div>
-				</div>
-			{% else %}
-				<p class="info">Aucun vaisseau en construction pour le moment.</p>
-			{% endif %}
 
-			<a href="{{ path('dock1') }}" class="more-link">vers le chantier alpha</a>
+				<a href="{{ path('refinery') }}" class="more-link">vers la raffinerie</a>
+			</div>
 		</div>
-	</div>
 
-	<div class="overbox left-pic" id="tools-dock2">
-		<h2>Chantier de ligne</h2>
-		<div class="overflow">
-			{% if current_dock2_ship_queues|length > 0 %}
-				{% set queue = current_dock2_ship_queues[0] %}
-				<div class="queue">
-					<div class="item active progress"
-						 data-progress-no-reload="true"
-						 data-progress-output="lite"
-						 data-progress-current-time="{{ queue|queue_duration }}"
-						 data-progress-total-time="{{ queue.quantity * queue|ship_queue_time }}"
-					>
-						<img class="picto" src="{{ asset('media/ship/picto/' ~ queue|ship_queue_picture ~ '.png') }}" alt="" />
-						<strong>
-							{{ queue.quantity }} {{ queue|ship_queue_name ~ queue.quantity|plural }}
-						</strong>
-
-						<em><span class="progress-text">{{ queue|queue_duration|lite_seconds }}</span></em>
-
-						<span class="progress-container">
-							<span style="width: {{ (queue.quantity * queue|ship_queue_time - queue|queue_duration)|percent(queue.quantity * queue|ship_queue_time) }}%;" class="progress-bar">
-							</span>
-						</span>
-					</div>
-				</div>
-			{% else %}
-				<p class="info">Aucun vaisseau en construction pour le moment.</p>
-			{% endif %}
-
-			<a href="{{ path('dock2') }}" class="more-link">vers le chantier de ligne</a>
-		</div>
-	</div>
-
-	<div class="overbox left-pic" id="tools-technosphere">
-		<h2>Technosphère</h2>
-		<div class="overflow">
-			{% if technology_queues_count > 0 %}
-				{% set queue = current_base.technoQueues[0] %}
-				<div class="queue">
-					<div class="item active progress"
-						 data-progress-no-reload="true"
-						 data-progress-output="lite"
-						 data-progress-current-time="{{ queue|queue_duration }}"
-						 data-progress-total-time="{{ queue|technology_queue_time }}"
-					>
-						<img class="picto" src="{{ asset('media/technology/picto/' ~ queue|queue_picture ~ '.png') }}" alt="" />
-						<strong>
-							{{ queue|queue_name }}
-							{% if queue|is_unblocking_technology %}
-								<span class="level">niv. {{ queue.targetLevel }}</span>
-							{% endif %}
-						</strong>
-
-						<em><span class="progress-text">{{ queue|queue_duration|lite_seconds }}</span></em>
-						<span class="progress-container">
-							<span style="width: {{ (queue|technology_queue_time - queue_duration)|percent() }}%;" class="progress-bar">
-							</span>
-						</span>
-					</div>
-				</div>
-			{% else %}
-				<p class="info">Aucune recherche en cours pour le moment.</p>
-			{% endif %}
-
-			<a href="{{ path('technosphere') }}" class="more-link">vers la technosphère</a>
-		</div>
-	</div>
-
-	<div class="overbox right-pic" id="tools-incoming-attack">
-		<h2>Attaques entrantes</h2>
-		<div class="overflow">
-			{% if incoming_commanders_count > 0 %}
-				<div class="queue">
-					{% for commander in incoming_commanders %}
-						<div class="item active progress"
-							data-progress-no-reload="true"
-							data-progress-output="lite"
-							data-progress-current-time="{{ commander|journey_remaining_time }}"
-							data-progress-total-time="{{ commander|journey_total_time }}"
-						>
-							<img class="picto" src="{{ asset('media/commander/small/' ~ commander.avatar ~ '.png') }}" alt="" />
-							<strong>{{ commander|commander_rank }} {{ commander.name }}</strong>
-							<em>
-								{{ commander|mission_label }}
-								</em>
-							<em><span class="progress-text"></span></em>
-							<span class="progress-container">
-								<span class="progress-bar">
-								</span>
-							</span>
-						</div>
-					{% endfor %}
-				</div>
-			{% else %}
-				<p class="info">Aucune attaques entrantes.</p>
-			{% endif %}
-		</div>
-		<a href="{{ path('fleet') }}" class="more-link">vers l\'amirauté</a>
-	</div>
-
-	<div class="overbox right-pic" id="tools-outgoing-attack">
-		<h2>Déplacement de vos flottes</h2>
-		<div class="overflow">
-			{% if outgoing_commanders_count > 0 %}
-				<div class="queue">
-					{% for commander in outgoing_commanders %}
+		<div class="overbox left-pic" id="tools-generator">
+			<h2>Générateur</h2>
+			<div class="overflow">
+				{% if building_queues_count > 0 %}
+					{% set queue = current_base.buildingQueues[0] %}
+					{% set queue_time = queue|building_queue_time %}
+					{% set queue_duration = queue|queue_duration %}
+					<div class="queue">
 						<div class="item active progress"
 							 data-progress-no-reload="true"
 							 data-progress-output="lite"
-							 data-progress-current-time="{{ commander|journey_remaining_time }}"
-							 data-progress-total-time="{{ commander|journey_total_time }}"
+							 data-progress-current-time="{{ queue_duration }}"
+							 data-progress-total-time="{{ queue_time }}"
 						>
-							<img class="picto" src="{{ asset('media/commander/small/' ~ commander.avatar ~ '.png') }}" alt="" />
-							<strong>{{ commander|commander_rank }} {{ commander.name }}</strong>
+							<img class="picto" src="{{ asset('media/orbitalbase/' ~ queue|queue_picture ~ '.png') }}" alt="" />
+							<strong>
+								{{ queue|queue_name }}
+								<span class="level">niv. {{ queue.targetLevel }}</span>
+							</strong>
+
 							<em>
-								{{ commander|mission_label }}
+								<span class="progress-text">{{ queue_duration|lite_seconds }}</span>
 							</em>
-							<em><span class="progress-text"></span></em>
+
 							<span class="progress-container">
-								<span class="progress-bar">
+								<span style="width: {{ (queue_time - queue_duration)|percent(queue_time) }}%;" class="progress-bar">
 								</span>
 							</span>
 						</div>
-					{% endfor %}
-				</div>
-			{% else %}
-				<p class="info">Aucune flotte en route.</p>
-			{% endif %}
+					</div>
+				{% else %}
+					<p class="info">Aucun bâtiment en construction pour le moment.</p>
+				{% endif %}
+
+				<a href="{{ path('generator') }}" class="more-link">vers le générateur</a>
+			</div>
 		</div>
-		<a href="{{ path('fleet') }}" class="more-link">vers l\'amirauté</a>
+
+		<div class="overbox left-pic" id="tools-dock1">
+			<h2>Chantier Alpha</h2>
+			<div class="overflow">
+				{% if current_dock1_ship_queues|length > 0 %}
+					{% set queue = current_dock1_ship_queues[0] %}
+					<div class="queue">
+						<div class="item active progress"
+							 data-progress-no-reload="true"
+							 data-progress-output="lite"
+							 data-progress-current-time="{{ queue|queue_duration }}"
+							 data-progress-total-time="{{ queue.quantity * queue|ship_queue_time }}"
+						>
+							<img class="picto" src="{{ asset('media/ship/picto/' ~ queue|ship_queue_picture ~ '.png') }}" alt="" />
+							<strong>
+								{{ queue.quantity }} {{ queue|ship_queue_name ~ queue.quantity|plural }}
+							</strong>
+
+							<em><span class="progress-text">{{ queue|queue_duration|lite_seconds }}</span></em>
+
+							<span class="progress-container">
+								<span style="width: {{ (queue.quantity * queue|ship_queue_time - queue|queue_duration)|percent(queue.quantity * queue|ship_queue_time) }}%;" class="progress-bar">
+								</span>
+							</span>
+						</div>
+					</div>
+				{% else %}
+					<p class="info">Aucun vaisseau en construction pour le moment.</p>
+				{% endif %}
+
+				<a href="{{ path('dock1') }}" class="more-link">vers le chantier alpha</a>
+			</div>
+		</div>
+
+		<div class="overbox left-pic" id="tools-dock2">
+			<h2>Chantier de ligne</h2>
+			<div class="overflow">
+				{% if current_dock2_ship_queues|length > 0 %}
+					{% set queue = current_dock2_ship_queues[0] %}
+					<div class="queue">
+						<div class="item active progress"
+							 data-progress-no-reload="true"
+							 data-progress-output="lite"
+							 data-progress-current-time="{{ queue|queue_duration }}"
+							 data-progress-total-time="{{ queue.quantity * queue|ship_queue_time }}"
+						>
+							<img class="picto" src="{{ asset('media/ship/picto/' ~ queue|ship_queue_picture ~ '.png') }}" alt="" />
+							<strong>
+								{{ queue.quantity }} {{ queue|ship_queue_name ~ queue.quantity|plural }}
+							</strong>
+
+							<em><span class="progress-text">{{ queue|queue_duration|lite_seconds }}</span></em>
+
+							<span class="progress-container">
+								<span style="width: {{ (queue.quantity * queue|ship_queue_time - queue|queue_duration)|percent(queue.quantity * queue|ship_queue_time) }}%;" class="progress-bar">
+								</span>
+							</span>
+						</div>
+					</div>
+				{% else %}
+					<p class="info">Aucun vaisseau en construction pour le moment.</p>
+				{% endif %}
+
+				<a href="{{ path('dock2') }}" class="more-link">vers le chantier de ligne</a>
+			</div>
+		</div>
+
+		<div class="overbox left-pic" id="tools-technosphere">
+			<h2>Technosphère</h2>
+			<div class="overflow">
+				{% if technology_queues_count > 0 %}
+					{% set queue = current_base.technoQueues[0] %}
+					<div class="queue">
+						<div class="item active progress"
+							 data-progress-no-reload="true"
+							 data-progress-output="lite"
+							 data-progress-current-time="{{ queue|queue_duration }}"
+							 data-progress-total-time="{{ queue|technology_queue_time }}"
+						>
+							<img class="picto" src="{{ asset('media/technology/picto/' ~ queue|queue_picture ~ '.png') }}" alt="" />
+							<strong>
+								{{ queue|queue_name }}
+								{% if queue|is_unblocking_technology %}
+									<span class="level">niv. {{ queue.targetLevel }}</span>
+								{% endif %}
+							</strong>
+
+							<em><span class="progress-text">{{ queue|queue_duration|lite_seconds }}</span></em>
+							<span class="progress-container">
+								<span style="width: {{ (queue|technology_queue_time - queue_duration)|percent() }}%;" class="progress-bar">
+								</span>
+							</span>
+						</div>
+					</div>
+				{% else %}
+					<p class="info">Aucune recherche en cours pour le moment.</p>
+				{% endif %}
+
+				<a href="{{ path('technosphere') }}" class="more-link">vers la technosphère</a>
+			</div>
+		</div>
+
+		<div class="overbox right-pic" id="tools-incoming-attack">
+			<h2>Attaques entrantes</h2>
+			<div class="overflow">
+				{% if incoming_commanders_count > 0 %}
+					<div class="queue">
+						{% for commander in incoming_commanders %}
+							<div class="item active progress"
+								data-progress-no-reload="true"
+								data-progress-output="lite"
+								data-progress-current-time="{{ commander|journey_remaining_time }}"
+								data-progress-total-time="{{ commander|journey_total_time }}"
+							>
+								<img class="picto" src="{{ asset('media/commander/small/' ~ commander.avatar ~ '.png') }}" alt="" />
+								<strong>{{ commander|commander_rank }} {{ commander.name }}</strong>
+								<em>
+									{{ commander|mission_label }}
+									</em>
+								<em><span class="progress-text"></span></em>
+								<span class="progress-container">
+									<span class="progress-bar">
+									</span>
+								</span>
+							</div>
+						{% endfor %}
+					</div>
+				{% else %}
+					<p class="info">Aucune attaques entrantes.</p>
+				{% endif %}
+			</div>
+			<a href="{{ path('fleet') }}" class="more-link">vers l\'amirauté</a>
+		</div>
+
+		<div class="overbox right-pic" id="tools-outgoing-attack">
+			<h2>Déplacement de vos flottes</h2>
+			<div class="overflow">
+				{% if outgoing_commanders_count > 0 %}
+					<div class="queue">
+						{% for commander in outgoing_commanders %}
+							<div class="item active progress"
+								 data-progress-no-reload="true"
+								 data-progress-output="lite"
+								 data-progress-current-time="{{ commander|journey_remaining_time }}"
+								 data-progress-total-time="{{ commander|journey_total_time }}"
+							>
+								<img class="picto" src="{{ asset('media/commander/small/' ~ commander.avatar ~ '.png') }}" alt="" />
+								<strong>{{ commander|commander_rank }} {{ commander.name }}</strong>
+								<em>
+									{{ commander|mission_label }}
+								</em>
+								<em><span class="progress-text"></span></em>
+								<span class="progress-container">
+									<span class="progress-bar">
+									</span>
+								</span>
+							</div>
+						{% endfor %}
+					</div>
+				{% else %}
+					<p class="info">Aucune flotte en route.</p>
+				{% endif %}
+			</div>
+			<a href="{{ path('fleet') }}" class="more-link">vers l\'amirauté</a>
+		</div>
 	</div>
-</div>
+{% endapply %}
