@@ -1,0 +1,51 @@
+{% extends 'layouts/athena/current_base.html.twig' %}
+
+{% block content %}
+	<div class="component building">
+		<div class="head skin-1">
+			<img src="{{ asset('media/orbitalbase/commercialplateforme.png') }}" alt="" />
+			<h2>
+				{{ get_building_info(constant('App\\Modules\\Athena\\Resource\\OrbitalBaseResource::COMMERCIAL_PLATEFORME'), 'frenchName') }}
+			</h2>
+			<em>niveau {{ current_base.levelCommercialPlateforme }}</em>
+		</div>
+		<div class="fix-body">
+			<div class="body">
+				<a href="{{ path('trade_market', { mode: 'market' }) }}" class="nav-element {% if mode == 'market' %}active{% endif %}">
+					<img src="{{ asset('media/orbitalbase/commercialplateforme.png') }}" alt="" />
+					<strong>Place du commerce</strong>
+					<em>Achetez sur le marché</em>
+				</a>
+
+				<a href="{{ path('trade_market', { mode: 'sell' }) }}" class="nav-element {% if mode == 'sell' %}active{% endif %}">
+					<img src="{{ asset('media/orbitalbase/commercialplateforme.png') }}" alt="" />
+					<strong>Salle des ventes</strong>
+					<em>Vendez sur le marché</em>
+				</a>
+			<hr />
+				<a href="{{ path('trade_market', { mode: 'resource' }) }}" class="nav-element {% if mode == 'resource' %}active{% endif %}">
+					<img src="{{ asset('media/orbitalbase/commercialplateforme.png') }}" alt="" />
+					<strong>Halle de transfert</strong>
+					<em>Envoyez des ressources et des vaisseaux</em>
+				</a>
+			</div>
+		</div>
+	</div>
+
+	{{ include('components/base/trade/transaction.html.twig') }}
+	{{ include('components/base/trade/' ~ mode ~ '.html.twig', { resources_current_rate }) }}
+
+	<div class="component">
+		<div class="head skin-2">
+			<h2>A propos</h2>
+		</div>
+		<div class="fix-body">
+			<div class="body">
+				<p class="long-info">
+					{{ get_building_info(constant('App\\Modules\\Athena\\Resource\\OrbitalBaseResource::COMMERCIAL_PLATEFORME'), 'description')|raw }}
+				</p>
+			</div>
+		</div>
+	</div>
+
+{% endblock content %}

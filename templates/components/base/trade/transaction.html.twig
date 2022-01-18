@@ -1,0 +1,37 @@
+<div class="component transaction">
+	<div class="head skin-2">
+		<h2>Transactions</h2>
+		</div>
+	<div class="fix-body">
+		<div class="body">
+			<div class="number-box">
+				<span class="label">Vaisseaux de commerce disponibles</span>
+				<span class="value">
+					{{ (max_ships - used_ships)|number }}
+					<img class="icon-color" alt="vaisseaux" src="{{ asset('media/resources/transport.png') }}"> /
+					{{ max_ships|number }}
+					<img class="icon-color" alt="vaisseaux" src="{{ asset('media/resources/transport.png') }}">
+				</span>
+
+				<span class="progress-bar">
+					<span style="width: {{ (max_ships - used_ships)|percent(max_ships) }}%;" class="content"></span>
+				</span>
+			</div>
+
+			<h4>Convoi en route</h4>
+			{% for commercial_shipping in commercial_shippings['outgoing'][constant('App\\Modules\\Athena\\Model\\CommercialShipping::ST_GOING')] %}
+				{{ include('molecules/base/trade/commercial_shipping.html.twig', { commercial_shipping }) }}
+			{% endfor %}
+			<hr />
+			<h4>Retour de convoi</h4>
+			{% for commercial_shipping in commercial_shippings['outgoing'][constant('App\\Modules\\Athena\\Model\\CommercialShipping::ST_MOVING_BACK')] %}
+				{{ include('molecules/base/trade/commercial_shipping.html.twig', { commercial_shipping }) }}
+			{% endfor %}
+			<hr />
+			<h4>Convoi à quai</h4>
+			{% for commercial_shipping in commercial_shippings['outgoing'][constant('App\\Modules\\Athena\\Model\\CommercialShipping::ST_WAITING')] %}
+				{{ include('molecules/base/trade/commercial_shipping.html.twig', { commercial_shipping }) }}
+			{% endfor %}
+			</div>
+		</div>
+	</div>

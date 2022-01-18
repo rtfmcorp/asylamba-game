@@ -1,0 +1,111 @@
+<div class="component new-message market-sell">
+	<div class="head skin-4 sh">
+		<img src="{{ asset('media/resources/resource.png') }}" alt="ressource" class="main" />
+		<h2>Envoi de ressources</h2>
+		<em>à une autre base</em>
+	</div>
+	<div class="fix-body">
+		<div class="body">
+			<form action="{{ path('give_resources', {'baseId': current_base.id}) }}" method="post">
+				<p><label for="send-resources-target">Base destinataire</label></p>
+				<input class="autocomplete-hidden" type="hidden" name="otherbaseid" />
+				<p class="input input-text"><input type="text" id="send-resources-target" class="autocomplete-orbitalbase" name="name" autocomplete="off" /></p>
+
+				<div class="sell-form"
+					 data-shipcom-size="{{ constant('App\\Modules\\Athena\\Model\\CommercialShipping::WEDGE') }}"
+					 data-resource-rate="1"
+					 data-max-quantity="{{ current_base.resourcesStorage }}"
+					 data-rate="0"
+					 data-min-price="0"
+				>
+					<div class="label-box">
+						<span class="label">Ressources</span>
+						<span class="value">{{ current_base.resourcesStorage|number }}</span>
+						<img class="icon-color" alt="ressources" src="{{ asset('media/resources/resource.png') }}">
+						</div>
+
+					<div class="label-box sf-quantity">
+						<label for="send-resources-quantity" class="label">Quantité</label>
+						<input id="send-resources-quantity" class="value" type="text" name="quantity" autocomplete="off" />
+						<img class="icon-color" alt="ressources" src="{{ asset('media/resources/resource.png') }}">
+					</div>
+
+					<hr />
+
+					<div class="label-box sf-comship">
+						<span class="label">Vaisseaux</span>
+						<span class="value"></span>
+						<img class="icon-color" alt="vaisseaux transports" src="{{ asset('media/resources/transport.png') }}">
+					</div>
+
+					<hr />
+
+					<p><input type="submit" value="Envoyer" /></p>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+
+<div class="component new-message market-sell">
+	<div class="head skin-4">
+		<img src="{{ asset('media/orbitalbase/dock2.png') }}" alt="vaisseaux" class="main" />
+		<h2>Envoi de vaisseaux</h2>
+		<em>à une autre base</em>
+	</div>
+	<div class="fix-body">
+		<div class="body">
+			<form action="{{ path('give_ships', { 'baseId': current_base.id }) }}" method="post">
+				<p><label for="send-ships-target">Base destinataire</label></p>
+				<input class="autocomplete-hidden" type="hidden" name="otherbaseid" />
+				<p class="input input-text"><input type="text" id="send-ships-target" class="autocomplete-orbitalbase" name="name" autocomplete="off" /></p>
+
+				{% for ship_number in current_base.shipStorage|keys %}
+					{% set ship_quantity = current_base.shipStorage[ship_number] %}
+					{% if ship_quantity > 0 %}
+						<div class="queue sh" data-target="sell-ships-{{ ship_number }}">
+							<div class="item">
+								<img class="picto" src="{{ asset('media/ship/picto/ship' ~ ship_number ~ '.png') }}" alt="" />
+								<strong>{{ get_ship_info(ship_number, 'codeName') }}</strong>
+								<em>{{ get_ship_info(ship_number, 'name') }}</em>
+								<em>{{ get_ship_info(ship_number, 'pev') }} pev</em>
+								</div>
+							</div>
+
+						<div id="sell-ships-{{ ship_number }}"
+							 class="sell-form"
+							 data-shipcom-size="' . CommercialShipping::WEDGE . '"
+							 data-resource-rate="{{ get_ship_info(ship_number, 'pev') * 1000 }}"
+							 data-max-quantity="{{ ship_number }}"
+							 data-rate="1"
+							 data-min-price="1"
+							 style="display:none;"
+						>
+							<div class="label-box">
+								<span class="label">Quantité max.</span>
+								<span class="value">{{ ship_quantity }}</span>
+								</div>
+
+							<div class="label-box sf-quantity">
+								<label for="sell-market-quantity-ship" class="label">Quantité</label>
+								<input id="sell-market-quantity-ship" class="value val-quantity" type="text" name="quantity-{{ ship_number }}" autocomplete="off" />
+								</div>
+
+							<hr />
+
+							<div class="label-box sf-comship">
+								<span class="label">Vaisseaux</span>
+								<span class="value"></span>
+								<img class="icon-color" alt="vaisseaux transports" src="{{ asset('media/resources/transport.png') }}">
+								</div>
+
+							<hr />
+
+							<p><input type="submit" name="identifier-{{ ship_number }}" value="Envoyer" /></p>
+						</div>
+					{% endif %}
+				{% endfor %}
+			</form>
+		</div>
+	</div>
+</div>

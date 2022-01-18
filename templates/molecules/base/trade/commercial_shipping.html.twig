@@ -1,0 +1,84 @@
+<div class="transaction {{ get_transaction_class(commercial_shipping) }}">
+	{% if commercial_shipping.statement != constant('App\\Modules\\Athena\\Model\\CommercialShipping::ST_MOVING_BACK') %}
+	<div class="product">
+		{% if commercial_shipping.statement == constant('App\\Modules\\Athena\\Model\\CommercialShipping::ST_WAITING') %}
+			<a href="{{ path('cancel_transaction', {'id': commercial_shipping.rTransaction }) }}"
+			   class="hb lt right-link"
+			   title="supprimer cette offre coûtera {{ get_cancellation_price(commercial_shipping) }} crédits"
+			>×</a>
+		{% endif %}
+		{% if commercial_shipping.typeOfTransaction == constant('App\\Modules\\Athena\\Model\\Transaction::TYP_RESOURCE') %}
+			<img src="{{ asset('media/market/resources-pack-' ~ commercial_shipping|transaction_picto ~ '.png') }}" alt="" class="picto" />
+			<div class="offer">
+				{# @TODO seems that resources selling isn't sure about the used property #}
+				{{ (commercial_shipping.resourceTransported is null ? commercial_shipping.quantity : commercial_shipping.resourceTransported)|number }}
+				<img src="{{ asset('media/resources/resource.png') }}" alt="" class="icon-color" />
+			</div>
+		{% elseif commercial_shipping.typeOfTransaction == constant('App\\Modules\\Athena\\Model\\Transaction::TYP_COMMANDER') %}
+			<img src="{{ asset('media/commander/small/' ~ commercial_shipping.commanderAvatar ~ '.png') }}" alt="" class="picto" />
+			<div class="offer">
+				<strong>{{ get_commander_rank(commercial_shipping.commanderLevel )}} {{ commercial_shipping.commanderName }}</strong>
+				<em>{{ commercial_shipping.commanderExperience|number }} xp | '{{ commercial_shipping.commanderVictory }} victoire{{ commercial_shipping.commanderVictory|plural }}</em>
+			</div>
+		{% if commercial_shipping.typeOfTransaction == constant('App\\Modules\\Athena\\Model\\Transaction::TYP_SHIP') %}
+			<img src="{{ asset('media/ship/picto/ship' ~ commercial_shipping.identifier ~ '.png') }}" alt="" class="picto" />
+			<div class="offer">
+				<strong>
+					{{ commercial_shipping.quantity }}
+					{{ get_ship_info(commercial_shipping.identifier, 'codeName') }}{{ commercial_shipping.quantity|plural }}
+				</strong>
+				<em>{{ get_ship_info(commercial_shipping.identifier, 'name') }} / {{ get_ship_info(commercial_shipping.identifier, 'pev') }} pev</em>
+			</div>
+		{% endif %}
+
+		{% if commercial_shipping.resourceTransported is null %}
+			{# transaction #}
+			<div class="for">
+				<span>pour</span>
+			</div>
+			<div class="price">
+				{{ commercial_shipping.price|number }}
+				<img src="{{ asset('media/resources/credit.png') }}" alt="" class="icon-color" />
+			</div>
+		{% elseif commercial_shipping.resourceTransported == 0 %}
+			{# ships sending #}
+			<div class="for"><span></span></div>
+			<div class="price">
+				envoi de vaisseaux
+			</div>
+		{% else %}
+			{# resources sending #}
+			<div class="for"><span></span></div>
+			<div class="price">
+				envoi de ressources
+			</div>
+		{% endif %}
+		</div>
+	{% endif %}
+
+	{% if commercial_shipping.statement != constant('App\\Modules\\Athena\\Model\\CommercialShipping::ST_WAITING') %}
+		<div class="shipping progress"
+			 data-progress-current-time="{{ commercial_shipping|travel_remaining_time }}"
+			 data-progress-total-time="{{ commercial_shipping|travel_total_time }}"
+			 data-progress-output="lite"
+		>
+	{% else %}
+		<div class="shipping">
+	{% endif %}
+		{# @TODO check if necessary when waiting #}
+		<span class="progress-container">
+			<span style="width: {{ commercial_shipping|travel_remaining_time|percent(commercial_shipping|travel_total_time) }}%;" class="progress-bar"></span>
+		</span>
+
+		<div class="ships">
+			{{ commercial_shipping.shipQuantity }}
+			<img src="{{ asset('media/resources/transport.png') }}" alt="" class="icon-color" />
+		</div>
+
+		{% if commercial_shipping.statement == constant('App\\Modules\\Athena\\Model\\CommercialShipping::ST_WAITING') %}
+			<div class="time">à quai</div>
+		{% else %}
+			<div class="time progress-text"></div>
+		{% endif %}
+	</div>
+</div>

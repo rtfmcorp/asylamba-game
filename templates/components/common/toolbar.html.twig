@@ -255,11 +255,11 @@
 							<div class="item active progress"
 								data-progress-no-reload="true"
 								data-progress-output="lite"
-								data-progress-current-time="{{ commander|journey_remaining_time }}"
-								data-progress-total-time="{{ commander|journey_total_time }}"
+								data-progress-current-time="{{ commander|travel_remaining_time }}"
+								data-progress-total-time="{{ commander|travel_total_time }}"
 							>
 								<img class="picto" src="{{ asset('media/commander/small/' ~ commander.avatar ~ '.png') }}" alt="" />
-								<strong>{{ commander|commander_rank }} {{ commander.name }}</strong>
+								<strong>{{ commander_rank }} {{ commander.name }}</strong>
 								<em>
 									{{ commander|mission_label }}
 									</em>
@@ -287,8 +287,8 @@
 							<div class="item active progress"
 								 data-progress-no-reload="true"
 								 data-progress-output="lite"
-								 data-progress-current-time="{{ commander|journey_remaining_time }}"
-								 data-progress-total-time="{{ commander|journey_total_time }}"
+								 data-progress-current-time="{{ commander|travel_remaining_time }}"
+								 data-progress-total-time="{{ commander|travel_total_time }}"
 							>
 								<img class="picto" src="{{ asset('media/commander/small/' ~ commander.avatar ~ '.png') }}" alt="" />
 								<strong>{{ commander|commander_rank }} {{ commander.name }}</strong>

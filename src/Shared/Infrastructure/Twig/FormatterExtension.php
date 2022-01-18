@@ -13,7 +13,7 @@ class FormatterExtension extends AbstractExtension
 	public function getFilters(): array
 	{
 		return [
-			new TwigFilter('number', fn (int|float $number) => Format::numberFormat($number)),
+			new TwigFilter('number', fn (int|float $number, int $decimals = 0) => Format::numberFormat($number, $decimals)),
 			new TwigFilter('ordinal_number', fn (int|float $number) => Format::ordinalNumber($number)),
 			new TwigFilter('plural', fn (int|float $number) => Format::plural($number)),
 			new TwigFilter('percent', fn (int $number, int $base) => Format::percent($number, $base)),

@@ -1,0 +1,192 @@
+<div class="component market-sell">
+	<div class="head skin-4 sh">
+		<img src="{{ asset('media/resources/resource.png') }}" alt="ressource" class="main" />
+		<h2>Ressources</h2>
+		<em>mettre en vente</em>
+	</div>
+
+	<div class="fix-body">
+		<div class="body">
+			<form class="sell-form"
+				  data-shipcom-size="constant('App\\Modules\\Athena\\Model\\CommercialShipping::WEDGE') "
+				  data-resource-rate="1"
+				  data-max-quantity="{{ current_base.resourcesStorage }}"
+				  data-rate="{{ resources_current_rate }}"
+				  data-min-price="{{ constant('App\\Modules\\Athena\\Model\\Transaction::MIN_RATE_RESOURCE')  }}"
+				  action="{{ path('propose_transaction', { 'baseId': current_base.id, 'type': constant('App\\Modules\\Athena\\Model\\Transaction::TYP_RESOURCE')  }) }}"
+				  method="post">
+				<div class="label-box">
+					<span class="label">Ressources</span>
+					<span class="value">{{ current_base.resourcesStorage|number }}</span>
+					<img class="icon-color" alt="ressources" src="{{ asset('media/resources/resource.png') }}">
+				</div>
+
+				<div class="label-box sf-quantity">
+					<label for="sell-market-quantity-resources" class="label">Quantité</label>
+					<input id="sell-market-quantity-resources" class="value" type="text" name="quantity" autocomplete="off" />
+					<img class="icon-color" alt="ressources" src="{{ asset('media/resources/resource.png') }}">
+				</div>
+
+				<hr />
+
+				<div class="label-box sf-min-price">
+					<span class="label">Prix minimum</span>
+					<span class="value" data-price-raw="0"></span>
+					<img class="icon-color" alt="crédits" src="{{ asset('media/resources/credit.png') }}">
+				</div>
+
+				<div class="label-box sf-price">
+					<label for="sell-market-price-resources" class="label">Prix</label>
+					<input id="sell-market-price-resources" class="value" type="text" name="price" autocomplete="off"/>
+					<img class="icon-color" alt="crédits" src="{{ asset('media/resources/credit.png') }}">
+				</div>
+
+				<hr />
+
+				<div class="label-box sf-comship">
+					<span class="label">Vaisseaux</span>
+					<span class="value"></span>
+					<img class="icon-color" alt="vaisseaux transports" src="{{ asset('media/resources/transport.png') }}">
+				</div>
+
+				<hr />
+
+				<p><input type="submit" value="Vendre" /></p>
+				</form>
+			</div>
+		</div>
+	</div>
+
+	<div class="component market-sell">
+		<div class="head skin-4">
+			<img src="{{ asset('media/orbitalbase/school.png') }}" alt="commandants" class="main" />
+			<h2>Commandants</h2>
+			<em>mettre en vente</em>
+			</div>
+		<div class="fix-body">
+			<div class="body">
+				{% for commander in base_commanders %}
+					<div class="queue">
+						<div class="item sh" data-target="sell-commander-{{ loop.index }}">
+							<img class="picto" src="{{ asset('media/commander/small/' ~ commander.avatar ~ '.png') }}" alt="" />
+							<strong>{{ commander|commander_rank }} {{ commander.name }}</strong>
+							<em>{{ commander.experience|number }} points d\'expérience</em>
+						</div>
+					</div>
+
+					<form class="sell-form" id="sell-commander-{{ loop.index }}" action="{{ path('propose_transaction', {'baseId': current_base.id, 'type': constant('App\\Modules\\Athena\\Model\\Transaction::TYP_COMMANDER'), 'identifier': commander.id}) }}" method="post" style="display:none;">
+
+						<div class="label-box">
+							<span class="label">Prix minimum</span>
+							<span class="value">
+								{{ get_min_price(
+									constant('App\\Modules\\Athena\\Model\\Transaction::TYP_COMMANDER'),
+									commander.experience
+								) }}
+							</span>
+							<img class="icon-color" alt="crédits" src="{{ asset('media/resources/credit.png') }}">
+						</div>
+
+						<div class="label-box">
+							<label for="sell-market-price-commander" class="label">Prix</label>
+							<input id="sell-market-price-commander" class="value" type="text" name="price" value="{{ get_commander_price(commander, commander_current_rate) }}" autocomplete="off" />
+							<img class="icon-color" alt="crédits" src="{{ asset('media/resources/credit.png') }}">
+						</div>
+
+						<div class="label-box">
+							<span class="label">Vaisseaux</span>
+							<span class="value">1</span>
+							<img class="icon-color" alt="vaisseaux transports" src="{{ asset('media/resources/transport.png') }}">
+						</div>
+
+						<hr />
+
+						<input type="hidden" value="{{ commander.experience }}" name="quantity" />
+
+						<p><input type="submit" value="Vendre" /></p>
+					</form>
+				{% endfor %}
+
+				{% if base_commanders|length == 0 %}
+					<p><em>Vous n\'avez aucun commandant dans l\'école.</em></p>
+				{% endif %}
+			</div>
+		</div>
+	</div>
+
+	<div class="component market-sell">
+		<div class="head skin-4">
+			<img src="{{ asset('media/orbitalbase/dock2.png') }}" alt="vaisseaux" class="main" />
+			<h2>Vaisseaux</h2>
+			<em>mettre en vente</em>
+		</div>
+		<div class="fix-body">
+			<div class="body">
+				{% for ship_number in current_base.shipStorage|keys %}
+					{% set ship_quantity = current_base.shipStorage[ship_number] %}
+					{% if ship_quantity > 0 %}
+						<div class="queue sh" data-target="sell-ships-{{ ship_number }}">
+							<div class="item">
+								<img class="picto" src="{{ asset('media/ship/picto/ship' ~ ship_number ~ '.png') }}" alt="" />
+								<strong>{{ get_ship_info(ship_number, 'codeName') }}</strong>
+								<em>{{ get_ship_info(ship_number, 'name') }}</em>
+								<em>{{ get_ship_info(ship_number, 'pev') }} pev</em>
+								</div>
+							</div>
+
+						<form id="sell-ships-{{ ship_number }}"
+							  class="sell-form"
+							  data-shipcom-size="{{ constant('App\\Modules\\Athena\\Model\\CommercialShipping::WEDGE') }}"
+							  data-resource-rate="{{ get_ship_info(ship_number, 'pev') * 1000 }}"
+							  data-max-quantity="{{ ship_quantity }}"
+							  data-rate="{{ get_ship_price(ship_number, ship_current_rate) }}"
+							  data-min-price="{{ get_min_price(
+								  constant('App\\Modules\\Athena\\Model\\Transaction::TYP_SHIP'),
+								  1,
+								  ship_number
+							  	) }}"
+							  action="{{ path('propose_transaction', {'baseId': current_base.id, 'type': constant('App\\Modules\\Athena\\Model\\Transaction::TYP_SHIP'), 'identifier': ship_number }) }}"
+							  method="post"
+							  style="display:none;"
+						>
+							<div class="label-box">
+								<span class="label">Quantité max.</span>
+								<span class="value">{{ ship_quantity }}</span>
+							</div>
+
+							<div class="label-box sf-quantity">
+								<label for="sell-market-quantity-ship" class="label">Quantité</label>
+								<input id="sell-market-quantity-ship" class="value" type="text" name="quantity" autocomplete="off" />
+							</div>
+
+							<hr />
+
+							<div class="label-box sf-min-price">
+								<span class="label">Prix minimum</span>
+								<span class="value"></span>
+								<img class="icon-color" alt="crédits" src="{{ asset('media/resources/credit.png') }}">
+							</div>
+
+							<div class="label-box sf-price">
+								<label for="sell-market-price-ship" class="label">Prix</label>
+								<input id="sell-market-price-ship" class="value" type="text" name="price" autocomplete="off" />
+								<img class="icon-color" alt="crédits" src="{{ asset('media/resources/credit.png') }}">
+							</div>
+
+							<hr />
+
+							<div class="label-box sf-comship">
+								<span class="label">Vaisseaux</span>
+								<span class="value"></span>
+								<img class="icon-color" alt="vaisseaux transports" src="{{ asset('media/resources/transport.png') }}">
+							</div>
+
+							<hr />
+
+							<p><input type="submit" value="Vendre" /></p>
+						</form>
+					{% endif %}
+				{% endfor %}
+			</div>
+		</div>
+	</div>
