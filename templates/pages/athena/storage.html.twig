@@ -1,0 +1,76 @@
+{% extends 'layouts/athena/current_base.html.twig' %}
+
+{% set storage_bonus = app.session.get('playerBonus').get(constant('App\\Modules\\Zeus\\Model\\PlayerBonus::REFINERY_STORAGE')) %}
+
+{% block content %}
+	<div class="component building">
+		<div class="head skin-1">
+			<img src="{{ asset('media/orbitalbase/storage.png') }}" alt="" />
+			<h2>
+				{{ get_building_info(constant('App\\Modules\\Athena\\Resource\\OrbitalBaseResource::STORAGE'), 'frenchName') }}
+			</h2>
+			<em>Niveau {{ current_base.levelStorage }}</em>
+			</div>
+		<div class="fix-body">
+			<div class="body">
+				{{ include('molecules/base/production/storage_gauge.html.twig', {
+					'stored_resources': current_base.resourcesStorage,
+					'percent': current_base|base_storage_percent,
+				}) }}
+
+				<hr />
+
+				<div class="number-box {% if storage_bonus == 0 %}grey{% endif %}">
+					<span class="label">bonus technologique de stockage</span>
+					<span class="value">{{ storage_bonus }} %</span>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="component">
+		<div class="head skin-5">
+			<h2>Gestion des stocks</h2>
+		</div>
+		<div class="fix-body">
+			<div class="body">
+				<h4>Stockage maximal de la raffinerie</h4>
+				<ul class="list-type-1">
+					{% set storage_level = current_base.levelStorage %}
+
+					{% for level in get_building_level_range(storage_level) %}
+						<li {% if level == storage_level %}class="strong"{% endif %}>
+							<span class="label">niveau {{ level }}</span>
+							<span class="value">
+								{% set storage_space = get_building_info(
+									constant('App\\Modules\\Athena\\Resource\\OrbitalBaseResource::STORAGE'),
+									'level',
+									level,
+									'storageSpace',
+								) %}
+								{{ storage_space|number }}
+								{% if storage_bonus > 0 %}
+									<span class="bonus">+{{ (storage_space * storage_bonus / 100)|number }}</span>
+								{% endif %}
+								<img class="icon-color" src="{{ asset('media/resources/resource.png') }}" alt="ressources" />
+							</span>
+						</li>
+					{% endfor %}
+				</ul>
+			</div>
+		</div>
+	</div>
+
+	<div class="component">
+		<div class="head skin-2">
+			<h2>À propos</h2>
+		</div>
+		<div class="fix-body">
+			<div class="body">
+				<p class="long-info">
+					{{ get_building_info(constant('App\\Modules\\Athena\\Resource\\OrbitalBaseResource::STORAGE'), 'description')|raw }}
+				</p>
+			</div>
+		</div>
+	</div>
+{% endblock content %}

@@ -41,7 +41,11 @@ class OrbitalBaseExtension extends AbstractExtension
 				),
 				$orbitalBase->getPlanetResources()
 			)),
-			new TwigFunction('get_building_info', fn (int $buildingNumber, string $info) => $this->orbitalBaseHelper->getInfo($buildingNumber, $info))
+			new TwigFunction('get_building_info', fn (int $buildingNumber, string $info, int $level = 0, string $sub = 'default') => $this->orbitalBaseHelper->getInfo($buildingNumber, $info, $level, $sub)),
+			new TwigFunction('get_building_level_range', fn (int $currentLevel) => \range(
+				($currentLevel < 3) ? 1 : $currentLevel - 2,
+				(($currentLevel > 35) ? 41 : $currentLevel + 5) - 1,
+			)),
 		];
 	}
 }

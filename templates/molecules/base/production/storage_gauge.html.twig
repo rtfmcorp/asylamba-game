@@ -1,0 +1,10 @@
+<div class="number-box {% if faction_color is defined and faction_color == false %}grey{% endif %}">
+	<span class="label">ressources en stock</span>
+	<span class="value">
+		{{ stored_resources|number }}
+		<img alt="ressources" src="{{ asset('media/resources/resource.png') }}" class="icon-color">
+	</span>
+	<span class="progress-bar hb bl" title="remplissage : {{ percent }}%">
+		<span style="width:{{ percent }}%;" class="content"></span>
+	</span>
+</div>

@@ -90,18 +90,13 @@
 						{% endif %}
 						 <img alt="ressources" src="{{ asset('media/resources/resource.png') }}" class="icon-color">
 					</span>
-					</div>
+				</div>
 
-				<div class="number-box grey">
-					<span class="label">ressources en stock</span>
-					<span class="value">
-						{{ current_base.resourcesStorage|number }}
-						<img alt="ressources" src="{{ asset('media/resources/resource.png') }}" class="icon-color">
-					</span>
-					<span class="progress-bar hb bl" title="remplissage : {{ current_base|base_storage_percent }}%">
-						<span style="width:{{ current_base|base_storage_percent }}%;" class="content"></span>
-					</span>
-					</div>
+				{{ include('molecules/base/production/storage_gauge.html.twig', {
+					'stored_resources': current_base.resourcesStorage,
+					'percent': current_base|base_storage_percent,
+					'faction_color': false,
+				}) }}
 
 				<a href="{{ path('refinery') }}" class="more-link">vers la raffinerie</a>
 			</div>

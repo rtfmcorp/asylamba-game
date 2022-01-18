@@ -45,7 +45,7 @@ recycling:
 
 storage:
     path: /storage
-    controller: App\Modules\Athena\Infrastructure\Controller\RefineryController
+    controller: App\Modules\Athena\Infrastructure\Controller\StorageController
 
 dock1:
     path: /dock1
