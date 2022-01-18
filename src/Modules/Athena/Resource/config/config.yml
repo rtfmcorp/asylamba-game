@@ -33,6 +33,10 @@ services:
             - '../../Repository'
             - '../../Resource'
 
+    App\Modules\Athena\Infrastructure\ArgumentResolver\CurrentBaseValueResolver:
+        tags:
+            - { name: 'controller.argument_value_resolver', priority: 50 }
+
     App\Modules\Athena\Manager\CommercialShippingManager:
         arguments:
             $mediaPath: '%media%'
