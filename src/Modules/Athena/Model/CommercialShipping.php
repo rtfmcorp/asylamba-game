@@ -222,6 +222,16 @@ class CommercialShipping {
 		return $this->dArrival;
 	}
 
+	public function getArrivalDate(): string
+	{
+		return $this->dArrival;
+	}
+
+	public function getDepartureDate(): string
+	{
+		return $this->dDeparture;
+	}
+
 	/**
 	 * @param int $statement
 	 * @return CommercialShipping

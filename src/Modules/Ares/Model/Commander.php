@@ -13,8 +13,9 @@
 namespace App\Modules\Ares\Model;
 
 use App\Modules\Athena\Resource\ShipResource;
+use App\Shared\Domain\Model\TravellerInterface;
 
-class Commander
+class Commander implements TravellerInterface
 {
 	public $id 						= 0;
 	public $name 					= '';
@@ -576,16 +577,18 @@ class Commander
         
         return $this;
     }
-    
-    /**
-     * @return string
-     */
-	public function getArrivalDate()
+
+	public function getArrivalDate(): string
     {
         return $this->dArrival;
     }
-    
-    /**
+
+	public function getDepartureDate(): string
+	{
+		return $this->dStart;
+	}
+
+	/**
      * @param string $dDeath
      * @return $this
      */
