@@ -24,6 +24,10 @@ services:
             - '../../Repository'
             - '../../Resource'
 
+    App\Modules\Zeus\Infrastructure\ArgumentResolver\CurrentPlayerValueResolver:
+        tags:
+            - { name: 'controller.argument_value_resolver', priority: 50 }
+
     App\Modules\Zeus\Manager\PlayerManager:
         arguments:
             $playerBaseLevel: "%zeus.player.base_level%"
