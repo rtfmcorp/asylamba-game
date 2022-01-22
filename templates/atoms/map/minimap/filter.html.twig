@@ -1,0 +1,9 @@
+<a href="#"
+	class="sh switch-class ajax-switch-params hb lb {% if app.request.cookies.get('p' ~ param, default_map_parameters[param]) %}active{% endif %}"
+	data-class="active"
+	data-target="map-content"
+	data-switch-params="{{ param }}"
+	title="{{ tooltip }}"
+>
+	<img src="{{ asset(picto) }}" alt="minimap" />
+</a>

@@ -6,6 +6,7 @@ use App\Classes\Entity\AbstractRepository;
 
 use App\Modules\Athena\Model\CommercialRoute;
 use App\Modules\Demeter\Model\Color;
+use App\Modules\Zeus\Model\Player;
 
 class CommercialRouteRepository extends AbstractRepository {
 	
@@ -71,6 +72,33 @@ class CommercialRouteRepository extends AbstractRepository {
 		$commercialRoute = $this->format($row);
 		$this->unitOfWork->addObject($commercialRoute);
 		return $commercialRoute;
+	}
+
+	public function getAllPlayerRoutes(Player $player): array
+	{
+		$query = $this->connection->prepare('SELECT
+			sy1.xPosition AS sy1x,
+			sy1.yPosition AS sy1y,
+			sy2.xPosition AS sy2x,
+			sy2.yPosition AS sy2y,
+			cr.statement AS statement
+		FROM commercialRoute AS cr
+		LEFT JOIN place AS pl1
+			ON cr.rOrbitalBase = pl1.id
+			LEFT JOIN system AS sy1
+				ON pl1.rSystem = sy1.id
+				LEFT JOIN orbitalBase AS ob1
+					ON cr.rOrbitalBase = ob1.rPlace
+		LEFT JOIN place AS pl2
+			ON cr.rOrbitalBaseLinked = pl2.id
+			LEFT JOIN system AS sy2
+				ON pl2.rSystem = sy2.id
+				LEFT JOIN orbitalBase AS ob2
+					ON cr.rOrbitalBaseLinked = ob2.rPlace
+		WHERE ob1.rPlayer = ? OR ob2.rPlayer = ?');
+		$query->execute([$player->getId(), $player->getId()]);
+
+		return $query->fetchAll();
 	}
 	
 	/**

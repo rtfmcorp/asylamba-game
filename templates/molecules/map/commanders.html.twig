@@ -1,0 +1,61 @@
+{% set break = false %}
+
+<div id="subnav">
+	<div class="overflow">
+		{% for commander in local_commanders %}
+			{% set is_moving = commander.statement == constant('App\\Modules\\Ares\\Model\\Commander::MOVING') %}
+
+			{% if commander.line == 1 and break == false %}
+				<hr />
+				{% set break = true %}
+			{% endif %}
+
+			<a href="#"
+			   class="item {% if is_moving %}striped{% endif %} map-commander"
+			   data-id="{{ commander.id }}"
+			   data-color="{{ current_player.rColor }}"
+			   data-max-jump="{{ get_max_travel_distance() }}"
+			   data-available="{{ is_moving ? 'false' : 'true' }}"
+			   data-name="{{ commander|commander_rank }} {{ commander.name }}"
+			   {# @TODO move this logic in a dedicated service #}
+			   data-wedge="{{ (constant('App\\Modules\\Ares\\Model\\Commander::COEFFLOOT') * commander.pev)|number }}"
+			>
+				<span class="picto">
+					<img src="{{ asset('media/commander/small/' ~ commander.avatar ~ '.png') }}" alt="" />
+					<span class="number">{{ commander.level }}</span>
+				</span>
+				<span class="content skin-2">
+					<span class="sub-content">
+						{{ commander|commander_rank }} {{ commander.name }}<br/>
+						{{ commander.pev|number }} pev
+						<hr />
+						{% if is_moving %}
+							{# @TODO Implement translator to replace the switch #}
+							{% if commander.travelType == constant('App\\Modules\\Ares\\Model\\Commander::MOVE') %}
+								Déplacement
+							{% elseif commander.travelType == constant('App\\Modules\\Ares\\Model\\Commander::LOOT') %}
+								Pillage
+							{% elseif commander.travelType == constant('App\\Modules\\Ares\\Model\\Commander::COLO') %}
+								Colonisation
+							{% elseif commander.travelType == constant('App\\Modules\\Ares\\Model\\Commander::BACK') %}
+								Retour
+							{% endif %}
+						{% else %}
+							A quai
+						{% endif %}
+						<hr />
+
+						{% set ships_by_type = commander.nbrShipByType %}
+						{% for type in ships_by_type|keys %}
+							{% set quantity = ships_by_type[type] %}
+							<span class="ship">
+								<img src="{{ asset('media/ship/picto/ship' ~ type ~ '.png') }}" {% if quantity == 0 %}class="zero"{% endif %}/>
+								<span class="number">{{ quantity }}</span>
+							</span>
+						{% endfor %}
+					</span>
+				</span>
+			</a>
+		{% endfor %}
+	</div>
+</div>

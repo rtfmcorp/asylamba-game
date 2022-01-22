@@ -1,0 +1,40 @@
+<div id="map-info">
+	<h2>Légende</h2>
+
+	<h3>Type de système</h3>
+	<ul>
+		<li>
+			Cimetière Spatial
+			<img src="{{ asset('media/map/systems/t1c0.png') }}" alt="" />
+		</li>
+		<li>
+			Nébuleuse
+			<img src="{{ asset('media/map/systems/t2c0.png') }}" alt="" />
+		</li>
+		<li>
+			Géante Bleue
+			<img src="{{ asset('media/map/systems/t3c0.png') }}" alt="" />
+		</li>
+		<li>
+			Naine Jaune
+			<img src="{{ asset('media/map/systems/t4c0.png') }}" alt="" />
+		</li>
+		<li>
+			Naine Rouge
+			<img src="{{ asset('media/map/systems/t5c0.png') }}" alt="" />
+		</li>
+	</ul>
+
+	<h3>Revendication</h3>
+	<ul>
+		<li>
+			Non revendiquée
+			<img src="{{ asset('media/map/systems/t4c0.png') }}" alt="" />
+		</li>
+
+		{% for faction_id in range(1, 12) %}
+			<li>{{ get_faction_info(faction_id, 'officialName') }}
+			<img src="{{ asset('media/map/systems/t4c' ~ faction_id ~ '.png') }}" alt="" /></li>
+		{% endfor %}
+	</ul>
+</div>

@@ -1,0 +1,12 @@
+<div id="sectors">
+	<svg viewBox="0, 0, {{ map_size }}, {{ map_size }}" xmlns="http://www.w3.org/2000/svg">
+		{% for sector in sectors %}
+			<polygon
+				class="ally{{ sector.rColor }}"
+				points="{{ galaxy_configuration.getSectorCoord(sector.id, galaxy_configuration.scale, 0) }}"
+				data-x-brc="{{ sector.xBarycentric }}"
+				data-y-brc="{{ sector.yBarycentric }}"
+			/>
+		{% endfor %}
+	</svg>
+</div>

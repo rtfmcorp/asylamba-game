@@ -11,12 +11,14 @@ use App\Modules\Athena\Manager\OrbitalBaseManager;
 use App\Modules\Athena\Model\OrbitalBase;
 use App\Modules\Demeter\Manager\ColorManager;
 use App\Modules\Demeter\Model\Color;
+use App\Modules\Demeter\Resource\ColorResource;
 use App\Modules\Gaia\Event\PlaceOwnerChangeEvent;
 use App\Modules\Gaia\Manager\PlaceManager;
 use App\Modules\Gaia\Model\Place;
 use App\Modules\Hermes\Manager\NotificationManager;
 use App\Modules\Zeus\Manager\PlayerBonusManager;
 use App\Modules\Zeus\Manager\PlayerManager;
+use App\Modules\Zeus\Model\Player;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 class ConquestManager
@@ -32,8 +34,31 @@ class ConquestManager
 		protected EntityManager $entityManager,
 		protected EventDispatcherInterface $eventDispatcher,
 		protected NotificationManager $notificationManager,
+		protected int $colonizationCost,
+		protected int $conquestCost,
 	) {
 
+	}
+
+	public function getColonizationCost(Player $player, int $totalBases): int
+	{
+		return $this->processAttackCost($player, $this->colonizationCost, $totalBases);
+	}
+
+	public function getConquestCost(Player $player, int $totalBases): int
+	{
+		return $this->processAttackCost($player, $this->conquestCost, $totalBases);
+	}
+
+	private function processAttackCost(Player $player, int $cost, int $totalBases): int
+	{
+		$price = $cost * $totalBases;
+
+		if ($player->rColor == ColorResource::CARDAN) {
+			# bonus if the player is from Cardan
+			$price -= round($price * ColorResource::BONUS_CARDAN_COLO / 100);
+		}
+		return $price;
 	}
 
 	public function conquer(Commander $commander): void

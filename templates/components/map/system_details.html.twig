@@ -1,0 +1,193 @@
+<div class="header"
+	 data-sector-color="{{ places[0].sectorColor }}"
+	 data-distance="{{ get_place_distance(default_base, places[0])|number }}">
+	<ul>
+		<li>Système #{{ system.id }}</li>
+		<li>Cordonnées {{ system|coords }}</li>
+		<li>
+			{% if system.rColor == 0 %}
+				Non revendiqué
+			{% else %}
+				<img src="{{ asset('media/ally/big/color' ~ system.rColor ~ '.png') }}" alt="" />
+				Revendiqué par {{ get_faction_info(system.rColor, 'popularName') }}
+			{% endif %}
+		</li>
+		<li>
+			<img src="{{ asset('media/map/systems/t' ~ system.typeOfSystem ~ 'c0.png') }}" alt="" />
+			{{ get_system_info(system.typeOfSystem, 'frenchName') }}
+		</li>
+	</ul>
+	<a href="#" class="button closeactionbox">×</a>
+</div>
+
+<div class="body">
+	<a class="actbox-movers" id="actboxToLeft" href="#"></a>
+	<a class="actbox-movers" id="actboxToRight" href="#"></a>
+	<div class="system">
+		<ul>
+			<li class="star"></li>
+
+			{% for place in places %}
+				{% set position = place.position - 1 %}
+				<li class="place color{{ place.playerColor }}">
+					<a href="#" class="openplace" data-target="{{ position }}">
+						<strong>{{ position }}</strong>
+						{% if place.typeOfPlace == 1 %}
+							<img class="land" src="{{ asset('media/map/place/place' ~ place.typeOfPlace ~ '-' ~ get_place_demography(place.population) ~ '.png') }}" />
+						{% else %}
+							{% if place.resources > 10000000 %}
+								{% set size = 3 %}
+							{% elseif place.resources > 5000000 %}
+								{% set size = 2 %}
+							{% else %}
+								{% set size = 1 %}
+							{% endif %}
+
+							<img class="land" src="{{ asset('media/map/place/place' ~ place.typeOfPlace ~ '-' ~ size ~ '.png') }}" />
+						{% endif %}
+						{% if place.rPlayer != 0 %}
+							<img class="avatar" src="{{ asset('media//avatar/small/' ~ place.playerAvatar ~ '.png') }}" />
+						{% endif %}
+					</a>
+				</li>
+
+				{# noAjax #}
+				<li class="action color{{ place.playerColor }}"
+					id="place-{{ position }}"
+					{% if no_ajax is defined and no_ajax == true and app.request.query.get('place') == place.id %}style="width: 565px;"{% endif %}
+				>
+				<div class="content">
+					<div class="column info">
+						{% set reports = spy_reports|filter(r => r.rPlace == place.id) %}
+						{% if reports|length > 0 %}
+							{% set report = reports[0] %}
+							<a href="{{ path('spy_report', {'id': report.id}) }}"
+							   class="last-spy-link hb"
+							   title="voir le rapport d\'espionnage le plus récent"
+							>
+								<img src="{{ asset('media/map/spy/last-spy.png') }}" alt="" />
+							</a>
+						{% endif %}
+
+						{% if place.typeOfPlace == 1 %}
+						{% if place.typeOfBase != 0 %}
+							<p><strong>{{ place.baseName }}</strong></p>
+
+							<p>propriété du</p>
+							<p>
+								{% if place.playerColor != 0 %}
+									{% set player_status = get_faction_info(place.playerColor, 'status')[place.playerStatus - 1] %}
+									{{ player_status }}
+									<span class="player-name">
+										<a href="{{ path('embassy', {'playerId': place.rPlayer}) }}" class="color{{ place.playerColor }}">
+											{{ place.playerName }}
+										</a>
+									</span>
+								{% else %}
+									rebelle <span class="player-name">{{ place.playerName }}</span>
+								{% endif %}
+							</p>
+						{% else %}
+							<p><strong>Planète rebelle</strong></p>
+
+							<hr />
+
+							{{ include('molecules/common/coeff_indicator.html.twig', {
+								'label': 'Défense',
+								'values': [
+									0,
+									constant('App\\Modules\\Atlas\\Model\\Place::DNG_CASUAL'),
+									constant('App\\Modules\\Atlas\\Model\\Place::DNG_EASY'),
+									constant('App\\Modules\\Atlas\\Model\\Place::DNG_MEDIUM'),
+									constant('App\\Modules\\Atlas\\Model\\Place::DNG_HARD'),
+								],
+								'coeff': place.maxDanger,
+								'media_path': asset('media/resources/defense.png'),
+							}) }}
+						{% endif %}
+
+						<hr />
+							{% set coeffs_data = [
+								{
+									'label': 'Population',
+									'coeff': place.population,
+									'values': [0, 50, 100, 150, 200],
+									'media_path': asset('media/resources/population.png'),
+								},
+								{
+									'label': 'Ressource',
+									'coeff': place.coefResources,
+									'values': [0, 20, 40, 60, 80],
+									'media_path': asset('media/resources/resource.png'),
+								},
+								{
+									'label': 'Science',
+									'coeff': get_place_technosphere_improvement_coeff(place),
+									'values': [0, 8, 16, 24, 32],
+									'media_path': asset('media/resources/science.png'),
+								}
+							] %}
+							{% for coeff_data in coeffs_data %}
+								{{ include('molecules/common/coeff_indicator.html.twig', coeff_data) }}
+							{% endfor %}
+						{% else %}
+							<p>
+								<strong>{{ get_place_type(place)|capitalize }}</strong>
+							</p>
+	
+							<hr />
+	
+							<p>
+								<span class="label">Ressources</span>
+								<span class="value">
+									{{ ((place.resources * place.coefResources)/100)|number }}
+								</span>
+							</p>
+							<p>
+								<span class="label">Débris</span>
+								<span class="value">
+									{{ ((place.resources * place.coefHistory)/100)|number }}
+								</span>
+							</p>
+							<p>
+								<span class="label">Gaz noble</span>
+								<span class="value">
+									{{ ((place.resources * place.population)/100)|number }}
+								</span>
+							</p>
+						{% endif %}
+
+						<p>
+							<span class="label">Distance</span>
+							<span class="value">
+								{{ get_place_distance(default_base, place)|number }} Al.
+							</span>
+						</p>
+
+						{% if place.typeOfPlace == 1 %}
+							{% set reports = combat_reports|filter(r => r.rPlace == place.id) %}
+							{% if reports|length > 0 %}
+								{% set report = reports[0] %}
+								<hr />
+								<p>
+									<em>
+										Dernier pillage {{ report.dFight|date }}.
+									</em>
+								</p>
+							{% endif %}
+						{% endif %}
+					</div>
+
+					{{ include('molecules/map/place_actions.html.twig', {
+						technologies,
+						moving_commanders,
+						colonization_cost,
+						conquest_cost,
+						recycling_missions,
+					}) }}
+				</div>
+			</li>
+			{% endfor %}
+		</ul>
+	</div>
+</div>

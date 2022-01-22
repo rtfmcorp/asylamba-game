@@ -3,6 +3,7 @@
 namespace App\Modules\Ares\Infrastructure\Twig;
 
 use App\Classes\Library\Utils;
+use App\Modules\Ares\Manager\CommanderManager;
 use App\Modules\Ares\Model\Commander;
 use App\Modules\Ares\Resource\CommanderResources;
 use Twig\Extension\AbstractExtension;
@@ -11,6 +12,10 @@ use Twig\TwigFunction;
 
 class CommanderExtension extends AbstractExtension
 {
+	public function __construct(protected CommanderManager $commanderManager)
+	{
+	}
+
 	public function getFilters(): array
 	{
 		return [
@@ -28,6 +33,7 @@ class CommanderExtension extends AbstractExtension
 	public function getFunctions(): array
 	{
 		return [
+			new TwigFunction('get_commander_position', fn (Commander $commander, int $x1, int $x2, int $y1, int $y2) => $this->commanderManager->getPosition($commander, $x1, $x2, $x2, $y2)),
 			new TwigFunction('get_commander_rank', fn (int $level) => $this->getCommanderLevel($level)),
 			new TwigFunction('get_commander_price', fn (Commander $commander, int $commanderCurrentRate) => ceil($commander->getExperience() * $commanderCurrentRate)),
 		];

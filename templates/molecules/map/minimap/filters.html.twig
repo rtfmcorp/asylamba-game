@@ -1,0 +1,43 @@
+<div id="map-option">
+	{% set filters_data = [
+		{
+			'picto': 'media/map/option/minimap.png',
+			'param': constant('App\\Classes\\Container\\Params::SHOW_MAP_MINIMAP'),
+			'tooltip': 'afficher/cacher la petite carte'
+		},
+		{
+			'picto': 'media/orbitalbase/commercialplateforme.png',
+			'param': constant('App\\Classes\\Container\\Params::SHOW_MAP_RC'),
+			'tooltip': 'afficher/cacher vos routes commerciales'
+		},
+		{
+			'picto': 'media/orbitalbase/antispy.png',
+			'param': constant('App\\Classes\\Container\\Params::SHOW_MAP_ANTISPY'),
+			'tooltip': 'afficher/cacher vos cercles de contre-espionnage'
+		},
+		{
+			'picto': 'media/fleet/general-quarter.png',
+			'param': constant('App\\Classes\\Container\\Params::SHOW_MAP_FLEETOUT'),
+			'tooltip': 'afficher/cacher vos mouvements de flotte'
+		},
+		{
+			'picto': 'media/fleet/movement.png',
+			'param': constant('App\\Classes\\Container\\Params::SHOW_MAP_FLEETIN'),
+			'tooltip': 'afficher/cacher les attaques entrantes'
+		},
+	] %}
+	{% for filter_data in filters_data %}
+		{{ include('atoms/map/minimap/filter.html.twig', filter_data) }}
+	{% endfor %}
+
+	<a href="#"
+		class="sh hb lb moveTo switch-class"
+		data-class="active"
+		data-x-position="240"
+		data-y-position="19"
+		data-target="map-info"
+		title="légende"
+	>
+		<img src="{{ asset('media/map/option/info.png') }}" alt="information" />
+	</a>
+</div>

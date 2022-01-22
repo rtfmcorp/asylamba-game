@@ -1,0 +1,24 @@
+<div id="own-base">
+	<svg viewBox="0, 0, {{ map_size }}, {{ map_size }}" xmlns="http://www.w3.org/2000/svg">
+		{% for base in player_bases %}
+			{% set centerX = base.xSystem * galaxy_configuration.scale %}
+			{% set centerY = base.ySystem * galaxy_configuration.scale %}
+
+			<circle cx="{{ centerX }}" cy="{{ centerY }}" r="22" />
+
+			{% if base.id == current_base.id %}
+				<circle cx="{{ centerX }}" cy="{{ centerY }}" r="16">
+					<animate attributeType="XML" from="16" to="60" begin="0s" dur="1200ms" repeatCount="indefinite" attributeName="r" />
+					<animate attributeType="CSS" from="0.2" to="0" begin="0s" dur="1200ms" repeatCount="indefinite" attributeName="opacity" />
+				</circle>
+
+				<circle cx="{{ centerX }}"
+						cy="{{ centerY }}"
+						r="{{ (get_max_travel_distance() * galaxy_configuration.scale) + 10 }}"
+						style="fill: none; stroke-width: 6px; stroke: white; stroke-dasharray: 50 10;" />
+			{% else %}
+				<circle cx="{{ centerX }}" cy="{{ centerY }}" r="28" />
+			{% endif %}
+		{% endfor %}
+	</svg>
+</div>

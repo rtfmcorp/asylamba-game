@@ -15,12 +15,19 @@ use App\Classes\Entity\EntityManager;
 use App\Modules\Athena\Model\CommercialRoute;
 use App\Modules\Demeter\Model\Color;
 use App\Modules\Athena\Model\OrbitalBase;
+use App\Modules\Zeus\Model\Player;
 
 class CommercialRouteManager
 {
 	public function __construct(EntityManager $entityManager)
 	{
 		$this->entityManager = $entityManager;
+	}
+
+	// @TODO use an appropriate DTO for this
+	public function getAllPlayerRoutes(Player $player): array
+	{
+		return $this->entityManager->getRepository(CommercialRoute::class)->getAllPlayerRoutes($player);
 	}
 	
 	/**

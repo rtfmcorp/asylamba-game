@@ -1,21 +1,10 @@
 <?php
 
-/**
- * Orbital Base Manager
- *
- * @author Jacky Casas
- * @copyright Expansion - le jeu
- *
- * @package Athena
- * @update 02.01.14
-*/
 namespace App\Modules\Athena\Manager;
 
 use App\Classes\Library\Session\SessionWrapper;
 use App\Classes\Library\Utils;
 use App\Classes\Library\Game;
-use App\Classes\Library\Format;
-use App\Classes\Worker\CTC;
 use App\Classes\Exception\ErrorException;
 use App\Classes\Entity\EntityManager;
 
@@ -23,21 +12,17 @@ use App\Modules\Ares\Model\Commander;
 use App\Modules\Athena\Model\OrbitalBase;
 use App\Modules\Gaia\Model\System;
 use App\Modules\Promethee\Manager\TechnologyQueueManager;
-use App\Modules\Promethee\Manager\TechnologyManager;
 use App\Modules\Zeus\Manager\PlayerManager;
 use App\Modules\Zeus\Manager\PlayerBonusManager;
-use App\Modules\Gaia\Manager\PlaceManager;
 use App\Modules\Ares\Manager\CommanderManager;
 use App\Modules\Hermes\Manager\NotificationManager;
 use App\Modules\Athena\Helper\OrbitalBaseHelper;
 use App\Modules\Zeus\Model\PlayerBonus;
 
 use App\Modules\Athena\Resource\OrbitalBaseResource;
-use App\Modules\Promethee\Helper\TechnologyHelper;
-use App\Modules\Athena\Resource\ShipResource;
-use App\Classes\Library\Flashbag;
 
 use App\Classes\Daemon\ClientManager;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Contracts\Service\Attribute\Required;
 
@@ -48,6 +33,7 @@ class OrbitalBaseManager
 	protected PlayerManager $playerManager;
 
 	public function __construct(
+		protected RequestStack $requestStack,
 		protected EntityManager $entityManager,
 		protected ClientManager $clientManager,
 		protected MessageBusInterface $messageBus,
@@ -79,6 +65,22 @@ class OrbitalBaseManager
 	public function setPlayerManager(PlayerManager $playerManager): void
 	{
 		$this->playerManager = $playerManager;
+	}
+
+	/**
+	 * @param list<Commander> $movingCommanders
+	 */
+	public function getPlayerBasesCount(array $movingCommanders): int
+	{
+		$session = $this->requestStack->getSession();
+		$obQuantity = $session->get('playerBase')->get('ob')->size();
+		$msQuantity = $session->get('playerBase')->get('ms')->size();
+		$coloQuantity = \count(\array_filter(
+			$movingCommanders,
+			fn (Commander $commander) => $commander->getTravelType() == Commander::COLO
+		));
+
+		return $obQuantity + $msQuantity + $coloQuantity;
 	}
 	
 	/**

@@ -298,14 +298,6 @@ echo '<div class="column act">';
 				} elseif ($defaultBase->getLevelRecycling() == 0) {
 					echo 'Vous devez disposer d\'un centre de recyclage.';
 				} else {
-					$totalShip  = $orbitalBaseHelper->getBuildingInfo(OrbitalBaseResource::RECYCLING, 'level', $defaultBase->levelRecycling, 'nbRecyclers');
-					$activeShip = 0;
-					$travelTime = Game::getTimeTravel($defaultBase->system, $defaultBase->position, $defaultBase->xSystem, $defaultBase->ySystem, $place->rSystem, $place->position, $place->xSystem, $place->ySystem, $session->get('playerBonus'));
-
-					foreach ($baseMissions as $mission) { 
-						$activeShip += $mission->recyclerQuantity;
-						$activeShip += $mission->addToNextMission;
-					}
 
 					echo '<span class="label-box">';
 						echo '<span class="key">Recycleurs libres</span>';

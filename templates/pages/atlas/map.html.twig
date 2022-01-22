@@ -1,0 +1,53 @@
+{% extends 'layouts/game.html.twig' %}
+
+{% set map_size = galaxy_configuration.scale * galaxy_configuration.galaxy.size %}
+
+{% block body %}
+	{# control include #}
+	{{ include('molecules/map/minimap/filters.html.twig', { default_map_parameters }) }}
+	{{ include('molecules/map/minimap/minimap.html.twig', { galaxy_configuration, sectors, default_map_parameters }) }}
+	{{ include('molecules/map/commanders.html.twig', { local_commanders }) }}
+
+	<div id="coord-box"></div>
+
+	{% if default_position.system is not null %}
+		{% set no_ajax = true %}
+
+		<div id="action-box" style="bottom: 0px;">
+			{{ include('components/map/system_details.html.twig', {
+				places,
+				default_base,
+				no_ajax,
+				moving_commanders,
+				recycling_missions,
+				technologies,
+				colonization_cost,
+				conquest_cost,
+			}) }}
+		</div>
+	{% else %}
+		<div id="action-box"></div>
+	{% endif %}
+	{# map sytems #}
+	<div id="map"
+		data-begin-x-position="{{ default_position.x }}"
+		data-begin-y-position="{{ default_position.y }}"
+		data-related-place="{{ default_base.id }}"
+		data-map-size="{{ map_size }}"
+		data-map-ratio="{{ galaxy_configuration.scale }}"
+		style="width: {{ map_size }}px; height: {{ map_size }}px;"
+	>
+		<div id="background"></div>
+
+		{{ include('components/map/sectors.html.twig', { sectors, map_size, galaxy_configuration }) }}
+		{{ include('molecules/map/spying_circles.html.twig', { player_bases, map_size, galaxy_configuration }) }}
+
+		{{ include('molecules/map/current_base.html.twig', { player_bases, map_size, galaxy_configuration }) }}
+		{{ include('molecules/map/commercial_routes.html.twig', { commercial_routes, default_map_parameters, map_size, galaxy_configuration }) }}
+		{{ include('molecules/map/fleet_movements.html.twig', { moving_commanders, default_map_parameters, map_size }) }}
+		{{ include('molecules/map/attacks.html.twig', { attacking_commanders, default_map_parameters, map_size }) }}
+
+		{{ include('molecules/map/systems.html.twig', { 'current_system_id': default_position['system_id'], systems, sectors, map_size }) }}
+		{{ include('molecules/map/legend.html.twig') }}
+	</div>
+{% endblock body %}

@@ -1,0 +1,24 @@
+{% set fleet_param = constant('App\\Classes\\Container\\Params::SHOW_MAP_FLEETIN') %}
+
+<div id="attacks" {% if false == app.request.cookies.get('p' ~ fleet_param, default_map_parameters[fleet_param]) %}style="display:none;"{% endif %}>
+	<svg viewBox="0, 0, {{ map_size }}, {{ map_size }}" xmlns="http://www.w3.org/2000/svg">
+		{% for commander in attacking_commanders|filter(c => c.travelType != constant('App\\Modules\\Ares\\Model\\Commander::BACK')) %}
+			{% set start_place = get_place(commander.rStartPlace) %}
+			{% set destination_place = get_place(commander.rDestinationPlace) %}
+			{% set x1 = start_place.xSystem * galaxy_configuration.scale %}
+			{% set x2 = destination_place.xSystem * galaxy_configuration.scale %}
+			{% set y1 = start_place.ySystem * galaxy_configuration.scale %}
+			{% set y2 = destination_place.ySystem * galaxy_configuration.scale %}
+			{% set commander_position = get_commander_position(commander, x1, x2, y1, y2) %}
+			{% set x3 = commander_position[0] %}
+			{% set y3 = commander_position[1] %}
+			{% set remaining_time = commander|travel_remaining_time %}
+		
+			<line class="color{{ commander.playerColor }}" x1="{{ x1 }}" x2="{{ x2 }}" y1="{{ y1 }}" y2="{{ y2 }}" />
+			<circle class="color{{ commander.playerColor }}" cx="0" cy="0" r="3">
+				<animate attributeName="cx" attributeType="XML" fill="freeze" from="{{ x3 }}" to="{{ x2 }}" begin="0s" dur="{{ remaining_time }}s"/>
+				<animate attributeName="cy" attributeType="XML" fill="freeze" from="{{ y3 }}" to="{{ y2 }}" begin="0s" dur="{{ remaining_time }}s"/>
+			</circle>
+		{% endfor %}
+	</svg>
+</div>

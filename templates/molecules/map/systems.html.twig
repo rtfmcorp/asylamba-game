@@ -1,0 +1,44 @@
+<div id="systems">
+	{% set current_player_bases_sector_ids = player_bases|map(b => b.system) %}
+
+	{% for system in systems %}
+		{% set has_bases_in = system.id in current_player_bases_sector_ids %}
+		<a href="#"
+			class="loadSystem {{ current_system_id }} {% if system.id == current_system_id %}active{% endif %}"
+			data-system-id="{{ system.id }}"
+			data-x-position="{{ system.xPosition }}"
+			data-y-position="{{ system.yPosition }}"
+			style="top: {{ system.yPosition * galaxy_configuration.scale - 10 }}px; left: {{ system.xPosition * galaxy_configuration.scale - 10 }}px"
+		>
+			<img src="{{ asset('media/map/systems/t' ~ system.typeOfSystem ~ 'c' ~ system.rColor ~ '.png') }}"
+				 {% if has_bases_in %}class="own"{% endif%}
+				alt="" />
+		</a>
+	{% endfor %}
+
+	{% for sector in sectors %}
+		{% set sectorCenterX = sector.xBarycentric * galaxy_configuration.scale %}
+		{% set sectorCenterY = sector.YBarycentric * galaxy_configuration.scale %}
+		<span
+		class="sector-number color{{ sector.rColor }} sh"
+		data-target="sector-info-{{ sector.id }}"
+		style="left: {{ sectorCenterX }}px; top: {{ sectorCenterY }}px">
+			{{ sector.id }}
+		</span>
+
+		<div id="sector-info-{{ sector.id }}" class="sector-info color{{ sector.rColor }}" style="left: {{ sectorCenterX + 55 }}px; top: {{ sectorCenterY - 10 }}px">
+			<h2>{{ sector.name }}</h2>
+			<p>
+				<a href="#">+</a>
+				{% if sector.rColor != 0 %}
+					Revendiqué par {{ get_faction_info(sector.rColor, 'popularName') }}
+					| {{ sector.tax }}% de taxe
+				{% else %}
+					Non revendiqué
+					| Aucune taxe
+				{% endif %}
+				| rapporte {{ sector.points }} point{{ sector.points|plural }}
+			</p>
+		</div>
+	{% endfor %}
+</div>

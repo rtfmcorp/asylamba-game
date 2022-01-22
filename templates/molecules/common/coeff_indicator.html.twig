@@ -1,0 +1,9 @@
+<p>
+	<span class="label">{{ label }}</span>
+	<span class="value">
+		{% set icons_number = values|filter(v => coeff >= v)|length %}
+		{% for i in range(1, icons_number) %}
+			<img src="{{ media_path }}" class="icon-color" alt="" />
+		{% endfor %}
+	</span>
+</p>

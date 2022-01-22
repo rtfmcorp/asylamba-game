@@ -1,0 +1,16 @@
+{% set commercial_routes_param = constant('App\\Classes\\Container\\Params::SHOW_MAP_RC') %}
+
+{# @TODO use a correct DTO for this view #}
+<div id="commercial-routes" {% if false == app.request.cookies.get('p' ~ commercial_routes_param, default_map_parameters[commercial_routes_param]) %}style="display:none;"{% endif %}>
+	<svg viewBox="0, 0, {{ map_size }}, {{ map_size }}" xmlns="http://www.w3.org/2000/svg">
+		{% for route in commercial_routes %}
+			{% set class = route.statement == constant('App\\Modules\\Athena\\Model\\CommercialRoute::ACTIVE') ? 'active' : 'standby' %}
+
+			<line class="commercialRoute {{ class }}"
+				  x1="{{ route.sy1x * galaxy_configuration.scale }}"
+				  x2="{{ route.sy2x * galaxy_configuration.scale }}"
+				  y1="{{ route.sy1y * galaxy_configuration.scale }}"
+				  y2="{{ route.sy2y * galaxy_configuration.scale }}" />
+		{% endfor %}
+	</svg>
+</div>

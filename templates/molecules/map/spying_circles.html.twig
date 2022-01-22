@@ -1,0 +1,15 @@
+{% set antispy_param = constant('App\\Classes\\Container\\Params::SHOW_MAP_ANTISPY') %}
+
+<div id="spying" {% if false == app.request.cookies.get('p' ~ antispy_param, default_map_parameters[antispy_param]) %}style="display:none;"{% endif %}>
+	<svg viewBox="0, 0, {{ map_size }}, {{ map_size }}" xmlns="http://www.w3.org/2000/svg">
+		{% for base in player_bases %}
+			{% set spy_radius = get_base_antispy_radius(base) %}
+			{% set centerX = base.xSystem * galaxy_configuration.scale %}
+			{% set centerY = base.ySystem * galaxy_configuration.scale %}
+
+			<circle cx="{{ centerX }}" cy="{{ centerY }}" r="{{ spy_radius / 3 }}" />
+			<circle cx="{{ centerX }}" cy="{{ centerY }}" r="{{ (spy_radius / 3) * 2 }}" />
+			<circle cx="{{ centerX }}" cy="{{ centerY }}" r="{{ spy_radius }}" />
+		{% endfor %}
+	</svg>
+</div>

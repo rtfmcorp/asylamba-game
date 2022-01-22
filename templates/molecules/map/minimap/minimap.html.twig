@@ -1,0 +1,34 @@
+{% set rate = 400 / galaxy_configuration.galaxy.size %}
+{% set minimap_param = constant('App\\Classes\\Container\\Params::SHOW_MAP_MINIMAP') %}
+
+<div id="map-content" {% if false == app.request.cookies.get('p' ~ minimap_param, default_map_parameters[minimap_param]) %}style="display:none;"{% endif %}>
+	<div class="mini-map">
+		<svg class="sectors" viewBox="0, 0, 400, 400" xmlns="http://www.w3.org/2000/svg">
+			{% for sector in sectors %}
+				<polygon
+					class="ally{{ sector.rColor }} moveTo"
+					points="{{ galaxy_configuration.getSectorCoord(sector.id, rate, 0) }}"
+					data-x-position="{{ sector.xBarycentric }}"
+					data-y-position="{{ sector.yBarycentric }}"
+				/>
+			{% endfor %}
+		</svg>
+		<div class="number">
+			{% for sector in sectors %}
+				{% set i = sector.id - 1 %}
+				{% set display_params = galaxy_configuration.sectors[i].display %}
+				<span style="top: {{ display_params[1] * rate / 1.35 }}px; left: {{ display_params[0] * rate / 1.35 }}px;">
+					{{ sector.id }}
+				</span>
+			{% endfor %}
+		</div>
+		<svg class="bases" viewBox="0, 0, 400, 400" xmlns="http://www.w3.org/2000/svg">
+			{% for base in player_bases %}
+				<circle cx="{{ base.xSystem * rate }}"
+						cy="{{ base.ySystem * rate }}"
+						r="4" />
+			{% endfor %}
+		</svg>
+		<div class="viewport"></div>
+	</div>
+</div>

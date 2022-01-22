@@ -1,0 +1,282 @@
+{% set travel_time = get_travel_time(default_base, place)|lite_seconds %}
+<div class="column act">
+	<div class="top">
+		{% if place.typeOfPlace == 1 %}
+			{% set can_attack = can_player_attack_place(current_player, place) %}
+			{% set can_move = can_player_move_to_place(current_player, place, default_base) %}
+			{% set can_trade = can_orbital_base_trade_with_place(default_base, place) %}
+			{% set can_spy = can_spy(current_player, place) %}
+			{% set can_recycle = can_recycle(current_player, place) %}
+
+			<a href="#" class="actionbox-sh {% if can_attack == false %}grey{% endif %}" data-target="1">
+				<img src="{{ asset('media/map/action/loot.png') }}" alt="" />
+			</a>
+			<a href="#" class="actionbox-sh {% if can_attack == false %}grey{% endif %}" data-target="2">
+				<img src="{{ asset('media/map/action/colo.png') }}" alt="" />
+			</a>
+
+			<a href="#" class="actionbox-sh {% if can_move == false %}grey{% endif %}" data-target="3">
+				<img src="{{ asset('media/map/action/move.png') }}" alt="" />
+			</a>
+
+			<a href="#" class="actionbox-sh {% if can_trade == false %}grey{% endif %}" data-target="4">
+				<img src="{{ asset('media/map/action/rc.png') }}" alt="" />
+			</a>
+
+			<a href="#" class="actionbox-sh {% if can_spy == false %}grey{% endif %}" data-target="5">
+				<img src="{{ asset('media/map/action/spy.png') }}" alt="" />
+			</a>
+		{% else %}
+			<a href="#" class="actionbox-sh {% if can_recycle == false %}grey{% endif %}" data-target="1">
+				<img src="{{ asset('media/orbitalbase/recycler.png') }}" alt="">
+			</a>
+		{% endif %}
+	</div>
+
+	<div class="bottom">
+		{% if place.typeOfPlace == 1 %}
+			<div class="box" data-id="1">
+				<h2>Lancer un pillage</h2>
+				<div class="box-content">
+					{% if place.rPlayer == 0 and place.typeOfPlace != 1 %}
+						Vous ne pouvez pas attaquer une planète non-habitable
+					{% elseif place.typeOfPlace == 1 and place.playerColor == current_player.rColor %}
+						Vous ne pouvez pas attaquer un joueur de votre faction
+					{% elseif place.typeOfPlace == 1 and place.playerLevel == 1 and place.playerColor != 0 %}
+						Ce joueur est sous protection débutant
+					{% else %}
+						<div class="commander-tile">
+							<div class="item no-commander">
+								Aucun commandant selectionné. Sélectionnez-en un sur la barre latérale gauche.<br/><br />
+								Si aucun commandant n\'est visible, vous pouvez en affecter un depuis l\'école de commandement.
+								</div>
+							<div class="item too-far">
+								Ce commandant est trop éloigné pour piller cette planète.
+								</div>
+							<div class="item move">
+								<strong class="name"></strong><br />
+								Temps de l\'attaque : {{ travel_time }} <img src="{{ asset('media/resources/time.png') }}" class="icon-color" alt="" /><br />
+								Capacité de la soute : <span class="wedge"></span> <img src="{{ asset('media/resources/resource.png') }}" class="icon-color" alt="" /><br />
+								<a class="button" href="#" data-url="{{ path('loot', {'commanderId': '{id}', 'placeId': place.id}) }}">
+									Lancer l\'attaque
+								</a>
+							</div>
+						</div>
+					{% endif %}
+					</div>
+				</div>
+
+			{% set max_bases = technologies.getTechnology(constant('App\\Modules\\Promethee\\Model\\Technology::BASE_QUANTITY')) + 1 %}
+			{% set total_bases = get_player_bases_count(moving_commanders) %}
+
+			<div class="box" data-id="2">
+				<h2>Lancer une {{ place.rPlayer == 0 ? 'colonisation' : 'conquête' }}</h2>
+				<div class="box-content">
+					{% if place.rPlayer == 0 and place.typeOfPlace != 1 %}
+						Vous ne pouvez pas coloniser une planète non-habitable.
+					{% elseif place.typeOfPlace == 1 and place.playerColor == current_player.rColor %}
+						Vous ne pouvez pas conquérir un joueur de votre faction.
+					{% elseif place.typeOfPlace == 1 and place.playerLevel <= 3 and place.playerLevel > 0 and place.playerColor != 0 %}
+						Vous ne pouvez pas conquérir un joueur de niveau 3 ou inférieur.
+					{% elseif place.rPlayer == 0 and technologies.getTechnology(constant('App\\Modules\\Promethee\\Model\\Technology::COLONIZATION')) == 0 %}
+						Vous devez développer la technologie colonisation.
+					{% elseif place.rPlayer != 0 and technologies.getTechnology(constant('App\\Modules\\Promethee\\Model\\Technology::COLONIZATION')) == 0 %}
+						Vous devez développer la technologie conquête.
+					{% elseif total_bases >= max_bases %}
+						Vous devez améliorer le niveau de la technologie administration étendue pour disposer de planète supplémentaire.
+					{% else %}
+						<div class="commander-tile">
+							<div class="item no-commander">
+								Aucun commandant selectionné. Sélectionnez-en un sur la barre latérale gauche.<br/><br />
+								Si aucun commandant n\'est visible, vous pouvez en affecter un depuis l\'école de commandement.
+								</div>
+							<div class="item too-far">
+								Ce commandant est trop éloigné pour coloniser cette planète.
+								</div>
+							<div class="item move">
+								<strong class="name"></strong><br />
+								Temps de l\'attaque : {{ travel_time }}
+								<img src="{{ asset('media/resources/time.png') }}" class="icon-color" alt="" /><br />
+
+								{% if place.rPlayer == 0 %}
+									Coût : <span class="price">{{ colonization_cost|number }}</span>
+									<img src="{{ asset('media/resources/credit.png') }}" class="icon-color" alt="" /><br />
+									<a class="button" href="#" data-url="{{ path('colonize', 'commanderId': '{id}', 'placeId': place.id) }}">Lancer la colonisation</a>
+								{% else %}
+									Coût : <span class="price">{{ conquest_cost|number }}</span>
+									<img src="{{ asset('media/resources/credit.png') }}" class="icon-color" alt="" /><br />
+									<a class="button" href="#" data-url="{{ path('conquer', {'commanderId': '{id}', 'placeId': place.id}) }}">Lancer la conquête</a>
+								{% endif %}
+							</div>
+						</div>
+					{% endif %}
+				</div>
+			</div>
+
+			<div class="box" data-id="3">
+				<h2>
+					{{ place.rPlayer == default_base.rPlayer ? 'Déplacer une flotte' : 'Donner votre flotte' }}
+				</h2>
+
+				<div class="box-content">
+					{% if place.id == default_base.id %}
+						Vous ne pouvez pas déplacer une flotte sur votre planète de départ
+					{% elseif place.playerColor != current_player.rColor %}
+						Vous ne pouvez donner une de vos flotte qu\'a un membre de votre faction
+					{% else %}
+						<div class="commander-tile">
+							<div class="item no-commander">
+								Aucun commandant selectionné. Sélectionnez-en un sur la barre latérale gauche.<br/><br />
+								Si aucun commandant n\'est visible, vous pouvez en affecter un depuis l\'école de commandement.
+							</div>
+							<div class="item too-far">
+								Ce commandant est trop éloigné pour se déplacer jusqu\'ici.
+							</div>
+							<div class="item move">
+								<strong class="name"></strong><br />
+								Temps du déplacement : {{ travel_time}} <img src="{{ asset('media/resources/time.png') }}" class="icon-color" alt="" /><br />
+								{# @TODO default_base.rPlayer could probably be replaced with current_player.id #}
+								{% if place.rPlayer != default_base.rPlayer %}
+									Attention, vous perdrez votre flotte !<br />
+								{% endif %}
+								<a class="button" href="#" data-url="{{ path('move_fleet', {'commanderId': '{id}', 'placeId': place.id}) }}">Lancer la mission</a>
+							</div>
+						</div>
+					{% else %}
+				</div>
+			</div>
+
+			<div class="box" data-id="4">
+				<h2>Proposer une route commerciale</h2>
+				<div class="box-content">
+					{% if place.rPlayer == 0 %}
+						Vous ne pouvez proposer une route commerciale qu\'à des joueurs.
+					{% elseif place.id == default_base.id %}
+						Vous ne pouvez pas proposer une route commerciale sur votre propre base.
+					{% elseif default_base.levelSpatioport == 0 %}
+						Il vous faut un spatioport pour proposer une route commerciale.
+					{% elseif place.levelSpatioport == 0 %}
+						Le joueur ne dispose pas d\'un spatioport.
+					{% else %}
+						{% set commercial_route_data = get_commercial_route_data(default_base, place) %}
+						{% set distance = get_place_distance(default_base, place) %}
+
+						{% set price = get_route_price(distance) %}
+						{% set price = get_route_income(default_base, place, distance, route_sector_bonus, route_color_bonus) %}
+
+						<div class="rc">
+							<img src="{{ asset('media/map/place/place' ~ place.typeOfBase ~ '-' ~ get_place_demography(place) ~ '.png') }}" alt="" class="planet" />
+
+							<span class="label-box">
+								<span class="key">Revenu par relève</span>
+								<span class="val">
+									{{ income|number }}
+									<img src="{{ asset('media/resources/credit.png') }}" alt="" class="icon-color" />
+								</span>
+							</span>
+
+							<span class="label-box">
+								<span class="key">Coût de construction</span>
+								<span class="val">
+									{{ price|number }}
+									<img src="{{ asset('media/resources/credit.png') }}" alt="" class="icon-color" />
+								</span>
+							</span>
+
+							{% if commercial_route_data.proposed == true %}
+								<a href="{{ path('spatioport') }}" class="button">Annuler la proposition</a>
+							{% elseif commercial_route_data.not_accepted = true %}
+								<a href="{{ path('spatioport') }}" class="button">Accepter la proposition</a>
+							{% elseif commercial_route_data.stand_by == true %}
+								<span class="button">C\'est la guerre.</span>
+							{% else %}
+
+								{% if price > current_place.credit %}
+									<span class="button">Vous n\'avez pas assez de crédits.</span>
+								{% elseif commercial_route_data.slots < get_building_info(constant('App\\Modules\\Athena\\Resource\\OrbitalBaseResource::SPATIOPORT'), 'level', current_base.levelSpatioport, 'nbRoutesMax') %}
+									<a href="{{ path('propose_route', {'sourceBase': default_base.id, 'destinationBase': place.id }) }}" class="button">
+										Proposer une route commerciale
+									</a>
+								{% else %}
+									<span class="button">Pas assez de slots.</span>
+								{% endif %}
+							{% endif %}
+						</div>
+					{% endif %}
+				</div>
+			</div>
+
+			<div class="box" data-id="5">
+				<h2>Lancer un espionnage</h2>
+				<div class="box-content">
+					{% if place.rPlayer != 0 and place.playerColor == current_player.rColor %}
+						Vous ne pouvez pas espionner un joueur de votre faction
+					{% elseif place.rPlayer == 0 and place.typeOfPlace != 1 %}
+						Vous ne pouvez pas espionner une planète non-habitable
+					{% else %}
+						{% set prices = {
+							'Impact faible': 1000,
+							'Impact moyen': 2500,
+							'Grand impact': 5000
+						} %}
+
+						{% for label in prices %}
+							{% set price = prices[label] %}
+							<a href="{{ path('spy', {'baseId': place.id, price}) }}" class="spy-button">
+								<span class="label">{{ label }}</span>
+								<span class="price">
+									{{ price|number }}
+									<img src="{{ asset('media/resources/credit.png') }}" class="icon-color" alt="" />
+								</span>
+							</a>
+						{% endfor %}
+
+						<form class="spy-form" method="post" action="{{ path('spy', {'baseId': place.id}) }}">
+							<input type="text" value="10000" name="price" />
+							<button type="submit">Espionner</button>
+						</form>
+					{% endif %}
+				</div>
+			</div>
+		{% else %}
+			<div class="box" data-id="1">
+				<h2>Envoyer des recycleurs</h2>
+				<div class="box-content">
+					{% if place.sectorColor != current_player.rColor || place.sectorColor == 0 %}
+						Vous ne pouvez envoyer des recycleurs que dans des secteurs non-revendiqués ou contrôlés par votre faction.
+					{% elseif place.typeOfPlace == constant('App\\Modules\\Atlas\\Model\\Place::EMPTYZONE') %}
+						Cette endroit regorgait autrefois de ressources ou de gaz mais de nombreux recycleurs sont déjà passés par là et n\'ont laissé que le vide de l\'espace.
+					{% elseif current_base.levelRecycling == 0 %}
+						Vous devez disposer d\'un centre de recyclage.
+					{% else %}
+						{% set total_ships = get_building_info(
+							constant('App\\Modules\\Athena\\Resource\\OrbitalBaseResource::EMPTYZONE'),
+							'level',
+							default_base.levelRecycling,
+							'nbRecyclers',
+						) %}
+						{# @TODO move this logic to a dedicated service #}
+						{% set active_ship = recycling_missions|reduce((carry, rm) => carry + rm.recyclerQuantity + rm.addToNextMission) %}
+						{% set available_recyclers = total_ships - active_ships %}
+						{% set recyclers_travel_time = (2 * get_travel_time(default_base, place)) + constant('App\\Modules\\Athena\\Model\\RecyclingMission::RECYCLING_TIME')|lite_seconds  %}
+
+						<span class="label-box">
+								<span class="key">Recycleurs libres</span>
+								<span class="val">{{ available_recyclers|number }}</span>
+							</span>
+
+						<span class="label-box">
+								<span class="key">Temps de cycle</span>
+								<span class="val">{{ recyclers_travel_time }}</span>
+							</span>
+
+						<form class="spy-form" method="post" action="{{ path('create_recycling_mission', {'baseId': default_base.id, 'placeId': place.id}) }}">
+							<input type="text" name="quantity" value="{{ available_recyclers }}" />
+							<button type="submit">Envoyer</button>
+						</form>
+					{% endif %}
+				</div>
+			</div>
+		{% endif %}
+	</div>
+</div>
