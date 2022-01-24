@@ -1,0 +1,23 @@
+<div id="subnav">
+	<button class="move-side-bar top" data-dir="up"></button>
+	<div class="overflow">
+		<a href="{{ path('financial_investments') }}" class="item {% if app.request.get('_route') == 'financial_investments' %}active{% endif %}">
+			<span class="picto">
+				<img src="{{ asset('media/financial/invest.png') }}" alt="" />
+			</span>
+			<span class="content skin-1">
+				<span>Investissement</span>
+			</span>
+		</a>
+
+		<a href="{{ path('financial_transfers') }}" class="item {% if app.request.get('_route') == 'financial_transfers' %}active{% endif %}">
+			<span class="picto">
+				<img src="{{ asset('media/financial/send-credit.png') }}" alt="" />
+			</span>
+			<span class="content skin-1">
+				<span>Envoi de crédit</span>
+			</span>
+		</a>
+	</div>
+	<button class="move-side-bar bottom" data-dir="down"></button>
+</div>

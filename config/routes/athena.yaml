@@ -1,3 +1,7 @@
+financial:
+    resource: './athena/financial.yaml'
+    prefix: /financial
+
 switchbase:
     path: /switchbase/{baseId}/{page}
     controller: App\Modules\Athena\Infrastructure\Controller\SwitchBaseController
@@ -11,10 +15,6 @@ base_situation:
 bases:
     path: /bases
     controller: App\Modules\Athena\Infrastructure\Controller\BasesController
-
-financial:
-    path: /financial
-    controller: App\Modules\Athena\Infrastructure\Controller\FinancialController
 
 generator:
     path: /generator

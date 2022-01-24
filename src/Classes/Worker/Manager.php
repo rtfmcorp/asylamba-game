@@ -21,12 +21,12 @@ abstract class Manager {
         $this->newSession();
     }
 
-    public function newSession($uMode = ASM_UMODE) {
+    public function newSession($uMode = true) {
         $this->statSessions++;
         $this->statChangeSessions++;
 
         if (count($this->sessions) == 0) {
-            $session = new ManagerSession('_1', $this->managerType, ASM_UMODE);
+            $session = new ManagerSession('_1', $this->managerType, true);
         } else {
             $session = new ManagerSession('_' . (count($this->sessions) + 1), $this->managerType, $uMode);
         }

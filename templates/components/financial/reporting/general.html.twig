@@ -1,0 +1,155 @@
+<div class="component size2 financial">
+	<div class="head">
+		<h1>Finance</h1>
+	</div>
+	<div class="fix-body">
+		<div class="body">
+			<table><tr><td>
+						<h4>recettes</h4>
+						<ul class="list-type-1">
+							<li>
+								<span class="label">impôts</span>
+								<span class="value">
+									{{ investments_data.totalTaxIn|number }}
+									{% if tax_bonus > 0 %}
+										<span class="bonus">+{{ investments_data.totalTaxInBonus|number }}</span>
+									{% endif %}
+									<img class="icon-color" src="{{ asset('media/resources/credit.png') }}" alt="crédits" />
+								</span>
+								</li>
+							<li>
+								<span class="label">taxes commerciales</span>
+								<span class="value">
+									{{ investments_data.totalRouteIncome }}
+									{% if trade_routes_income_bonus > 0 %}
+										<span class="bonus">+{{ investments_data.totalRouteIncomeBonus|number }}</span>
+									{% endif %}
+									<img class="icon-color" src="{{ asset('media/resources/credit.png') }}" alt="crédits" />
+								</span>
+							</li>
+							<li class="empty"></li>
+							<li class="empty"></li>
+							<li class="empty"></li>
+							<li class="strong">
+								<span class="label">total des recettes</span>
+								<span class="value">
+									{{ investments_data.total_income|number }}
+									<img class="icon-color" src="{{ asset('media/resources/credit.png') }}" alt="crédits" />
+								</span>
+							</li>
+							{% if investments_data.gains < 0 %}
+								<li class="strong">
+									<span class="label">perte</span>
+									<span class="value">
+										{{ investments_data.gains|abs|number }}
+										<img class="icon-color" src="{{ asset('media/resources/credit.png') }}" alt="crédits" />
+									</span>
+								</li>
+							{% endif %}
+							</ul>
+
+						</td><td>
+
+						<h4>dépenses</h4>
+						<ul class="list-type-1">
+							<li>
+								<span class="label">investissements planétaires</span>
+								<span class="value">
+									{{ investments_data.totalInvest|number }}
+									<img class="icon-color" src="{{ asset('media/resources/credit.png') }}" alt="crédits" />
+								</span>
+							</li>
+							<li>
+								<span class="buttons">
+									<a href="#" class="sh" data-target="invest-uni">↓</a>
+								</span>
+								<span class="label">investissements universitaires</span>
+								<span class="value">
+									{{ investments_data.totalInvestUni|number }}
+									<img class="icon-color" src="{{ asset('media/resources/credit.png') }}" alt="crédits" />
+								</span>
+
+								<form action="{{ path('update_university_investments') }}" method="POST" id="invest-uni">
+									<p>
+										<input type="text" name="credit" value="{{ investments_data.totalInvestUni }}" />
+										<input type="submit" value="ok" />
+									</p>
+								</form>
+							</li>
+							<li>
+								<span class="label">salaire des commandants</span>
+								<span class="value">
+									{{ investments_data.totalFleetFees|number }}
+									<img class="icon-color" src="{{ asset('media/resources/credit.png') }}" alt="crédits" />
+								</span>
+							</li>
+							<li>
+								<span class="label">entretien des vaisseaux</span>
+								<span class="value">
+									{{ investments_data.totalShipsFees|number }}
+									<img class="icon-color" src="{{ asset('media/resources/credit.png') }}" alt="crédits" />
+								</span>
+							</li>
+							<li>
+								<span class="label">redevances aux factions</span>
+								<span class="value">
+									{{ investments_data.totalTaxOut|number }}
+									<img class="icon-color" src="{{ asset('media/resources/credit.png') }}" alt="crédits" />
+								</span>
+							</li>
+							<li class="strong">
+								<span class="label">total des charges</span>
+								<span class="value">
+									{{ investments_data.total_expenses|number }}
+									<img class="icon-color" src="{{ asset('media/resources/credit.png') }}" alt="crédits" />
+								</span>
+							</li>
+							{% if investments_data.gains >= 0 %}
+								<li class="strong">
+									<span class="label">bénéfice</span>
+									<span class="value">
+										{{ investments_data.gains|number }}
+										<img class="icon-color" src="{{ asset('media/resources/credit.png') }}" alt="crédits" />
+									</span>
+								</li>
+							{% endif %}
+						</ul>
+
+						</td></tr><tr><td>
+
+						<h4>évolution de finances</h4>
+						<ul class="list-type-1">
+							<li>
+								<span class="label">crédits en possession</span>
+								<span class="value">
+									{{ current_player.credit }}
+									<img class="icon-color" src="{{ asset('media/resources/credit.png') }}" alt="crédits" />
+								</span>
+							</li>
+							<li>
+								<span class="label">bénéfice</span>
+								<span class="value">
+									{{ investments_data.gains|number }}
+									<img class="icon-color" src="{{ asset('media/resources/credit.png') }}" alt="crédits" />
+								</span>
+							</li>
+							<li class="strong">
+								<span class="label">prévision à la prochaine relève</span>
+								<span class="value">
+									{{ investments_data.remains|number }}
+									<img class="icon-color" src="{{ asset('media/resources/credit.png') }}" alt="crédits" />
+								</span>
+							</li>
+						</ul>
+
+						</td><td>
+
+						<p class="info">Ces deux colonnes sont un résumé de vos recettes et de vos dépenses pendant la durée d’une relève. Dans la
+							colonne des recettes vous pouvez voir tous les éléments qui vous rapportent des crédits dans Asylamba. Dans la colonne des dépenses,
+							c’est l’inverse, vous voyez les éléments qui vous coûtent sur vos bases. La différence entre ces deux colonnes vous donne soit une
+							perte (sous la colonne des recettes) soit un bénéfice (sous la colonne des dépenses).</p>
+
+						</td></tr></table>
+			</div>
+		</div>
+	</div>

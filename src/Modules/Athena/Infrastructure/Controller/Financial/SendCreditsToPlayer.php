@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Modules\Athena\Infrastructure\Controller;
+namespace App\Modules\Athena\Infrastructure\Controller\Financial;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 
-class FinancialController extends AbstractController
+class SendCreditsToPlayer extends AbstractController
 {
 	public function __invoke(): Response
 	{

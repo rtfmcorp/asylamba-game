@@ -1,0 +1,17 @@
+{% extends 'layouts/game.html.twig' %}
+
+{% block body %}
+	<div id="background-paralax" class="financial"></div>
+
+	{{ include('molecules/financial/subnav.html.twig') }}
+	{{ include('molecules/common/movers.html.twig') }}
+
+	<div id="content">
+		{{ include ('molecules/common/advertising.html.twig') }}
+
+		{{ include('components/financial/player_sending.html.twig') }}
+		{{ include('components/financial/faction_sending.html.twig') }}
+		{{ include('components/financial/sendings_history.html.twig') }}
+		{{ include('components/financial/receivings_history.html.twig') }}
+	</div>
+{% endblock body %}
