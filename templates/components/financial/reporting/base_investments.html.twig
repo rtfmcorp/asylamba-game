@@ -1,0 +1,78 @@
+{% apply spaceless %}
+	<div class="component financial">
+		<div class="head skin-1">
+			<img src="{{ asset('media/financial/invest.png') }}" alt="" />
+			<h2>Investissements</h2>
+			<em>Investissements par planète</em>
+			</div>
+		<div class="fix-body">
+			<div class="body">
+				<ul class="list-type-1">
+					{% for base in player_bases %}
+						{% set base_invest = base.iSchool + base.iAntiSpy %}
+
+						<li>
+							<span class="buttons">
+								<a href="#" class="sh" data-target="invest-base-{{ base.id }}">↓</a>
+							</span>
+
+							<span class="label">{{ base.name }}</span>
+
+							<span class="value">
+								{{- base_invest|number -}}
+								<img class="icon-color" src="{{ asset('media/resources/credit.png') }}" alt="crédits" />
+							</span>
+
+							<ul class="sub-list-type-1" id="invest-base-{{ base.id }}">
+								<li>
+									<span class="label">école de cmd.</span>
+
+									<span class="value">
+										{{- base.iSchool|number -}}
+										 <a href="#" class="button sh" data-target="school-form-base-{{ base.id }}">‹</a>
+									</span>
+
+									<form action="{{ path('update_base_investments', {'baseId': base.id, 'category': 'school'}) }}" method="POST" id="school-form-base-{{ base.id }}">
+										<p>
+											<input type="text" name="credit" value="{{ base.iSchool }}" />
+											<input type="submit" value="ok" />
+										</p>
+									</form>
+								</li>
+								<li>
+									<span class="label">contre-espionnage</span>
+
+									<span class="value">
+										{{- base.iAntiSpy|number -}}
+										<a href="#" class="button sh" data-target="spying-form-base-{{ base.id }}">‹</a>
+									</span>
+
+									<form action="{{ path('update_base_investments', {'baseId': base.id, 'category': 'antispy'}) }}" method="POST" id="spying-form-base-{{ base.id }}">
+										<p>
+											<input type="text" name="credit" value="{{ base.iAntiSpy }}" />
+											<input type="submit" value="ok" />
+										</p>
+									</form>
+								</li>
+							</ul>
+						</li>
+					{% endfor %}
+
+					<li class="strong">
+						<span class="label">total des investissements</span>
+						<span class="value">
+							{{- investments_data.totalInvest|number -}}
+							<img class="icon-color" src="{{ asset('media/resources/credit.png') }}" alt="crédits" />
+						</span>
+					</li>
+				</ul>
+
+				<p class="info">
+					Dans la rubrique « Investissements » sont répertoriés tous les investissements relatifs à l’école
+					de commandement et au contre-espionnage. Chacun de ces investissements peuvent être gérés dans leur bâtiment respectif. Faites attention
+					à ne pas avoir plus d’investissements que de recettes.
+				</p>
+			</div>
+		</div>
+	</div>
+{% endapply %}

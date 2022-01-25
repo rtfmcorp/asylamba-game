@@ -5,7 +5,9 @@ namespace App\Modules\Athena\Infrastructure\Twig;
 use App\Classes\Library\Game;
 use App\Modules\Athena\Helper\OrbitalBaseHelper;
 use App\Modules\Athena\Model\OrbitalBase;
+use App\Modules\Athena\Model\Transaction;
 use App\Modules\Athena\Resource\OrbitalBaseResource;
+use App\Modules\Athena\Resource\ShipResource;
 use App\Modules\Gaia\Resource\PlaceResource;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
@@ -46,6 +48,10 @@ class OrbitalBaseExtension extends AbstractExtension
 				($currentLevel < 3) ? 1 : $currentLevel - 2,
 				(($currentLevel > 35) ? 41 : $currentLevel + 5) - 1,
 			)),
+			new TwigFunction('get_base_fleet_cost', fn (OrbitalBase $base) => Game::getFleetCost($base->shipStorage, false)),
+			new TwigFunction('get_base_tax', fn (OrbitalBase $base, int $taxCoeff) => Game::getTaxFromPopulation($base->getPlanetPopulation(), $base->typeOfBase, $taxCoeff)),
+			// @TODO move to a rightful place
+			new TwigFunction('get_ship_transaction_cost', fn (Transaction $transaction) => ShipResource::getInfo($transaction->identifier, 'cost') * ShipResource::COST_REDUCTION * $transaction->quantity),
 		];
 	}
 }

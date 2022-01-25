@@ -1,0 +1,14 @@
+<div class="component new-message">
+	<div class="head"></div>
+	<div class="fix-body">
+		<div class="body">
+			<h4>A votre faction</h4>
+			<form action="{{ path('send_credits_to_faction') }}" method="post" >
+				<p><label for="send-credit-faction">Nombre de crédit</label></p>
+				<p class="input input-text"><input type="text" id="send-credit-faction" name="quantity" /></p>
+
+				<p class="button"><button type="submit">Envoyer</button></p>
+			</form>
+		</div>
+	</div>
+</div>

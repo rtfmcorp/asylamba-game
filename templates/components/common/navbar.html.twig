@@ -23,7 +23,7 @@
 			<a href="{{ path('map') }}" class="square hb rb {% if app.request.get('_route') == 'map' %}active{% endif %}" title="galaxie">
 				<img src="{{ asset('media/common/nav-map.png') }}" alt="" />
 			</a>
-			<a href="{{ path('financial') }}" class="square hb rb {% if app.request.get('_route') == 'financial' %}active{% endif %}" title="finances">
+			<a href="{{ path('financial_investments') }}" class="square hb rb {% if app.request.get('_route') in ['financial_investments', 'financial_transfers'] %}active{% endif %}" title="finances">
 				<img src="{{ asset('media/common/nav-financial.png') }}" alt="" />
 			</a>
 			<a href="{{ path('technology') }}" class="square hb rb {% if app.request.get('_route') == 'technology' %}active{% endif %}" title="université">

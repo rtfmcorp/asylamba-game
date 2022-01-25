@@ -1,0 +1,61 @@
+{% apply spaceless %}
+	<div class="component financial">
+		<div class="head skin-1">
+			<img src="{{ asset('media/financial/commander.png') }}" alt="commandants" />
+			<h2>Commandants</h2>
+			<em>Salaires des commandants</em>
+		</div>
+		<div class="fix-body">
+			<div class="body">
+				<ul class="list-type-1">
+					{% for base_id in commanders_by_base|keys %}
+						{% set commanders = commanders_by_base[base_id] %}
+						{% set commander_fees = commanders|reduce(
+							(carry, c) => carry + (c.level * constant('App\\Modules\\Ares\\Model\\Commander::LVLINCOMECOMMANDER'))
+						) %}
+
+						<li>
+							<span class="buttons">
+								<a href="#" class="sh" data-target="commander-base-{{ base_id }}">↓</a>
+							</span>
+
+							{% for base in player_bases|filter(b => b.id == base_id) %}
+								<span class="label">{{ base.name }} [{{ commanders|length }} officier{{ commanders|length }}]</span>
+							{% endfor %}
+
+							<span class="value">
+								{{ commander_fees|number }}
+								<img class="icon-color" src="{{ asset('media/resources/credit.png') }}" alt="crédits" />
+							</span>
+
+							<ul class="sub-list-type-1" id="commander-base-{{ base_id }}">
+								{% for commander in commanders %}
+									<li>
+										<span class="label">{{ commander|commander_rank }} {{ commander.name }}</span>
+										<span class="value">
+											{{- (commander.level * constant('App\\Modules\\Ares\\Model\\Commander::LVLINCOMECOMMANDER')) -}}
+										</span>
+									</li>
+								{% endfor %}
+							</ul>
+						</li>
+					{% endfor %}
+
+					<li class="strong">
+						<span class="label">total des salaires</span>
+						<span class="value">
+							{{- investments_data.totalFleetFees -}}
+							<img class="icon-color" src="{{ asset('media/resources/credit.png') }}" alt="crédits" />
+						</span>
+					</li>
+				</ul>
+
+				<p class="info">
+					La rubrique commandant ne correspond pas à l’investissement fait dans l’école de commandement, mais au salaire de vos
+					commandants. Plus un commandant a un niveau élevé, plus son salaire sera important.
+					Chaque niveau de commandant coûte {{ constant('App\\Modules\\Ares\\Model\\Commander::LVLINCOMECOMMANDER') }} crédits par relève.
+				</p>
+			</div>
+		</div>
+	</div>
+{% endapply %}

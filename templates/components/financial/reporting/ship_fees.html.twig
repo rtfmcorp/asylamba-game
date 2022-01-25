@@ -1,0 +1,70 @@
+{% apply spaceless %}
+	<div class="component financial">
+		<div class="head skin-1">
+			<img src="{{ asset('media/financial/fleet.png') }}" alt="flottes" />
+			<h2>Entretien</h2>
+			<em>Entretien des vaisseaux</em>
+		</div>
+		<div class="fix-body">
+			<div class="body">
+				<ul class="list-type-1">
+					{% for base in player_bases %}
+						{% set base_fleet_cost = get_base_fleet_cost(base) %}
+						{% set base_commanders = commanders_by_base[base.id] is defined ? commanders_by_base[base.id] : [] %}
+						{% set total_base = base_fleet_cost + base_commanders|reduce(
+							(carry, commander) => carry + get_fleet_cost(commander)
+						) %}
+						{% set base_transaction = transactions|filter(t => t.rPlace == base.id)|reduce((carry, t) => carry + get_ship_transaction_cost(t))|default(0) %}
+
+						<li>
+							<span class="buttons">
+								<a href="#" class="sh" data-target="ships-base-{{ base.id }}">↓</a>
+							</span>
+
+							<span class="label">{{ base.name }}</span>
+							<span class="value">
+								{{- total_base|number -}}
+								<img class="icon-color" src="{{ asset('media/resources/credit.png') }}" alt="crédits" />
+							</span>
+
+							<ul class="sub-list-type-1" id="ships-base-{{ base.id }}">
+								<li>
+									<span class="label">Dans le hangar</span>
+									<span class="value">
+										{{- base_fleet_cost|number -}}
+									</span>
+									</li>
+
+								<li>
+									<span class="label">En vente</span>
+									<span class="value">
+										{{- base_transaction|number -}}
+									</span>
+								</li>
+
+								{% for commander in base_commanders %}
+									<li>
+										<span class="label">{{ commander|commander_rank }} {{ commander.name }}</span>
+										<span class="value">
+											{{- get_fleet_cost(commander)|number -}}
+										</span>
+									</li>
+								{% endfor %}
+							</ul>
+						</li>
+					{% endfor %}
+
+					<li class="strong">
+						<span class="label">total des coûts</span>
+						<span class="value">
+							{{- investments_data.totalShipsFees|number -}}
+							<img class="icon-color" src="{{ asset('media/resources/credit.png') }}" alt="crédits" />
+						</span>
+					</li>
+				</ul>
+
+				<p class="info">Les frais d'entretien des vaisseaux sont nécessaires pour que les différents appareils continuent à voler sans risque. Ils représentent une part importante de vos finances et sont par nature très volatiles, pensez donc à garder un oeil dessus.</p>
+			</div>
+		</div>
+	</div>
+{% endapply %}

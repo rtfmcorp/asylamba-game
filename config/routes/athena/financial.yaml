@@ -1,0 +1,29 @@
+financial_investments:
+    path: /investments
+    controller: App\Modules\Athena\Infrastructure\Controller\Financial\ViewInvestments
+    methods: 'GET'
+
+financial_transfers:
+    path: /transfers
+    controller: App\Modules\Athena\Infrastructure\Controller\Financial\ViewTransfers
+    methods: 'GET'
+
+send_credits_to_player:
+    path: /send-credits-to-player
+    controller: App\Modules\Athena\Infrastructure\Controller\Financial\SendCreditsToPlayer
+    methods: 'POST'
+
+send_credits_to_faction:
+    path: /send-credits-to-faction
+    controller: App\Modules\Athena\Infrastructure\Controller\Financial\SendCreditsToFaction
+    methods: 'POST'
+
+update_university_investments:
+    path: /university-investments
+    controller: App\Modules\Athena\Infrastructure\Controller\Financial\UpdateUniversityInvestments
+    methods: 'POST'
+
+update_base_investments:
+    path: /bases/{baseId}/investments/{category<antispy|school>}
+    controller: App\Modules\Athena\Infrastructure\Controller\Financial\UpdateBaseInvestments
+    methods: 'POST'

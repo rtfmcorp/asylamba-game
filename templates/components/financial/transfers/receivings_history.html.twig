@@ -1,0 +1,24 @@
+<div class="component player rank">
+	<div class="head"></div>
+	<div class="fix-body">
+		<div class="body">
+			<h4>Derniers reçus</h4>
+
+			{% for transaction in receivings %}
+				<div class="player color{{ transaction.senderColor }}">
+					<a href="{{ path('embassy', {'playerId': transaction.rSender }) }}">
+						<img src="{{ asset('media/avatar/small/' ~ transaction.senderAvatar ~ '.png') }}" alt="{{ transaction.senderName }}" class="picto" />
+					</a>
+
+					<span class="title">{{ get_faction_info(transaction.senderColor, 'status')[transaction.senderStatus - 1] }}</span>
+					<strong class="name">{{ transaction.senderName }}</strong>
+					<span class="experience">{{ transaction.amount|number }} crédit{{ transaction.amount|plural }}</span>
+				</div>
+			{% endfor %}
+
+			{% if receivings|length == 0 %}
+				<p>Vous n'avez encore reçu aucun crédit.</p>
+			{% endif %}
+		</div>
+	</div>
+</div>

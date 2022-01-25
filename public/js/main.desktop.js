@@ -873,7 +873,7 @@ jQuery(document).ready(function($) {
 					wswBox.container.append(data);
 					wswBox.box = container.find('.modal');
 
-					$('.autocomplete-player').autocomplete(game.path + 'ajax/a-autocompleteplayer/');
+					$('.autocomplete-player').autocomplete(game.path + 'api/players/search');
 					$('.autocomplete-orbitalbase').autocomplete(game.path + 'ajax/a-autocompleteorbitalbase/');
 				}).fail(function() {
 					alertController.add(101, 'chargement des données interrompu');

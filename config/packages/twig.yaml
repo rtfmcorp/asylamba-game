@@ -1,5 +1,6 @@
 twig:
     default_path: '%kernel.project_dir%/templates'
+    debug: '%kernel.debug%'
     globals:
         app_subname: '%app_subname%'
         app_description: '%app_description%'

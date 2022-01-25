@@ -1,0 +1,25 @@
+<div class="component new-message">
+	<div class="head skin-2">
+		<h2>Envoi de crédit</h2>
+	</div>
+	<div class="fix-body">
+		<div class="body">
+			<h4>A un joueur</h4>
+			<form action="{{ path('send_credits_to_player') }}" method="post">
+				<p><label for="send-credit-target">Destinataire</label></p>
+				<p class="input input-text">
+					<input type="hidden" class="autocomplete-hidden" name="playerid" />
+					<input type="text" id="send-credit-target" class="autocomplete-player" name="name" />
+				</p>
+
+				<p><label for="send-credit-credit">Nombre de crédit</label></p>
+				<p class="input input-text"><input type="text" id="send-credit-credit" name="quantity" /></p>
+
+				<p><label for="send-credit-message">Votre message (* facultatif)</label></p>
+				<p class="input input-area"><textarea id="send-credit-message" name="text"></textarea></p>
+
+				<p class="button"><button type="submit">Envoyer</button></p>
+			</form>
+		</div>
+	</div>
+</div>

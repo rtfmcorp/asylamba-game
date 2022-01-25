@@ -1,0 +1,11 @@
+{% apply spaceless %}
+	{% for player in players %}
+		{# @TODO check the use of this statement #}
+		{# if (in_array($player->getStatement(), array(Player::ACTIVE, Player::INACTIVE, Player::HOLIDAY, Player::BANNED))) { #}
+		{% set status = player.rColor > 0 ? get_faction_info(player.rColor, 'status')[player.status - 1] : 'Rebelle' %}
+
+		<img class="img" src="{{ asset('media/avatar/small/' ~ player.avatar ~ '.png') }}" alt="{{ player.name }}" />
+		<span class="value-2">{{ status }}</span>
+		<span class="value-1"><span class="ac_value" data-id="' . $player->getId() . '">{{ player.name }}</span></span>
+	{% endfor %}
+{% endapply %}

@@ -1,0 +1,68 @@
+{% apply spaceless %}
+	<div class="component financial">
+		<div class="head skin-1">
+			<img src="{{ asset('media/financial/commercial-route.png') }}" alt="route commerciale" />
+			<h2>Commerce</h2>
+			<em>Revenus des routes commerciales par planète</em>
+		</div>
+		<div class="fix-body">
+			<div class="body">
+				<ul class="list-type-1">
+					{% for base in player_bases %}
+						{% set base_data = bases_data[base.id] %}
+
+						<li>
+							{% if base_data['routes_count'] > 0 %}
+								<span class="buttons">
+									<a href="#" class="sh" data-target="rc-base-{{ base.id }}">↓</a>
+								</span>
+							{% endif %}
+							<span class="label">{{ base.name }} [{{ base_data['routes_count'] }} route{{ base_data['routes_count']|plural }}]</span>
+							<span class="value">
+								{{- base_data['routes_income'] -}}
+								{% if trade_routes_income_bonus > 0 %}
+									<span class="bonus">+{{ ((base_data['routes_income'] * trade_routes_income_bonus) / 100)|number }}</span>
+								{% endif %}
+								<img class="icon-color" src="{{ asset('media/resources/credit.png') }}" alt="crédits" />
+							</span>
+
+							{% if base_data['routes_count'] > 0 %}
+								<ul class="sub-list-type-1" id="rc-base-{{ base.id }}">
+									{% for route in base_data['routes'] %}
+										{% if route.statement == constant('App\\Modules\\Athena\\Model\\CommercialRoute::ACTIVE') %}
+											<li>
+												<span class="label">
+													{{- route.baseName1 == base.name ? route.baseName2 : route.baseName1 -}}
+												</span>
+												<span class="value">
+													{{- route.income|number -}}
+												</span>
+											</li>
+										{% endif %}
+									{% endfor %}
+								</ul>
+							{% endif %}
+						</li>
+					{% endfor %}
+
+					<li class="strong">
+						<span class="label">total des routes commerciales</span>
+						<span class="value">
+							{{- investments_data.totalRouteIncome|number -}}
+							{% if trade_routes_income_bonus > 0 %}
+								<span class="bonus">+{{- investments_data.totalRouteIncomeBonus|number -}}</span>
+							{% endif %}
+							<img class="icon-color" src="{{ asset('media/resources/credit.png') }}" alt="crédits" />
+						</span>
+					</li>
+				</ul>
+
+				<p class="info">
+					La colonne « Commerce » est un compte rendu de la totalité des revenus de vos routes commerciales. Pour gérer les
+					recettes de vos routes commerciales, il vous est nécessaire de vous rendre sur votre plateforme commerciale afin de créer ou supprimer
+					des routes.
+				</p>
+			</div>
+		</div>
+	</div>
+{% endapply %}

@@ -852,7 +852,7 @@ jQuery(document).ready(function($) {
 	});
 
 	// using module
-	$('.autocomplete-player').autocomplete(game.path + 'ajax/a-autocompleteplayer/');
+	$('.autocomplete-player').autocomplete(game.path + 'api/players/search');
 	$('.autocomplete-orbitalbase').autocomplete(game.path + 'ajax/a-autocompleteorbitalbase/');
 
 	// confirm box

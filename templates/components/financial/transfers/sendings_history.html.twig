@@ -1,0 +1,24 @@
+<div class="component player rank">
+	<div class="head"></div>
+	<div class="fix-body">
+		<div class="body">
+			<h4>Derniers envois</h4>
+
+			{% for transaction in sendings %}
+				<div class="player color{{ transaction.formatedReceiverColor }}">
+					<a href="{{ transaction.formatedReceiverLink }}">
+						<img src="{{ asset('media/avatar/small/' ~ transaction.formatedReceiverAvatar ~ '.png') }}" alt="{{ transaction.formatedReceiverName }}" class="picto" />
+					</a>
+
+					<span class="title">{{ transaction.formatedReceiverStatus }}</span>
+					<strong class="name">{{ transaction.formatedReceiverName }}</strong>
+					<span class="experience">{{ transaction.amount|number }} crédit{{ transaction.amount|plural }}</span>
+				</div>
+			{% endfor %}
+
+			{% if sendings|length == 0 %}
+				<p>Vous n'avez fait aucun envoi de crédit.</p>
+			{% endif %}
+		</div>
+	</div>
+</div>
