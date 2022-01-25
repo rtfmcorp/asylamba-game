@@ -1,40 +1,42 @@
-<div class="component financial">
-	<div class="head skin-1">
-		<img src="{{ asset('media/financial/taxout.png') }}" alt="" />
-		<h2>Redevances</h2>
-		<em>Redevances aux factions</em>
-	</div>
-	<div class="fix-body">
-		<div class="body">
-			<ul class="list-type-1">
-				{% for base in player_bases %}
-					{% set base_tax = get_base_tax(base, tax_coeff) %}
-					{# @TODO move that logic somewhere legit #}
-					{% set base_tax_out = (base_tax + (base_tax * tax_coeff) / 100) * base.tax / 100 %}
+{% apply spaceless %}
+	<div class="component financial">
+		<div class="head skin-1">
+			<img src="{{ asset('media/financial/taxout.png') }}" alt="" />
+			<h2>Redevances</h2>
+			<em>Redevances aux factions</em>
+		</div>
+		<div class="fix-body">
+			<div class="body">
+				<ul class="list-type-1">
+					{% for base in player_bases %}
+						{% set base_tax = get_base_tax(base, tax_coeff) %}
+						{# @TODO move that logic somewhere legit #}
+						{% set base_tax_out = (base_tax + (base_tax * tax_coeff) / 100) * base.tax / 100 %}
 
-					<li>
-						<span class="label">{{ base.name }} [{{ base.tax }}% de taxe]</span>
+						<li>
+							<span class="label">{{ base.name }} [{{ base.tax }}% de taxe]</span>
+							<span class="value">
+								{{- base_tax_out|number -}}
+								<img class="icon-color" src="{{ asset('media/resources/credit.png') }}" alt="crédits" />
+							</span>
+						</li>
+					{% endfor %}
+
+					<li class="strong">
+						<span class="label">total de la redevance</span>
 						<span class="value">
-							{{ base_tax_out|number }}
+							{{- investments_data.totalTaxOut|number -}}
 							<img class="icon-color" src="{{ asset('media/resources/credit.png') }}" alt="crédits" />
 						</span>
 					</li>
-				{% endfor %}
+				</ul>
 
-				<li class="strong">
-					<span class="label">total de la redevance</span>
-					<span class="value">
-						{{ investments_data.totalTaxOut|number }}
-						<img class="icon-color" src="{{ asset('media/resources/credit.png') }}" alt="crédits" />
-					</span>
-				</li>
-			</ul>
-
-			<p class="info">
-				La redevance de faction est une taxe que vous devez payer. Cette taxe est versée à la faction qui a le contrôle
-				du secteur dans lequel vous vous situez. De ce fait, vous pouvez très bien verser un impôt à une faction ennemie. Cette taxe est
-				versée chaque relève.
-			</p>
+				<p class="info">
+					La redevance de faction est une taxe que vous devez payer. Cette taxe est versée à la faction qui a le contrôle
+					du secteur dans lequel vous vous situez. De ce fait, vous pouvez très bien verser un impôt à une faction ennemie. Cette taxe est
+					versée chaque relève.
+				</p>
+			</div>
 		</div>
 	</div>
-</div>
+{% endapply %}

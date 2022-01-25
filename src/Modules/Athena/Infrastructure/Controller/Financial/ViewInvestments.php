@@ -47,6 +47,14 @@ class ViewInvestments extends AbstractController
 
 		return $this->render('pages/athena/financial/investments.html.twig', [
 			'commanders' => $commanders,
+			'commanders_by_base' => array_reduce($commanders, function ($carry, Commander $commander) {
+				if (!isset($carry[$commander->getRBase()])) {
+					$carry[$commander->getRBase()] = [];
+				}
+				$carry[$commander->getRBase()][] = $commander;
+
+				return $carry;
+			}, []),
 			'player_bases' => $playerBases,
 			'tax_coeff' => $taxCoeff,
 			'tax_bonus' => $taxBonus,

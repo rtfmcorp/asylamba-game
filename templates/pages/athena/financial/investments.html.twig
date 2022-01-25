@@ -9,10 +9,6 @@
 	<div id="content">
 		{{ include ('molecules/common/advertising.html.twig') }}
 
-		{% set commanders_by_base = commanders|reduce((carry, c) => carry|merge({
-			(c.rBase): (carry[c.rBase] is not defined) ? [c] : carry[rBase]|merge(c)
-		}), {}) %}
-
 		{{ include('components/financial/reporting/general.html.twig', {
 			tax_bonus,
 			investments_data,
@@ -21,7 +17,7 @@
 		{{ include('components/financial/reporting/commercial_routes.html.twig') }}
 		{{ include('components/financial/reporting/base_investments.html.twig') }}
 		{{ include('components/financial/reporting/taxes.html.twig') }}
-		{{ include('components/financial/reporting/ship_fees.html.twig') }}
+		{{ include('components/financial/reporting/ship_fees.html.twig', { commanders_by_base }) }}
 		{{ include('components/financial/reporting/commander_fees.html.twig') }}
 	</div>
 {% endblock body %}
