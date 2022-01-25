@@ -1,0 +1,76 @@
+{% extends 'layouts/zeus/registration.html.twig' %}
+
+{% block content %}
+	<div id="background-paralax" class="profil"></div>
+
+	{{ include('molecules/common/movers.html.twig') }}
+	{{ include('molecules/registration/subnav.html.twig') }}
+
+	<div id="content">
+		<form action="{{ path('create_character', {'step': 'save'}) }}" method="post" >
+			{{ include('molecules/registration/invisible.html.twig') }}
+
+			<div class="component inscription color{{ app.session.get('inscription').get('ally') }}">
+				<div class="head">
+					<h1>Localisation</h1>
+					</div>
+				<div class="fix-body">
+					<div class="body">
+						<h4>Choisissez le nom de votre première planète</h4>
+						<p><input type="text" name="base" id="base" maxlength="20" required placeholder="nom de votre planète" /></p>
+						<p>Vous pourrez changer ce nom plus tard.</p>
+						</div>
+					</div>
+				</div>
+
+			<div class="component inscription size2 color{{ app.session.get('inscription').get('ally') }}">
+				<div class="head skin-5">
+					<h2>Choisissez l'emplacement dans la galaxie</h2>
+					</div>
+				<div class="fix-body">
+					<div class="body">
+						{% set rate = 750 / galaxy_configuration.galaxy.size %}
+
+						<div class="tactical-map reactive">
+							<input type="hidden" id="input-sector-id" name="sector" />
+							<svg class="sectors" viewBox="0, 0, 750, 750" xmlns="http://www.w3.org/2000/svg" style="width: 580px; height: 580px;">
+								{% for sector in sectors %}
+								<polygon data-id="{{ sector.id }}"
+									class="ally{{ sector.rColor }} {{ sector.rColor == app.session.get('inscription').get('ally') ? 'enabled' : 'disabled' }}"
+									points="{{ galaxy_configuration.getSectorCoord(sector.id, rate, 0) }}"
+								/>
+								{% endfor %}
+
+								</svg>
+							<div class="number">
+								{% for sector in sectors %}
+									{% set positionX = galaxy_configuration.sectors[loop.index - 1]['display'][0] * rate / 1.35 %}
+									{% set positionY = galaxy_configuration.sectors[loop.index - 1]['display'][1] * rate / 1.35 %}
+
+									<span id="sector{{ sector.id }}"
+										  class="ally{{ sector.rColor == app.session.get('inscription').get('ally') ? sector.rColor : 0 }}"
+										  style="top: {{ positionY }}px; left: {{ positionX }}px;">
+										{{- sector.id -}}
+									</span>
+								{% endfor %}
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+			<div class="component inscription color{{ app.session.get('inscription').get('ally') }}">
+				<div class="head">
+				</div>
+				<div class="fix-body">
+					<div class="body">
+						<button type="submit" class="chooseLink">
+							<strong>Choisir ce secteur</strong>
+							<em>et commencer le jeu</em>
+						</button>
+					</div>
+				</div>
+			</div>
+		</form>
+	</div>
+{% endblock content %}

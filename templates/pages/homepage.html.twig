@@ -4,14 +4,14 @@
 <h1><img src="http://asylamba.com/public/media/asylamba.png" alt="test" /></h1>
 
 <div class="content">
-	<a href="{{ path('registration', { 'bindKey': bind_key }) }}">
+	<a href="{{ path('create_character', { 'bindKey': bind_key }) }}">
 		<em>Créer un</em>
 		<strong>Personnage lvl. 1</strong>
 		<img src="{{ asset('media/avatar/big/empty.png') }}" alt="" />
 	</a>
 
 	{% if high_mode %}
-		<a href="{{ path('registration', { 'bindKey': bind_key, 'highMode': true }) }}">
+		<a href="{{ path('create_character', { 'bindKey': bind_key, 'highMode': true }) }}">
 			<em>Créer un</em>
 			<strong>Personnage lvl. 5</strong>
 			<img src="{{ asset('media/avatar/big/empty.png') }}" alt="" />

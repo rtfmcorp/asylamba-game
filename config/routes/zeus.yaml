@@ -1,3 +1,13 @@
+create_character:
+    path: /create-character/{step}/{highMode}
+    controller: App\Modules\Zeus\Infrastructure\Controller\CreateCharacter
+    methods: ['GET', 'POST']
+    defaults:
+        highMode: false
+        step: 'faction-choice'
+    requirements:
+        step: faction-choice|profile|place-choice|save
+
 profile:
     path: /profile
     controller: App\Modules\Zeus\Infrastructure\Controller\ProfileController

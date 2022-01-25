@@ -24,13 +24,18 @@ class ArrayList {
         return null;
     }
 
-    /**
-     * @param string $key
-     * @return boolean
-     */
-    public function exist($key) {
-        return isset($this->elements[$key]);
-    }
+	/**
+	 * @param string $key
+	 * @return boolean
+	 */
+	public function exist($key) {
+		return isset($this->elements[$key]);
+	}
+
+	public function has(string $key): bool
+	{
+		return isset($this->elements[$key]);
+	}
 
     /**
      * @param string $key

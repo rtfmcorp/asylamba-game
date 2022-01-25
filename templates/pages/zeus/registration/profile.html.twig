@@ -1,0 +1,78 @@
+{% extends 'layouts/zeus/registration.html.twig' %}
+
+{% block content %}
+	<div id="background-paralax" class="profil"></div>
+
+	{{ include('molecules/common/movers.html.twig') }}
+	{{ include('molecules/registration/subnav.html.twig') }}
+
+	<div id="content">
+		<form action="{{ path('create_character', {'step': 'place-choice'}) }}" method="post" >
+			{{ include('molecules/registration/invisible.html.twig') }}
+			<div class="component inscription color{{ app.session.get('inscription').get('ally') }}">
+				<div class="head">
+					<h1>Profil</h1>
+					</div>
+				<div class="fix-body">
+					<div class="body">
+						<h4>Choisissez votre nom dans le jeu</h4>
+
+						{% if app.session.get('inscription').has('pseudo') %}
+							<p><input type="text" name="pseudo" id="pseudo" maxlength="15" required disabled value="{{ app.session.get('inscription').get('pseudo') }}" /></p>
+						{% elseif app.session.get('inscription').get('portalPseudo') %}
+							<p><input type="text" name="pseudo" id="pseudo" maxlength="15" required placeholder="pseudo" value="{{ app.session.get('inscription').get('portalPseudo') }}" /></p>
+						{% else %}
+							<p><input type="text" name="pseudo" id="pseudo" maxlength="15" required placeholder="pseudo" /></p>
+						{% endif %}
+
+						<p>Nous déconseillons les noms moins roleplay, essayez de coller avec l'histoire et les moeurs de votre faction.</p>
+						<p>Ce nom ne pourra pas être changé plus tard.</p>
+
+						<hr />
+
+						<button type="submit" class="chooseLink">
+							<strong>Définir son profil</strong>
+							<em>et passer à l'étape suivante</em>
+							</button>
+						</div>
+					</div>
+				</div>
+
+			<div class="component inscription size3 color{{ app.session.get('inscription').get('ally') }}">
+				<div class="head skin-2">
+					<h2>Choisissez un avatar</h2>
+					</div>
+				<div class="fix-body">
+					<div class="body">
+						<div class="avatars">
+							{% set is_long = false %}
+							{% set cursor = 0 %}
+							{% dump avatars|length %}
+							{% dump nb_avatars %}
+							{% for i in range(0, nb_avatars - 3) %}
+								<div class="avatar">
+									<input type="radio" name="avatar" value="{{ avatars[i] }}" id="avatar{{ i }}" required />
+									<label for="avatar{{ i }}">
+										<img src="{{ asset('media/avatar/big/' ~ avatars[i] ~ '.png') }}" alt="" />
+									</label>
+								</div>
+
+								{% set cursor = cursor + 1 %}
+
+								{% if is_long == false and cursor == 5 %}
+									{% set cursor = 0 %}
+									{% set is_long = true %}
+									<br />
+								{% elseif is_long == true and cursor == 6 %}
+									{% set cursor = 0 %}
+									{% set is_long = false %}
+									<br />
+								{% endif %}
+							{% endfor %}
+						</div>
+					</div>
+				</div>
+			</div>
+		</form>
+	</div>
+{% endblock content %}
