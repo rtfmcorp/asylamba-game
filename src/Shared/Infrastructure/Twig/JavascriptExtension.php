@@ -11,7 +11,7 @@ class JavascriptExtension extends AbstractExtension
 	public function getFunctions(): array
 	{
 		return [
-			new TwigFunction('get_api_endpoint', fn () => 'http://game.asylamba.wip/'),
+			new TwigFunction('get_api_endpoint', fn () => 'https://game.kalaxia.wip/'),
 			new TwigFunction('get_ship_names', fn () => $this->getShipNames()),
 			new TwigFunction('get_ship_pevs', fn () => $this->getShipPevs()),
 		];

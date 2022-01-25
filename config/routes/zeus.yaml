@@ -9,3 +9,7 @@ tutorial_validatestep:
 sponsorship:
     path: /sponsorship
     controller: App\Modules\Zeus\Infrastracture\Controller\SponsorController
+
+autocomplete_player:
+    path: /api/players/search
+    controller: App\Modules\Zeus\Infrastructure\Controller\AutocompletePlayers
