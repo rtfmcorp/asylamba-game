@@ -15,7 +15,7 @@
 
 					<li>
 						<span class="buttons">
-							<a href="#" class="sh" data-target="commander-base-' . $base . '">↓</a>
+							<a href="#" class="sh" data-target="commander-base-{{ base_id }}">↓</a>
 						</span>
 
 						{% for base in player_bases|filter(b => b.id == base_id) %}
