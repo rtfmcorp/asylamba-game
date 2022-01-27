@@ -1,0 +1,83 @@
+{% extends 'layouts/zeus/registration.html.twig' %}
+
+{% block content %}
+	<div id="background-paralax" class="profil"></div>
+
+	{{ include('molecules/common/movers.html.twig') }}
+	{{ include('molecules/registration/subnav.html.twig') }}
+
+	<div id="content">
+		{{ include('molecules/registration/invisible.html.twig') }}
+
+		<div class="component">
+			<div class="head">
+				<h1>Faction</h1>
+			</div>
+			<div class="fix-body">
+				<div class="body">
+					<h4>Choisissez votre faction</h4>
+					<p>Il vous faut choisir entre l'une des factions disponibles.</p>
+					<p>Chaque faction a ses forces et ses faiblesses. Certaines sont plus belliqueuses, certaines sont plus sages. De plus, le système politique change en fonction de la faction.</p>
+					<hr />
+				</div>
+			</div>
+		</div>
+
+		{% for faction in sorted_factions|filter(f => f.id != 0) %}
+			<div class="component inscription color{{ faction.id }}">
+				<div class="head skin-1">
+					<img class="color{{ faction.id }}" src="{{ asset('media/ally/big/color' ~ faction.id ~ '.png') }}" alt="" />
+					<h2>{{ get_faction_info(faction.id, 'officialName') }}</h2>
+					<em>{{ get_faction_info(faction.id, 'government') }}</em>
+				</div>
+				<div class="fix-body">
+					<div class="body">
+						<h4>A propos</h4>
+						<p>{{ get_faction_info(faction.id, 'desc1') }}</p>
+						<h4>Moeurs & autres</h4>
+						<p>{{ get_faction_info(faction.id, 'desc2') }}</p>
+						<h4>Guerre</h4>
+						<p>{{ get_faction_info(faction.id, 'desc3') }}</p>
+						<h4>Culture</h4>
+						<p>{{ get_faction_info(faction.id, 'desc4') }}</p>
+					</div>
+				</div>
+			</div>
+
+			<div class="component inscription color{{ faction.id }}">
+				<div class="head"></div>
+				<div class="fix-body">
+					<div class="body">
+						{% if not faction.isClosed %}
+							<a href="{{ path('create_character', {'step': 'profile', 'factionId': faction.id}) }}" class="chooseLink">
+								<strong>Choisir cette faction</strong>
+								{% if loop.index == 0 %}
+									<em>recommandée pour les joueurs débutants</em>
+								{% else %}
+									<em>et passer à l'étape suivante</em>
+								{% endif %}
+							</a>
+						{% else %}
+							<span class="chooseLink">
+								<strong>Cette faction est actuellement fermée</strong>
+								<em>De manière à équilibrer le jeu</em>
+							</span>
+						{% endif %}
+						<blockquote>"{{ get_faction_info(faction.id, 'devise') }}"</blockquote>
+
+						<h4>Bonus & Malus de faction</h4>
+						{% for bonus in faction.bonusText %}
+							<div class="build-item" style="margin: 25px 0;">
+								<div class="name">
+									<img src="{{ asset('media/' ~ bonus.path) }}" alt="" />
+									<strong>{{ bonus.title }}</strong>
+									<em>{{ bonus.desc }}</em>
+								</div>
+							</div>
+						{% endfor %}
+					</div>
+				</div>
+			</div>
+		{% endfor %}
+	</div>
+{% endblock content %}

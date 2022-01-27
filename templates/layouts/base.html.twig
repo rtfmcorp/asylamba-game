@@ -1,3 +1,8 @@
+{% set faction_id = (app.session.get('inscription') is not null and app.session.get('inscription').has('ally'))
+	? app.session.get('inscription').get('ally')
+	: current_player_faction_id is defined ? current_player_faction_id : 0
+%}
+
 <!DOCTYPE html>
 <html lang="fr">
 	<head>
@@ -10,12 +15,11 @@
 		<meta charset="utf-8" />
 		<meta name="description" content="{{ app_description }}" />
 
-		<link rel="icon" type="image/png" href="{{ asset('media/favicon/color1.png') }}" />
+		<link rel="icon" type="image/png" href="{{ asset('media/favicon/color' ~ faction_id ~ '.png') }}" />
 		<link rel="stylesheet" media="screen" type="text/css" href="{{ asset('css/buffer/main.css') }}" />
-		<link rel="stylesheet" media="screen" type="text/css" href="{{ asset('css/main.desktop.v3.css') }}" />
-
+		<link rel="stylesheet" media="screen" type="text/css" href="{{ asset('css/main.desktop.v3.color' ~ (faction_id != 0 ? faction_id : 1) ~ '.css') }}" />
 	</head>
-	<body>
+	<body class="color{{ faction_id }} no-scrolling {% if app.request.get('_route') == 'create_character' %}inscription{% endif %}">
 		{% block body %}{% endblock body %}
 
 		<script type="text/javascript" src="{{ asset('js/jquery1.8.2.min.js') }}"></script>

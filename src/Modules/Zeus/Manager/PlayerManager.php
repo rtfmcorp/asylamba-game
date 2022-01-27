@@ -43,6 +43,7 @@ use App\Classes\Library\Game;
 use App\Classes\Container\ArrayList;
 
 use App\Classes\Exception\ErrorException;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Contracts\Service\Attribute\Required;
 
 class PlayerManager
@@ -51,6 +52,7 @@ class PlayerManager
 	protected ResearchManager $researchManager;
 
 	public function __construct(
+		protected RequestStack $requestStack,
 		protected EntityManager $entityManager,
 		protected GalaxyColorManager $galaxyColorManager,
 		protected NotificationManager $notificationManager,
@@ -83,8 +85,10 @@ class PlayerManager
 
 	public function get(int $playerId): ?Player
 	{
+		$session = $this->requestStack->getSession();
+
 		if(($player = $this->entityManager->getRepository(Player::class)->get($playerId)) !== null) {
-			if ($this->sessionWrapper->get('playerId') === $player->id) {
+			if ($session->get('playerId') === $player->id) {
 				$player->synchronized = true;
 			}
 			$this->fill($player);
@@ -99,8 +103,10 @@ class PlayerManager
 
 	public function getByBindKey(string $bindKey): ?Player
 	{
+		$session = $this->requestStack->getSession();
+
 		if(($player = $this->entityManager->getRepository(Player::class)->getByBindKey($bindKey)) !== null) {
-			if ($this->sessionWrapper->get('playerId') === $player->id) {
+			if ($session->get('playerId') === $player->id) {
 				$player->synchronized = true;
 			}
 			$this->fill($player);
@@ -205,20 +211,21 @@ class PlayerManager
 	
 	public function isSynchronized(Player $player): bool
 	{
-		return ($player->getId() === $this->sessionWrapper->get('playerId'));
+		return ($player->getId() === $this->requestStack->getSession()->get('playerId'));
 	}
 	
 	public function saveSessionData(Player $player): void
 	{
-		if(!$this->sessionWrapper->exist('playerInfo')) {
-			$this->sessionWrapper->add('playerInfo', new ArrayList());
+		$session = $this->requestStack->getSession();
+		if(!$session->has('playerInfo')) {
+			$session->set('playerInfo', new ArrayList());
 		}
-		$this->sessionWrapper->get('playerInfo')->add('color', $player->getRColor());
-		$this->sessionWrapper->get('playerInfo')->add('name', $player->getName());
-		$this->sessionWrapper->get('playerInfo')->add('avatar', $player->getAvatar());
-		$this->sessionWrapper->get('playerInfo')->add('credit', $player->getCredit());
-		$this->sessionWrapper->get('playerInfo')->add('experience', $player->getExperience());
-		$this->sessionWrapper->get('playerInfo')->add('level', $player->getLevel());
+		$session->get('playerInfo')->add('color', $player->getRColor());
+		$session->get('playerInfo')->add('name', $player->getName());
+		$session->get('playerInfo')->add('avatar', $player->getAvatar());
+		$session->get('playerInfo')->add('credit', $player->getCredit());
+		$session->get('playerInfo')->add('experience', $player->getExperience());
+		$session->get('playerInfo')->add('level', $player->getLevel());
 	}
 
 	public function add(Player $player): void
@@ -610,17 +617,19 @@ class PlayerManager
 		$this->entityManager->getRepository(Player::class)->updatePlayerCredits($player, $credits, '-');
 	}
 
-	public function increaseExperience(Player $player, $exp) {
+	public function increaseExperience(Player $player, $exp): void
+	{
 		$exp = round($exp);
 		$player->experience += $exp;
+		$session = $this->requestStack->getSession();
 		if ($player->isSynchronized()) {
-			$this->sessionWrapper->get('playerInfo')->add('experience', $player->experience);
+			$session->get('playerInfo')->add('experience', $player->experience);
 		}
 		$nextLevel =  $this->playerBaseLevel * pow(2, ($player->level - 1));
 		if ($player->experience >= $nextLevel) {
 			$player->level++;
 			if ($player->isSynchronized()) {
-				$this->sessionWrapper->get('playerInfo')->add('level', $player->level);
+				$session->get('playerInfo')->add('level', $player->level);
 			}
 			$n = new Notification();
 			$n->setTitle('Niveau supérieur');

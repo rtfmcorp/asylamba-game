@@ -2,9 +2,6 @@
 
 use App\Kernel;
 
-const P_TYPE = 'app';
-const ASM_UMODE = true;
-
 require_once dirname(__DIR__).'/vendor/autoload_runtime.php';
 
 return function (array $context) {

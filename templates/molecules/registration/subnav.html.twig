@@ -1,0 +1,20 @@
+<div id="inscription-subnav">
+	<div class="bind"></div>
+	<div class="head">
+		<h2>
+			{% if app.session.get('inscription').exist('pseudo') %}
+				{{- app.session.get('inscription').get('pseudo') -}}
+			{% endif %}
+		</h2>
+		{% if app.session.get('inscription').exist('avatar') %}
+			<img src="{{ asset('media/avatar/big/' ~ app.session.get('inscription').get('avatar') ~ '.png') }}" alt="" />
+		{% else %}
+			<img src="{{ asset('media/avatar/big/empty.png') }}" alt="" />
+		{% endif %}
+		<span class="level">1</span>
+		<span class="experience">
+			<span class="value" style="width: 0%;"></span>
+		</span>
+	</div>
+	<div class="foot"></div>
+</div>
