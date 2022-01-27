@@ -34,6 +34,7 @@ class CommanderExtension extends AbstractExtension
 	public function getFunctions(): array
 	{
 		return [
+			new TwigFunction('get_commander_missing_experience', fn (Commander $commander) => $this->commanderManager->experienceToLevelUp($commander)),
 			new TwigFunction('get_fleet_cost', fn (Commander $commander) => Game::getFleetCost($commander->getNbrShipByType())),
 			new TwigFunction('get_commander_position', fn (Commander $commander, int $x1, int $x2, int $y1, int $y2) => $this->commanderManager->getPosition($commander, $x1, $x2, $x2, $y2)),
 			new TwigFunction('get_commander_rank', fn (int $level) => $this->getCommanderLevel($level)),

@@ -1,0 +1,14 @@
+create_commander:
+    path: /
+    controller: App\Modules\Ares\Infrastructure\Controller\CreateCommander
+    methods: 'POST'
+
+affect_commander:
+    path: /{id}/affect
+    controller: App\Modules\Ares\Infrastructure\Controller\AffectCommander
+    methods: 'POST'
+
+put_commander_in_school:
+    path: /{id}/put-in-school
+    controller: App\Modules\Ares\Infrastructure\Controller\PutCommanderInSchool
+    methods: 'POST'

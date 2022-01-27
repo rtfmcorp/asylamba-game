@@ -1,0 +1,154 @@
+{% extends 'layouts/athena/current_base.html.twig' %}
+
+{% block content %}
+	<div class="component school">
+		<div class="head skin-1">
+			<img src="{{ asset('media/orbitalbase/school.png') }}" alt="" />
+			<h2>Ecole de Cmd.</h2>
+			<em>Formation des officiers</em>
+		</div>
+		<div class="fix-body">
+			<div class="body">
+				<div class="number-box">
+					<span class="label">investissements alloués à l'école</span>
+					<span class="value">
+						{{ current_base.iSchool|number }}
+						<img alt="crédits" src="{{ asset('media/resources/credit.png') }}" class="icon-color">
+					</span>
+					<span class="group-link">
+						<a title="modifier" class="hb lt" href="{{ path('financial_investments') }}">→</a>
+					</span>
+				</div>
+
+				<div class="number-box {% if commander_invest_bonus == 0 %}grey{% endif %}">
+					<span class="label">bonus de formation</span>
+					<span class="value">
+						{{ commander_invest_bonus }} %
+					</span>
+				</div>
+
+				<hr />
+
+				<form action="{{ path('create_commander', {'baseId': current_base.id}) }}" method="post" class="build-item">
+					<div class="name">
+						<img src="{{ asset('media/school/school-1.png') }}" alt="" />
+						<strong>Former un nouvel officier</strong>
+					</div>
+					<input type="text" class="name-commander" name="name" value="{{ random_name }}" />
+					{# @TODO factorize these blocks #}
+					{% if commanders|length >= max_commanders_in_school %}
+						<span class="button disable">
+							<span class="text">
+								trop d'officiers dans l'école<br/>
+								{{ commander_price }}
+								<img src="{{ asset('media/resources/credit.png') }}" alt="crédits" class="icon-color" />
+							</span>
+						</span>
+					{% elseif commander_price > current_player.credit %}
+						<span class="button disable">
+							<span class="text">
+								vous ne disposez pas d'assez de crédit<br/>
+								{{ commander_price|number }}
+								<img src="{{ asset('media/resources/credit.png') }}" alt="crédits" class="icon-color" />
+							</span>
+						</span>
+					{% else %}
+						<button type="submit" class="button">
+							<span class="text">
+								créer l'officier pour<br/>
+								{{ commander_price|number }}
+								<img src="{{ asset('media/resources/credit.png') }}" alt="crédits" class="icon-color" />
+							</span>
+						</button>
+					{% endif %}
+				</form>
+			</div>
+		</div>
+	</div>
+
+	<div class="component">
+		<div class="head skin-5">
+			<h2>Salle de formation</h2>
+			</div>
+		<div class="fix-body">
+			<div class="body">
+				<div class="queue">
+					{% for commander in commanders %}
+						{% set missing_experience = get_commander_missing_experience(commander) %}
+						<div class="item">
+							<img class="picto" src="{{ asset('media/commander/small/' ~ commander.avatar ~ '.png') }}" alt="" />
+							<strong>{{ commander|commander_rank }} {{ commander.name }}</strong>
+							<em>{{ commander.experience|number }} points d'expérience</em>
+							<em>~ {{ earned_experience|number }}xp/relève</em>
+							<span class="group-link">
+								<a class="hb lt" title="affecter l'officier" href="{{ path('affect_commander', {'id': commander.id}) }}">&#8593;</a>
+								<a class="hb lt" title="placer l'officier dans le mess" href="{{ path('put_commander_in_school', {'id': commander.id}) }}">&#8594;</a>
+							</span>
+							<span class="progress-container">
+								<span style="width: {{ (commander.experience - missing_experience / 2)|percent(missing_experience - missing_experience / 2) }}%;" class="progress-bar"></span>
+							</span>
+						</div>
+						{% if commanders|length < max_commanders_in_school %}
+							{% for i in range(commanders.length, max_commanders_in_school) %}
+								<div class="item empty">
+									<span class="picto"></span>
+									<strong>Emplacement libre</strong>
+									<span class="progress-container"></span>
+								</div>
+							{% endfor %}
+						{% endif %}
+					{% endfor %}
+					</div>
+				</div>
+			</div>
+		</div>
+
+
+	<div class="component">
+		<div class="head skin-5">
+			<h2>Mess des officiers</h2>
+		</div>
+		<div class="fix-body">
+			<div class="body">
+				<div class="queue">
+					{% for commander in reserve_commanders %}
+						{% set missing_experience = get_commander_missing_experience(commander) %}
+						<div class="item">
+							<img class="picto" src="{{ asset('media/commander/small/' ~ commander.avatar ~ '.png') }}" alt="" />
+							<strong>{{ commander|commander_rank }} {{ commander.name }}</strong>
+							<em>{{ commander.experience|number }} points d'expérience</em>
+							<span class="group-link">
+								<a class="hb lt" title="affecter l'officier" href="{{ path('affect_commander', {'id': commander.id}) }}">&#8593;</a>
+								<a class="hb lt" title="placer l'officier dans l'école" href="{{ path('put_commander_in_school', {'id': commander.id}) }}">&#8592;</a>
+							</span>
+							<span class="progress-container">
+								<span style="width: {{ (commander.experience - missing_experience / 2)|percent(missing_experience - missing_experience / 2) }}%;" class="progress-bar"></span>
+							</span>
+						</div>
+					{% endfor %}
+
+					<div class="item empty">
+						<span class="picto"></span>
+						<strong>Emplacement libre</strong>
+						<span class="progress-container"></span>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="component">
+			<div class="head skin-2">
+				<h2>À propos</h2>
+				</div>
+			<div class="fix-body">
+				<div class="body">
+					<p class="long-info">
+						L’<strong>Ecole de commandement</strong> est le centre de formation de vos officiers. Il suffit pour cela d’engager de jeunes recrues sans expérience et d’investir un peu d’argent dans l’école pour que de brillants stratèges issus de toute la galaxie viennent enseigner leur savoir aux jeunes commandants de votre école.<br /><br />
+						Au fil du temps ils gagneront de l’<strong>expérience et des niveaux</strong>. En gradant, ils acquerront la capacité de diriger une escadrille supplémentaire, ce qui augmentera la taille maximale de la flotte qu’ils dirigeront. L’investissement dans l’école de commandement s’applique à tout les commandants en formation.<br /><br />
+						Le nombre de place de formation est limité. Il est cepandant plus élevé sur les <strong>bases militaires</strong> et les <strong>capitales</strong>. Le mess des officiers permet de mettre vos officiers au repos.
+					</p>
+				</div>
+			</div>
+		</div>
+{% endblock content %}
