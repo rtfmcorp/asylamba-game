@@ -1,3 +1,7 @@
+commanders:
+    resource: './zeus/commanders.yaml'
+    prefix: /commanders
+
 fleet:
     path: /fleet
     controller: App\Modules\Ares\Infrastructure\Controller\FleetController

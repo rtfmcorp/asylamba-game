@@ -71,4 +71,4 @@ spatioport:
 
 school:
     path: /school
-    controller: App\Modules\Athena\Infrastructure\Controller\RefineryController
+    controller: App\Modules\Athena\Infrastructure\Controller\ViewSchool

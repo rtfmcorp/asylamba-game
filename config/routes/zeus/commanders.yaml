@@ -1,0 +1,19 @@
+create_commander:
+    path: /
+    controller: App\Modules\Ares\Infrastructure\Controller\CreateCommander
+    methods: 'POST'
+
+fleet_details:
+    path: /{id}
+    controller: App\Modules\Ares\Infrastructure\Controller\ViewFleetDetails
+    methods: 'GET'
+
+affect_commander:
+    path: /{id}/affect
+    controller: App\Modules\Ares\Infrastructure\Controller\AffectCommander
+    methods: 'GET'
+
+put_commander_in_school:
+    path: /{id}/put-in-school
+    controller: App\Modules\Ares\Infrastructure\Controller\PutCommanderInSchool
+    methods: 'GET'
