@@ -29,7 +29,7 @@
 
 				<hr />
 
-				<form action="{{ path('create_commander', {'baseId': current_base.id}) }}" method="post" class="build-item">
+				<form action="{{ path('create_commander') }}" method="post" class="build-item">
 					<div class="name">
 						<img src="{{ asset('media/school/school-1.png') }}" alt="" />
 						<strong>Former un nouvel officier</strong>
@@ -89,7 +89,7 @@
 							</span>
 						</div>
 						{% if commanders|length < max_commanders_in_school %}
-							{% for i in range(commanders.length, max_commanders_in_school) %}
+							{% for i in range(commanders|length, max_commanders_in_school) %}
 								<div class="item empty">
 									<span class="picto"></span>
 									<strong>Emplacement libre</strong>
