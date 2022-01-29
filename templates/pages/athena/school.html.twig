@@ -88,20 +88,20 @@
 								<span style="width: {{ (commander.experience - missing_experience / 2)|percent(missing_experience - missing_experience / 2) }}%;" class="progress-bar"></span>
 							</span>
 						</div>
-						{% if commanders|length < max_commanders_in_school %}
-							{% for i in range(commanders|length, max_commanders_in_school) %}
-								<div class="item empty">
-									<span class="picto"></span>
-									<strong>Emplacement libre</strong>
-									<span class="progress-container"></span>
-								</div>
-							{% endfor %}
-						{% endif %}
 					{% endfor %}
-					</div>
+					{% if commanders|length < max_commanders_in_school %}
+						{% for i in range(commanders|length, max_commanders_in_school - 1) %}
+							<div class="item empty">
+								<span class="picto"></span>
+								<strong>Emplacement libre</strong>
+								<span class="progress-container"></span>
+							</div>
+						{% endfor %}
+					{% endif %}
 				</div>
 			</div>
 		</div>
+	</div>
 
 
 	<div class="component">
