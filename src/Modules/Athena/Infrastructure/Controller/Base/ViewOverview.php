@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Modules\Athena\Infrastructure\Controller;
+namespace App\Modules\Athena\Infrastructure\Controller\Base;
 
 use App\Classes\Container\ArrayList;
 use App\Classes\Library\Game;
