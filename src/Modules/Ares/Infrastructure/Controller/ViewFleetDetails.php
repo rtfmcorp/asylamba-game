@@ -9,6 +9,6 @@ class ViewFleetDetails extends AbstractController
 {
 	public function __invoke(): Response
 	{
-		return new Response();
+		return $this->render('pages/ares/fleet/details.html.twig');
 	}
 }

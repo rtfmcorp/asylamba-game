@@ -36,6 +36,7 @@ class OrbitalBaseExtension extends AbstractExtension
 	public function getFunctions(): array
 	{
 		return [
+			new TwigFunction('get_planet_size', fn (int $population) => Game::getSizeOfPlanet($population)),
 			new TwigFunction('get_base_type_info', fn (string $baseType, string $info) => PlaceResource::get($baseType, $info)),
 			new TwigFunction('can_leave_base', fn (OrbitalBase $orbitalBase) => Utils::interval(Utils::now(), $orbitalBase->dCreation, 'h') < OrbitalBase::COOL_DOWN),
 			new TwigFunction('get_time_until_cooldown_end', fn (OrbitalBase $orbitalBase) => OrbitalBase::COOL_DOWN * 60 * 60 - Utils::interval(Utils::now(), $orbitalBase->dCreation, 's')),

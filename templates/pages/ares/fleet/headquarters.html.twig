@@ -1,0 +1,12 @@
+{% extends 'layouts/ares/fleet.html.twig' %}
+
+{% block content %}
+	{{ include('molecules/common/advertising.html.twig') }}
+
+	{{ include('components/fleet/list.html.twig') }}
+
+	{% if commander is defined and commander is not null %}
+		{{ include('components/fleet/commander_fleet.html.twig') }}
+		{{ include('components/fleet/commander_details.html.twig') }}
+	{% endif %}
+{% endblock content %}

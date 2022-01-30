@@ -5,3 +5,23 @@ commanders:
 fleet:
     path: /fleet
     controller: App\Modules\Ares\Infrastructure\Controller\FleetController
+
+fleet_headquarters:
+    path: /fleet/headquarters
+    controller: App\Modules\Ares\Infrastructure\Controller\ViewHeadquarters
+
+fleet_overview:
+    path: /fleet/overview
+    controller: App\Modules\Ares\Infrastructure\Controller\FleetController
+
+spy_reports:
+    path: /spy-reports
+    controller: App\Modules\Ares\Infrastructure\Controller\FleetController
+
+fleet_archives:
+    path: /archives
+    controller: App\Modules\Ares\Infrastructure\Controller\FleetController
+
+memorial:
+    path: /memorial
+    controller: App\Modules\Ares\Infrastructure\Controller\FleetController

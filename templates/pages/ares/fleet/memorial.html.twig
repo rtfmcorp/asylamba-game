@@ -1,0 +1,31 @@
+{% extends 'layouts/ares/fleet.html.twig' %}
+
+{% block content %}
+	# loading des objets
+	$commanders = $commanderManager->getPlayerCommanders($session->get('playerId'), [Commander::DEAD], ['c.palmares' => 'DESC']);
+
+	# memorialTxt component
+	include $componentPath . 'fleet/memorialTxt.php
+
+	foreach ($commanders as $commander) {
+	if ($i < 6) {
+	$commander_commanderDetail = $commander;
+	include $componentPath . 'fleet/commanderDetail.php
+	} else {
+	$commander_shortMemorial = $commander;
+	include $componentPath . 'default.php
+	}
+	}
+
+	if (isset($commander_commanderDetail) && count($commander_commanderDetail) > 0) {
+	} else {
+	include $componentPath . 'default.php
+	include $componentPath . 'default.php
+	}
+
+	if (isset($commander_shortMemorial) && count($commander_shortMemorial) > 0) {
+	}
+	} else {
+	$response->redirect('404');
+	}
+{% endblock %}

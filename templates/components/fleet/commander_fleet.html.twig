@@ -1,0 +1,114 @@
+{% set dock_storage = current_base.shipStorage %}
+{% set line_coord = commander.formatLineCoord %}
+
+<div class="component size2 commander-fleet">
+	<div class="head skin-1">
+		<img src="{{ asset('media/commander/medium/' ~ commander.avatar ~ '.png') }}" alt="{{ commander.name }}" />
+		<h2>{{ commander.name }}</h2>
+		<em>{{ commander|commander_rank }}</em>
+	</div>
+	<div class="fix-body">
+		<div class="body">
+			<div class="fleet">
+				<table class="army commanderTransfer">
+					<tr>
+						<td></td>
+						{% for i in range(5, 1) %}
+							<td>#{{ i }}</td>
+						{% endfor %}
+						</tr><tr>
+						<td>Ceci représente la composition de votre flotte. Chaque carré montre une escadrille. Vous pouvez remplir cette escadrille en cliquant dessus puis en cliquant sur un type de vaisseau dans les colonnes à droite.<br /><br />La première colonne représente votre escadrille et la seconde votre hangar.<br /><br />En pressant CTRL + clic (CMD + clic), vous pouvez transférer le maximum de vaisseaux possible.</td>
+						{% for i in range(5, 1) %}
+							<td>
+								{% if max(line_coord) >= i %}
+									{% set nb_in_column = 0 %}
+
+									{% for k in line_coord|keys %}
+										{% set v = line_coord[k] %}
+
+										{% if v == i %}
+											{% set nbr = k + 1 %}
+											{% set nb_in_column = nb_in_column + 1 %}
+
+											{% if nbr == line_coord|length %}
+												<span class="block" title="prochaine escadrille disponible">
+													<strong>{{ nbr }}</strong>
+													<em>---</em>
+												</span>
+											{% else %}
+												{% set pev = commander.getSquadron(k).pev %}
+												{% if pev == 0 %}
+													{% set full = 'full0' %}
+												{% elseif pev < 50 %}
+													{% set full = 'full1' %}
+												{% elseif pev < 99 %}
+													{% set full = 'full2' %}
+												{% else %}
+													{% set full = 'full3' %}
+												{% endif %}
+
+												<span class="block squadron {{ full }}"
+													data-squadron-id="{{ nbr - 1 }}"
+													data-squadron-ships="{{ commander.getSquadron(k).arrayOfShips|join(',') }}"
+													data-squadron-pev="{{ pev }}"
+												>
+													<strong>{{ nbr }}</strong>
+													<em>{{ pev }}/100</em>
+												</span>
+											{% endif %}
+										{% endif %}
+									{% endfor %}
+
+									{% for j in range(nb_in_column, 4) %}
+										<span class="block empty"></span>
+									{% endfor %}
+								{% else %}
+									{% for j in range(0, 4) %}
+										<span class="block empty"></span>
+									{% endfor %}
+								{% endif %}
+							</td>
+						{% endfor %}
+					</tr>
+				</table>
+			</div>
+		</div>
+	</div>
+</div>
+
+{% if commander.isAffected %}
+	<div class="component commander-fleet baseTransfer"
+		data-base="{{ commander.rBase }}"
+		data-commander="{{ commander.id }}">
+		<div class="head skin-3">
+			<img class="left" src="{{ asset('media/fleet/commanders.png') }}" alt="/" />
+			<img class="right" src="{{ asset('media/orbitalbase/dock2.png') }}" alt="/" />
+		</div>
+		<div class="fix-body">
+			<div class="body">
+				<div class="list-ship squadron">
+					{% for i in range(0, 11) %}
+						<a href="#" class="empty" data-ship-id="{{ i }}">
+							<img src="{{ asset('media/ship/picto/' ~ get_ship_info(i, 'imageLink') ~ '.png') }}" alt="" />
+							<span class="text">
+								<span class="quantity">0</span>
+								<span>{{ get_ship_info(i, 'codeName') }}</span>
+							</span>
+						</a>
+					{% endfor %}
+				</div>
+				<div class="list-ship dock">
+					{% for i in range(0, 11) %}
+						<a href="#" {% if dock_storage[i] == 0 %}class="empty"{% endif %} data-ship-id="{{ i }}">
+							<img src="{{ asset('media/ship/picto/' ~ get_ship_info(i, 'imageLink') ~ '.png') }}" alt="" />
+							<span class="text">
+								<span class="quantity">{{ dock_storage[i] }}</span>
+								<span>{{ get_ship_info(i, 'codeName') }}</span>
+							</span>
+						</a>
+					{% endfor %}
+				</div>
+			</div>
+		</div>
+	</div>
+{% endif %}

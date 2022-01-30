@@ -444,6 +444,31 @@ class Commander implements TravellerInterface
 		return self::AFFECTED === $this->statement;
 	}
 
+	public function isInSchool(): bool
+	{
+		return self::INSCHOOL === $this->statement;
+	}
+
+	public function isTransferring(): bool
+	{
+		return self::MOVE === $this->travelType;
+	}
+
+	public function isLooting(): bool
+	{
+		return self::LOOT === $this->travelType;
+	}
+
+	public function isInvading(): bool
+	{
+		return self::COLO === $this->travelType;
+	}
+
+	public function isComingBack(): bool
+	{
+		return self::BACK === $this->travelType;
+	}
+
 	/**
 	 * @param int $startPlaceId
 	 * @return Commander

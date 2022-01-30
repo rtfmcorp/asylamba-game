@@ -75,12 +75,12 @@ class Format {
 	}
 
 	public static function percent($number, $base, $ceil = TRUE) {
-		return ($base == 0)
+		return min(100, ($base == 0)
 			? 0
 			: ($ceil
 				? ceil(($number / $base) * 100)
 				: ($number / $base) * 100
-			);
+			));
 	}
 
 	public static function rankingFormat($number) {

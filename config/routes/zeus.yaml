@@ -23,3 +23,8 @@ sponsorship:
 autocomplete_player:
     path: /api/players/search
     controller: App\Modules\Zeus\Infrastructure\Controller\AutocompletePlayers
+
+switch_param:
+    path: /switch_param
+    controller: App\Modules\Zeus\Infrastructure\Controller\AutocompletePlayers
+

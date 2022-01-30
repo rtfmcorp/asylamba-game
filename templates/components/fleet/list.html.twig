@@ -1,0 +1,126 @@
+<div class="component size3 list-fleet">
+	<div class="head skin-1">
+		<h1>Centre des opérations</h1>
+	</div>
+	<div class="fix-body">
+		<div class="body">
+			{% set list_all_fleets_param = constant('App\\Classes\\Container\\Params::LIST_ALL_FLEET') %}
+			<a class="top-right-button" href="{{ path('switch_param', {'parameter': list_all_fleets_param}) }}">
+				{{- app.request.cookies.get('p' ~ list_all_fleets_param, default_parameters[list_all_fleets_param]) ? 'Afficher uniquement la base courante' : 'Afficher toutes les bases' -}}
+			</a>
+
+			{% for base in obsets %}
+				<div class="set-fleet">
+					<img src="{{ asset('media/map/place/place' ~ base.info.img ~ '.png') }}" alt="{{ base.info.name }}" class="place" />
+
+					<h2>
+						{{- get_base_type_info(base.info.type, 'name') }}
+						{{ base.info.name -}}
+						<a href="{{ path('switchbase', {'baseId': base.info.id, 'page': 'school'}) }}">(affecter un officier)</a>
+					</h2>
+
+					{% for commander in base.fleets %}
+						{% set reversed = commander.rPlayer != current_player.id or commander.isComingBack %}
+
+						<div class="item color{{ commander.playerColor }}">
+							<div class="left">
+								{% if commander.rPlayer != current_player.id %}
+									<img src="{{ asset('media/map/action/shield.png') }}" alt="" class="status" />
+								{% elseif commander.isAffected %}
+									<img src="{{ asset('media/map/action/anchor.png') }}" alt="" class="status" />
+								{% elseif commander.isMoving %}
+									{% if commander.isTransferring %}
+										<img src="{{ asset('media/map/action/move.png') }}" alt="" class="status" />
+									{% elseif commander.isLooting %}
+										<img src="{{ asset('media/map/action/loot.png') }}" alt="" class="status" />
+									{% elseif commander.isInvading %}
+										<img src="{{ asset('media/map/action/colo.png') }}" alt="" class="status" />
+									{% elseif commander.isComingBack %}
+										<img src="{{ asset('media/map/action/back.png') }}" alt="" class="status" />
+									{% endif %}
+								{% endif %}
+								<span class="top">
+									{{ commander|commander_rank }} <strong>{{ commander.name }}</strong>
+
+									{% if commander.rPlayer != current_player.id %}
+										{% if commander.isLooting %}
+											tente de vous piller
+										{% elseif commander.isInvading %}
+											tente de vous conquérir
+										{% else %}
+											erreur
+										{% endif %}
+									{% elseif commander.isAffected %}
+										à quai
+									{% elseif commander.isMoving %}
+										{% if commander.isTransferring %}
+											se déplace
+										{% elseif commander.isLooting %}
+											tente un pillage
+										{% elseif commander.isInvading %}
+											tente une colonisation
+										{% elseif commander.isComingBack %}
+											revient avec {{ commander.resources }} ressources
+										{% endif %}
+									{% endif %}
+
+									&#8194;
+									{% if commander.rPlayer == current_player.id %}
+										{{ commander.pev|number ~ ' pev' }}
+									{% endif %}
+
+									{% if commander.rPlayer == current_player.id and commander.isMoving and not commander.isComingBack %}
+										{{ '&#8195;'|raw }}<a class="confirm" href="{{ path('cancel_fleet_move', {'id': commander.id}) }}">annuler la mission</a>
+									{% endif %}
+								</span>
+							</div>
+
+							<div class="center {% if reversed %}reversed{% endif %}">
+								{% if commander.isMoving %}
+									{% set spent_time = commander|travel_spent_time(reversed) %}
+									{% set remaining_time = commander|travel_remaining_time %}
+									{% set total_time = commander|travel_total_time %}
+
+									<div class="progress-ship" data-progress-current-time="{{ spent_time }}" data-progress-total-time="{{ total_time }}" data-progress-reverse="{{ (reversed ? 'true' : 'false') }}">
+										<div class="bar" style="width: {{ spent_time|percent(total_time, false) }}%;">
+											<img src="{{ asset('media/map/fleet/ship' ~ (reversed ? '-reversed' : '') ~ '.png') }}" alt="" class="ship" />
+											<span class="time">{{ remaining_time|lite_seconds }}</span>
+										</div>
+									</div>
+								{% else %}
+									<img src="{{ asset('media/map/fleet/ship.png') }}" alt="" class="ship" />
+								{% endif %}
+							</div>
+
+							{% if commander.isMoving %}
+								<div class="right">
+									<img src="{{ asset('media/map/place/place1-' ~ get_planet_size(commander.isComingBack ? commander.startPlacePop : commander.destinationPlacePop) ~ '.png') }}" alt="" class="cover" />'
+									<span class="top">
+										<a href="{{ path('map', {'placeId': reversed ? commander.rStartPlace : commander.rDestinationPlace }) }}">
+											{{- (reversed ? commander.rStartPlace : commander.rDestinationPlace) -}}
+										</a>
+
+										{% if commander.rPlayer != current_player.id %}
+											 (<a href="{{ path('embassy', {'playerId': commander.rPlayer}) }}' . $appRoot . 'embassy/player-' . $commander->rPlayer . '">' . $commander->playerName . '</a>)
+										{% endif %}
+									</span>
+								</div>
+							{% endif %}
+
+							{% if commander.rPlayer == current_player.id %}
+								<a href="{{ path('fleet_headquarters', {'commander': commander.id}) }}"
+								   class="show-commander {% if app.request.query.get('commander', null) == commander.id %}active{% endif %}">
+								</a>
+							{% endif %}
+						</div>
+					{% endfor %}
+
+
+					{% if base.fleets|length == 0 %}
+						<em>Aucun commandant affecté autour de cette planète</em>
+					{% endif %}
+				</div>
+			{% endfor %}
+		</div>
+	</div>
+</div>

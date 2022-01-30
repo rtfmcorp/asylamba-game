@@ -1,0 +1,42 @@
+{% extends 'layouts/ares/fleet.html.twig' %}
+
+{% block content %}
+	# loading des objets
+	$S_SRM1 = $spyReportManager->getCurrentSession();
+	$spyReportManager->newSession();
+	$spyReportManager->load(array('rPlayer' => $session->get('playerId')), array('dSpying', 'DESC'), array(0, 40));
+
+	# listReport component
+	$spyreport_listSpy = array();
+	for ($i = 0; $i < $spyReportManager->size(); $i++) {
+	$spyreport_listSpy[$i] = $spyReportManager->get($i);
+	}
+	include $componentPath . 'fleet/listSpy.php
+
+	# report component
+	$spyReportManager->newSession();
+
+	if ($request->query->has('report')) {
+	$spyReportManager->load(array('id' => $request->query->get('report'), 'rPlayer' => $session->get('playerId')));
+	} else {
+	$spyReportManager->load(array('rPlayer' => $session->get('playerId')), array('dSpying', 'DESC'), array(0, 1));
+	}
+
+	if ($spyReportManager->size() == 1) {
+	$spyreport = $spyReportManager->get(0);
+
+	$place_spy = $placeManager->get($spyreport->rPlace);
+
+	include $componentPath . 'fleet/spyReport.php
+	} else {
+	if ($request->query->has('report')) {
+	throw new ErrorException('Ce rapport ne vous appartient pas ou n\'existe pas');
+	//CTR::redirect('fleet/view-spyreport');
+	} else {
+	include $componentPath . 'default.php
+	include $componentPath . 'default.php
+	}
+	}
+
+	$spyReportManager->changeSession($S_SRM1);
+{% endblock content %}
