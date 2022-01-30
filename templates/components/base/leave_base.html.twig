@@ -1,0 +1,27 @@
+{% set are_commanders_in_mission = commanders|reduce((carry, c) => carry or c.isMoving, false) %}
+{% set cooldown = constant('App\\Modules\\Athena\\Model\\OrbitalBase::COOL_DOWN') %}
+
+<div class="component generator">
+	<div class="head"></div>
+	<div class="fix-body">
+		<div class="body">
+			<h4>Abandonner cette planète</h4>
+
+			<p>Pour abandonner une planète, aucun de vos commandants ne doit être en mission. De plus, vous devez posséder cette planète depuis plus de {{ cooldown }} relèves.</p>
+			<p>Une planète abandonnée peut être conquise par n\'importe qui. Les commandants en orbite autour de celle-ci continuent à la défendre. Les vaisseaux dans le hangar sont conservés. Cependant, les routes commerciales ainsi que les offres de ventes sont supprimées. De plus, toutes les constructions programmées sont annulées.</p>
+
+			<hr>
+
+			{% if are_commanders_in_mission %}
+				<span class="more-button">Action impossible</span>
+				<p>Certains de vos commandants sont en mission.</p>
+			{% elseif  %}
+				<span class="more-button">Action impossible</span>
+				<p>Vous possédez la planète depuis moins de {{ cooldown }} relèves.</p>
+				<p>Il reste {{ get_time_until_cooldown_end(current_base)|large_seconds }} avant que vous puissiez abandonner la planète.</p>
+			{% else %}
+				<a class="more-button confirm" href="{{ path('leave_base') }}">Abandonner la planète</a>
+			{% endif %}
+		</div>
+	</div>
+</div>

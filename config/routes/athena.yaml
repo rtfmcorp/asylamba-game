@@ -8,13 +8,9 @@ switchbase:
     defaults:
         page: 'current'
 
-base_situation:
+base_overview:
     path: /overview
-    controller: App\Modules\Athena\Infrastructure\Controller\RefineryController
-
-bases:
-    path: /bases
-    controller: App\Modules\Athena\Infrastructure\Controller\BasesController
+    controller: App\Modules\Athena\Infrastructure\Controller\ViewOverview
 
 generator:
     path: /generator
@@ -52,6 +48,14 @@ dock1:
     controller: App\Modules\Athena\Infrastructure\Controller\RefineryController
 
 dock2:
+    path: /dock2
+    controller: App\Modules\Athena\Infrastructure\Controller\RefineryController
+
+change_base_type:
+    path: /dock2
+    controller: App\Modules\Athena\Infrastructure\Controller\RefineryController
+
+rename_base:
     path: /dock2
     controller: App\Modules\Athena\Infrastructure\Controller\RefineryController
 

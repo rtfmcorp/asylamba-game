@@ -1,0 +1,163 @@
+{% set type_neutral = constant('App\\Modules\\Athena\\Model\\OrbitalBase::TYP_NEUTRAL') %}
+{% set type_commercial = constant('App\\Modules\\Athena\\Model\\OrbitalBase::TYP_COMMERCIAL') %}
+{% set type_military = constant('App\\Modules\\Athena\\Model\\OrbitalBase::TYP_MILITARY') %}
+{% set type_capital = constant('App\\Modules\\Athena\\Model\\OrbitalBase::TYP_CAPITAL') %}
+
+{# @TODO FACTORIZE THIIIIIS #}
+
+<div class="component generator">
+	<div class="head skin-2"></div>
+	<div class="fix-body">
+		<div class="body">
+			<div class="build-item base-type">
+				<div class="name">
+					<img src="{{ asset('media/orbitalbase/base-type-' ~ current_base.typeOfBase ~ '.jpg') }}" alt="{{ current_base|base_type }}">
+					<strong>{{ current_base.name }}</strong>
+					<em>{{ current_base|base_type }}</em>
+				</div>
+				<p class="desc">{{ get_base_type_info(current_base.typeOfBase, 'desc') }}</p>
+
+				<div class="list-choice">
+					<button class="item-1 {% if current_base.typeOfBase == type_neutral %}done{% endif %}">
+						<img src="{{ asset('media/orbitalbase/base-type-0.jpg') }}" alt="{{ get_base_type_info(type_neutral, 'name') }}">
+						</button>
+
+					<button class="item-2 {% if current_base.typeOfBase == type_commercial %}done{% endif %}">
+						<img src="{{ asset('media/orbitalbase/base-type-1.jpg') }}" alt="{{ get_base_type_info(type_commercial, 'name') }}">
+						</button>
+
+					<button class="item-3 {% if current_base.typeOfBase == type_military %}done{% endif %}">
+						<img src="{{ asset('media/orbitalbase/base-type-2.jpg') }}" alt="{{ get_base_type_info(type_military, 'name') }}">
+						</button>
+
+					<button class="item-4 {% if current_base.typeOfBase == type_capital %}done{% endif %}">
+						<img src="{{ asset('media/orbitalbase/base-type-3.jpg') }}" alt="{{ get_base_type_info(type_capital, 'name') }}">
+						</button>
+					</div>
+				<div class="list-desc">
+					{% set fleet_quantity = get_base_type_info(type_neutral, 'l-line') + get_base_type_info(type_neutral, 'r-line') %}
+
+					<div class="desc-choice">
+						<h4>{{ get_base_type_info(type_neutral, 'name') }}</h4>
+						<p><strong class="short">Flottes</strong>{{ fleet_quantity }}</p>
+						<p><strong class="short">Impôt</strong>{{ get_base_type_info(type_neutral, 'tax') * 100 }}%</p>
+					</div>
+
+					<div class="desc-choice">
+						{# @TODO move that logic to a Specification class #}
+						{% if current_base.typeOfBase == type_neutral and current_player.credit >= get_base_type_info(type_commercial, 'price') and current_base.levelGenerator >= minimal_change_level %}
+							<a href="{{ path('change_base_type', { 'id': current_base.id, 'type': type_commercial }) }}" class="button">
+								<span class="text">Evoluer en {{ get_base_type_info(type_commercial, 'name') }}<br />
+									{{ get_base_type_info(type_commercial, 'price')|number }}
+									<img class="icon-color" alt="crédits" src="{{ asset('media/resources/credit.png') }}">
+								</span>
+							</a>
+						{% elseif current_base.typeOfBase == type_military and current_player.credit >= get_base_type_info(type_commercial, 'price') %}
+							<a href="{{ path('change_base_type', { 'id': current_base.id, 'type': type_commercial }) }}" class="button confirm" data-confirm-label="Transformer cette base supprimera toute la file de construction. Vos missions de recyclage seront également annulées.">
+								<span class="text">Transformer en {{ get_base_type_info(type_commercial, 'name') }}<br />
+									{{ get_base_type_info(type_commercial, 'price')|number }}
+									<img class="icon-color" alt="crédits" src="{{ asset('media/resources/credit.png') }}">
+								</span>
+							</a>
+						{% elseif current_base.typeOfBase == type_commercial or current_base.typeOfBase == type_capital %}
+							{# do nothing #}
+						{% else %}
+							<span class="button disable">
+								<span class="text">Evoluer en {{ get_base_type_info(type_commercial, 'name') }}<br />
+									{{ get_base_type_info(type_commercial, 'price')|number }}
+									<img class="icon-color" alt="crédits" src="{{ asset('media/resources/credit.png') }}">
+								</span>
+							</span>
+						{% endif %}
+
+						<h4>Avantages &amp; Inconvénients</h4>
+
+						{% set fleet_quantity = get_base_type_info(type_commercial, 'l-line') + get_base_type_info(type_commercial, 'r-line') %}
+						<p><strong class="short">Flottes</strong>{{ fleet_quantity }}</p>
+						<p><strong class="short">Impôt</strong>{{ get_base_type_info(type_commercial, 'tax') * 100 }}%</p>
+						<p><strong>Technologies</strong>Orienté commerce et production</p>
+						<p><strong>Bâtiments</strong>Plateforme Commerciale et Spatioport au niveau maximum</p>
+						<hr />
+						<p><strong>Nécessite</strong>Générateur niveau {{ minimal_change_level }}</p>
+						</div>
+
+					<div class="desc-choice">
+						{% if current_base.typeOfBase == type_neutral and current_player.credit >= get_base_type_info(type_military, 'price') and current_base.levelGenerator >= minimal_change_level %}
+							<a href="{{ path('change_base_type', {'type': type_military}) }}" class="button">
+								<span class="text">Evoluer en {{ get_base_type_info(type_military, 'name') }}<br />
+									{{- get_base_type_info(type_military, 'price')|number -}}
+									<img class="icon-color" alt="crédits" src="{{ asset('media/resources/credit.png') }}">
+								</span>
+							</a>
+						{% elseif current_base.typeOfBase == type_commercial and current_player.credit >= get_base_type_info(type_military, 'price') %}
+							<a href="{{ path('change_base_type', {'type': type_military}) }}" class="button confirm" data-confirm-label="Transformer cette base supprimera toute la file de construction.">
+								<span class="text">Evoluer en {{ get_base_type_info(type_military, 'name') }}<br />
+									{{- get_base_type_info(type_military, 'price')|number -}}
+									<img class="icon-color" alt="crédits" src="{{ asset('media/resources/credit.png') }}">
+								</span>
+							</a>
+						{% elseif current_base.typeOfBase == type_military or current_base.typeOfBase == type_capital %}
+							{# do nothing #}
+						{% else %}
+							<span class="button disable">
+								<span class="text">Evoluer en {{ get_base_type_info(type_military, 'name') }}<br />
+									{{- get_base_type_info(type_military, 'price')|number -}}
+									<img class="icon-color" alt="crédits" src="{{ asset('media/resources/credit.png') }}">
+								</span>
+							</span>
+						{% endif %}
+						<h4>Avantages &amp; Inconvénients</h4>
+						{% set fleet_quantity = get_base_type_info(type_military, 'l-line') + get_base_type_info(type_military, 'r-line') %}
+						<p><strong class="short">Flottes</strong>{{ fleet_quantity }}</p>
+						<p><strong class="short">Impôt</strong>{{ get_base_type_info(type_military, 'tax') * 100 }}%</p>
+						<p><strong>Technologies</strong>Orienté militaire</p>
+						<p><strong>Bâtiments</strong>Centre de Recyclage et Chantier de Ligne au niveau maximum</p>
+						<hr />
+						<p><strong>Nécessite</strong>Générateur niveau {{ minimal_change_level }}</p>
+					</div>
+
+					<div class="desc-choice">
+						{% set total_price = get_base_type_info(type_capital, 'price') %}
+						{% if current_base.typeOfBase in [type_commercial, type_military] and current_player.credit >= total_price and current_base.levelGenerator >= capital_change_level %}
+							{% if capitals_count == 0 %}
+							<a href="{{ path('change_base_type', {'baseId': current_base.id, 'type': type_capital }) }}" class="button">
+								<span class="text">Evoluer en {{ get_base_type_info(type_capital, 'name') }}<br />
+									{{- total_price|number -}}
+									<img class="icon-color" alt="crédits" src="{{ asset('media/resources/credit.png') }}"></span>
+								</a>
+							{% else %}
+								<span class="button disable">
+									<span class="text">Vous avez déjà une {{ get_base_type_info(type_capital, 'name') }}</span><br />
+								</span>
+							{% endif %}
+						{% elseif current_base.typeOfBase == type_capital %}
+							{# do nothing #}
+						{% else %}
+							{% if capitals_count == 0 %}
+								<span class="button disable">
+									<span class="text">Evoluer en {{ get_base_type_info(type_capital, 'name') }}<br />
+									{{- total_price|number -}}
+									<img class="icon-color" alt="crédits" src="{{ asset('media/resources/credit.png') }}"></span>
+								</span>
+							{% else %}
+							<span class="button disable">
+								<span class="text">Vous avez déjà une {{ get_base_type_info(type_capital, 'name') }}</span><br />
+							</span>
+							{% endif %}
+						{% endif %}
+						<h4>Avantages &amp; Inconvénients</h4>
+
+						{% set fleet_quantity = get_base_type_info(type_capital, 'l-line') + get_base_type_info(type_capital, 'r-line') %}
+						<p>Vous ne pouvez avoir qu'une capitale</p>
+						<p><strong class="short">Flottes</strong>{{ fleet_quantity }}</p>
+						<p><strong class="short">Impôt</strong>{{ get_base_type_info(type_capital, 'tax') * 100 }}%</p>
+						<p><strong>Technologies</strong>Toutes disponibles</p>
+						<p><strong>Bâtiments</strong>Tous au niveau maximum</p>
+						<hr />
+						<p><strong>Nécessite</strong>Générateur niveau {{ capital_change_level }}</p>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>

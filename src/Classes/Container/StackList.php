@@ -24,6 +24,11 @@ class StackList {
 				return NULL;
 		}
 
+		public function all(): array
+		{
+			return $this->elements;
+		}
+
 		/**
 		 * @param int $index
 		 * @return boolean

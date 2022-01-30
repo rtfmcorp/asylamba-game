@@ -12,16 +12,75 @@
 namespace App\Modules\Athena\Manager;
 
 use App\Classes\Entity\EntityManager;
+use App\Modules\Athena\Helper\OrbitalBaseHelper;
 use App\Modules\Athena\Model\CommercialRoute;
+use App\Modules\Athena\Resource\OrbitalBaseResource;
 use App\Modules\Demeter\Model\Color;
 use App\Modules\Athena\Model\OrbitalBase;
 use App\Modules\Zeus\Model\Player;
+use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 class CommercialRouteManager
 {
-	public function __construct(EntityManager $entityManager)
+	public function __construct(
+		protected RequestStack $requestStack,
+		protected OrbitalBaseHelper $orbitalBaseHelper,
+		protected EntityManager $entityManager
+	) {
+	}
+
+	/**
+	 * @return array{
+	 *	waiting_for_me: int,
+	 *  waiting_for_other: int,
+	 *  operational: int,
+	 *  stand_by: int,
+	 *  total: int,
+	 *  max: int
+	 * }
+	 **/
+	public function getBaseCommercialData(OrbitalBase $orbitalBase): array
 	{
-		$this->entityManager = $entityManager;
+		$session = $this->requestStack->getSession();
+		$routes = array_merge(
+			$this->getByBase($orbitalBase->getId()),
+			$this->getByDistantBase($orbitalBase->getId())
+		);
+		//if (0 === count($routes)) {
+		//	return [];
+		//}
+
+		$nCRWaitingForOther = 0;
+		$nCRWaitingForMe = 0;
+		$nCROperational = 0;
+		$nCRInStandBy = 0;
+
+		foreach ($routes as $route) {
+			if ($route->getStatement() == CommercialRoute::PROPOSED AND $route->getPlayerId1() == $session->get('playerId')) {
+				$nCRWaitingForOther++;
+			} elseif ($route->getStatement() == CommercialRoute::PROPOSED AND $route->getPlayerId1() != $session->get('playerId')) {
+				$nCRWaitingForMe++;
+			} elseif ($route->getStatement() == CommercialRoute::ACTIVE) {
+				$nCROperational++;
+			} elseif ($route->getStatement() == CommercialRoute::STANDBY) {
+				$nCRInStandBy++;
+			}
+		}
+
+		return [
+			'waiting_for_me' => $nCRWaitingForMe,
+			'waiting_for_other' => $nCRWaitingForOther,
+			'operational' => $nCROperational,
+			'stand_by' => $nCRInStandBy,
+			'total' => $nCROperational + $nCRInStandBy + $nCRWaitingForOther,
+			'max' => $this->orbitalBaseHelper->getBuildingInfo(
+				OrbitalBaseResource::SPATIOPORT,
+				'level',
+				$orbitalBase->getLevelSpatioport(),
+				'nbRoutesMax'
+			),
+		];
 	}
 
 	// @TODO use an appropriate DTO for this

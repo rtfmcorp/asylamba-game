@@ -17,3 +17,7 @@ put_commander_in_school:
     path: /{id}/put-in-school
     controller: App\Modules\Ares\Infrastructure\Controller\PutCommanderInSchool
     methods: 'GET'
+
+change_commander_position:
+    path: /{id}/change-position
+    controller: App\Modules\Ares\Infrastructure\Controller\AffectCommander

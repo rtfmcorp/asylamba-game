@@ -433,7 +433,17 @@ class Commander implements TravellerInterface
 	{
 		return $this->travelLength;
 	}
-	
+
+	public function isMoving(): bool
+	{
+		return self::MOVING === $this->statement;
+	}
+
+	public function isAffected(): bool
+	{
+		return self::AFFECTED === $this->statement;
+	}
+
 	/**
 	 * @param int $startPlaceId
 	 * @return Commander
