@@ -52,6 +52,12 @@ class QueueableExtension extends AbstractExtension
 				$orbitalBase->levelDock1,
 				'nbQueues'
 			)),
+			new TwigFilter('base_max_dock2_ship_queues', fn (OrbitalBase $orbitalBase) => $this->orbitalBaseHelper->getBuildingInfo(
+				OrbitalBaseResource::DOCK2,
+				'level',
+				$orbitalBase->levelDock2,
+				'nbQueues'
+			)),
 			new TwigFilter('ship_queue_time', fn (ShipQueue $shipQueue) => $shipQueue->quantity * ShipResource::getInfo($shipQueue->shipNumber, 'time')),
 			new TwigFilter('ship_queue_picture', fn (ShipQueue $shipQueue) => ShipResource::getInfo($shipQueue->shipNumber, 'imageLink')),
 			new TwigFilter('ship_queue_name', fn (ShipQueue $shipQueue) => ShipResource::getInfo($shipQueue->shipNumber, 'codeName')),

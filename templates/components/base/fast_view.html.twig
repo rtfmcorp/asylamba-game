@@ -15,10 +15,10 @@
 	<div class="fix-body">
 		<div class="body">
 			{# pending commercial routes display #}
-			{% if orbital_base.levelSpatioport > 0 and orbital_base.commercialRouteData.waiting_for_me is defined and orbital_base.commercialRouteData.waiting_for_me != 0 %}
+			{% if orbital_base.levelSpatioport > 0 and orbital_base.commercialRoutesData.waiting_for_me is defined and orbital_base.commercialRoutesData.waiting_for_me != 0 %}
 				<a href="{{ path('switchbase', {'baseId': orbital_base.id, 'page': 'spatioport'}) }}" class="alert">
-					{% set plural = orbital_base.commercialRouteData.waiting_for_me|plural %}
-					Vous avez {{ orbital_base.commercialRouteData.waiting_for_me }} proposition{{ plural }} commerciale{{ plural }}
+					{% set plural = orbital_base.commercialRoutesData.waiting_for_me|plural %}
+					Vous avez {{ orbital_base.commercialRoutesData.waiting_for_me }} proposition{{ plural }} commerciale{{ plural }}
 				</a>
 			{% endif %}
 
@@ -125,7 +125,7 @@
 				{% set realSizeQueue = 0 %}
 
 				<div class="queue">
-					{% for ship_queue in orbital_base.dock1ShipQueues %}
+					{% for ship_queue in orbital_base.dock2ShipQueues %}
 						{% set realSizeQueue = realSizeQueue + 1 %}
 						{% set totalTimeShips = ship_queue|ship_queue_time %}
 						{% set remainingTime = ship_queue|queue_duration %}
@@ -154,8 +154,8 @@
 						{% endif %}
 						</div>
 					{% endfor %}
-					{% if orbital_base|base_max_dock1_ship_queues > orbital_base.dock1ShipQueues|length %}
-						<a href="{{ path('switchbase', {'baseId': orbital_base.id, 'page': 'dock1'}) }}" class="item link">
+					{% if orbital_base|base_max_dock2_ship_queues > orbital_base.dock2ShipQueues|length %}
+						<a href="{{ path('switchbase', {'baseId': orbital_base.id, 'page': 'dock2'}) }}" class="item link">
 							Lancer la production
 						</a>
 					{% endif %}
@@ -212,10 +212,10 @@
 				<div class="number-box">
 					<span class="label">Routes commerciales</span>
 					<span class="value">
-						{{ orbital_base.commercialRouteData.operational }} / {{ orbital_base.commercialRouteData.max }}
+						{{ orbital_base.commercialRoutesData.operational }} / {{ orbital_base.commercialRoutesData.max }}
 					</span>
 
-					{% set percent = ((orbital_base.commercialRouteData.operational / orbital_base.commercialRouteData.max) * 100)|number %}
+					{% set percent = ((orbital_base.commercialRoutesData.operational / orbital_base.commercialRoutesData.max) * 100)|number %}
 					<span class="progress-bar hb bl" title="remplissage : {{ percent }}%">
 						<span style="width:{{ percent }}%;" class="content"></span>
 					</span>

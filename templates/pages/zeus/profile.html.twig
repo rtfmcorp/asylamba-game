@@ -20,7 +20,7 @@
 		{{ include('molecules/common/advertising.html.twig') }}
 
 		{{ include('components/profile/character.html.twig', {
-			player,
+			'player': current_player,
 			player_experience,
 			player_missing_experience,
 			player_experience_progress,

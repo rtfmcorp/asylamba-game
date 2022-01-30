@@ -1,7 +1,7 @@
 <div id="subnav">
 	<button class="move-side-bar top" data-dir="up"> </button>
 	<div class="overflow">
-		<a href="{{ path('base_situation') }}" class="item {% if app.request.get('_route') == 'base_situation' %}active{% endif %}">
+		<a href="{{ path('base_overview') }}" class="item {% if app.request.get('_route') == 'base_overview' %}active{% endif %}">
 			<span class="picto">
 				<img src="{{ asset('media/orbitalbase/situation.png') }}" alt="" />
 			</span>

@@ -90,7 +90,7 @@ class MapExtension extends AbstractExtension
 		];
 	}
 
-	private function getCommercialRouteData(OrbitalBase $defaultBase, Place $place)
+	private function getCommercialRouteData(OrbitalBase $defaultBase, Place $place): array
 	{
 		$routes = array_merge(
 			$this->commercialRouteManager->getByBase($defaultBase->getId()),
@@ -120,5 +120,6 @@ class MapExtension extends AbstractExtension
 				CommercialRoute::STANDBY => ['stand_by' => true],
 			});
 		}
+		return $data;
 	}
 }

@@ -3,14 +3,14 @@
 namespace App\Modules\Zeus\Helper;
 
 class CheckName {
-	public $minLength = 2;
-	public $maxLength = 15;
+	public int $minLength = 2;
+	public int $maxLength = 15;
 
 	public function getMinLength()	{ return $this->minLength; }
 	public function getMaxLength()	{ return $this->maxLength; }
 
-	public function setMinLength($i){
-		if (is_int($i) AND  n)
+	public function setMinLength(int $i)
+	{
 		$this->minLength = $i;
 	}
 	public function setMaxLength($i){ $this->maxLength = $i; }

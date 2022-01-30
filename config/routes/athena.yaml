@@ -4,71 +4,81 @@ financial:
 
 switchbase:
     path: /switchbase/{baseId}/{page}
-    controller: App\Modules\Athena\Infrastructure\Controller\SwitchBaseController
+    controller: App\Modules\Athena\Infrastructure\Controller\Base\SwitchBase
+    methods: 'GET'
     defaults:
         page: 'current'
 
-base_situation:
+base_overview:
     path: /overview
-    controller: App\Modules\Athena\Infrastructure\Controller\RefineryController
-
-bases:
-    path: /bases
-    controller: App\Modules\Athena\Infrastructure\Controller\BasesController
+    controller: App\Modules\Athena\Infrastructure\Controller\Base\ViewOverview
 
 generator:
     path: /generator
-    controller: App\Modules\Athena\Infrastructure\Controller\RefineryController
+    controller: App\Modules\Athena\Infrastructure\Controller\Base\Building\RefineryController
 
 refinery:
     path: /refinery
-    controller: App\Modules\Athena\Infrastructure\Controller\RefineryController
+    controller: App\Modules\Athena\Infrastructure\Controller\Base\Building\RefineryController
 
 propose_transaction:
     path: /bases/{baseId}/transactions/
-    controller: App\Modules\Athena\Infrastructure\Controller\RefineryController
+    controller: App\Modules\Athena\Infrastructure\Controller\Base\Building\RefineryController
     methods: 'POST'
 
 give_resources:
     path: /bases/{baseId}/give-resources
-    controller: App\Modules\Athena\Infrastructure\Controller\RefineryController
+    controller: App\Modules\Athena\Infrastructure\Controller\Base\Building\RefineryController
     methods: 'POST'
 
 give_ships:
     path: /bases/{baseId}/give-ships
-    controller: App\Modules\Athena\Infrastructure\Controller\RefineryController
+    controller: App\Modules\Athena\Infrastructure\Controller\Base\Building\RefineryController
     methods: 'POST'
 
 recycling:
     path: /recycling
-    controller: App\Modules\Athena\Infrastructure\Controller\RefineryController
+    controller: App\Modules\Athena\Infrastructure\Controller\Base\Building\RefineryController
 
 storage:
     path: /storage
-    controller: App\Modules\Athena\Infrastructure\Controller\StorageController
+    controller: App\Modules\Athena\Infrastructure\Controller\Base\Building\StorageController
 
 dock1:
     path: /dock1
-    controller: App\Modules\Athena\Infrastructure\Controller\RefineryController
+    controller: App\Modules\Athena\Infrastructure\Controller\Base\Building\RefineryController
 
 dock2:
     path: /dock2
-    controller: App\Modules\Athena\Infrastructure\Controller\RefineryController
+    controller: App\Modules\Athena\Infrastructure\Controller\Base\Building\RefineryController
+
+change_base_type:
+    path: /change-base-type
+    controller: App\Modules\Athena\Infrastructure\Controller\Base\ChangeBaseType
+
+leave_base:
+    path: /leave-base
+    controller: App\Modules\Athena\Infrastructure\Controller\Base\LeaveBase
+
+rename_base:
+    path: /rename-base
+    controller: App\Modules\Athena\Infrastructure\Controller\Base\RenameBase
+    methods: 'POST'
 
 technosphere:
     path: /technosphere
-    controller: App\Modules\Athena\Infrastructure\Controller\RefineryController
+    controller: App\Modules\Athena\Infrastructure\Controller\Base\Building\RefineryController
 
 trade_market:
     path: /trade-market/{mode<market|sell|resource>}
-    controller: App\Modules\Athena\Infrastructure\Controller\TradeMarketController
+    controller: App\Modules\Athena\Infrastructure\Controller\Base\Building\TradeMarketController
     defaults:
         mode: market
 
 spatioport:
     path: /spatioport
-    controller: App\Modules\Athena\Infrastructure\Controller\RefineryController
+    controller: App\Modules\Athena\Infrastructure\Controller\Base\Building\RefineryController
 
 school:
     path: /school
-    controller: App\Modules\Athena\Infrastructure\Controller\ViewSchool
+    controller: App\Modules\Athena\Infrastructure\Controller\Base\Building\ViewSchool

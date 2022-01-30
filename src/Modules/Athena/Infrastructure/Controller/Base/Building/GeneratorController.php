@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Modules\Athena\Infrastructure\Controller;
+namespace App\Modules\Athena\Infrastructure\Controller\Base\Building;
 
 use App\Classes\Library\Chronos;
 use App\Classes\Library\Format;

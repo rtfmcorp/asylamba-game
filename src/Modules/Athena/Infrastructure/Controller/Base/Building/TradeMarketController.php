@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Modules\Athena\Infrastructure\Controller;
+namespace App\Modules\Athena\Infrastructure\Controller\Base\Building;
 
 use App\Modules\Ares\Manager\CommanderManager;
 use App\Modules\Ares\Model\Commander;

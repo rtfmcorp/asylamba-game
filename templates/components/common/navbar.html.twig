@@ -4,7 +4,7 @@
 			<a href="#" class="square sh" data-target="change-bases">
 				<img src="{{ asset('media/common/nav-base.png') }}" alt="" />
 			</a>
-			<a href="{{ path('bases') }}" class="current-base {% if app.request.get('_route') == 'bases' %}active{% endif %}">
+			<a href="{{ path('base_overview') }}" class="current-base {% if app.request.get('_route') == 'bases' %}active{% endif %}">
 				<img src="{{ asset('media/map/place/place' ~ current_base_image ~ '.png') }}" alt="{{ current_base_name }}" />
 				{{ current_base_name }}
 			</a>
