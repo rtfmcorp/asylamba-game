@@ -1,0 +1,11 @@
+delete_all_combat_reports:
+    path: /delete-all
+    controller: App\Modules\Athena\Infrastructure\Controller\Base\Building\RefineryController
+
+archive_combat_report:
+    path: /{id}/archive
+    controller: App\Modules\Athena\Infrastructure\Controller\Base\Building\RefineryController
+
+delete_combat_report:
+    path: /{id}/delete
+    controller: App\Modules\Athena\Infrastructure\Controller\Base\Building\RefineryController

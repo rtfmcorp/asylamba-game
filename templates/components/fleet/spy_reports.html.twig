@@ -1,0 +1,35 @@
+<div class="component report">
+	<div class="head skin-2">
+		<h2>Archives d'espionnage</h2>
+		</div>
+	<div class="fix-body">
+		<div class="body">
+			<div class="tool">
+				<span><a href="{{ path('delete_all_spy_reports') }}">tout supprimer</a></span>
+			</div>
+			{% if spy_reports|length > 0 %}
+				<div class="set-item">
+					{% for spy_report in spy_reports %}
+						<div class="item">
+							<div class="left">
+								<img src="{{ asset('media/map/action/spy.png') }}" alt="" class="color{{ spy_report.placeColor }}" />
+							</div>
+
+							<div class="center">
+								<strong><a href="{{ path('map', {'place': spy_report.rPlace}) }}">{{ spy_report.placeName }}</a></strong>
+								{{- spy_report.dSpying|date|raw -}}
+							</div>
+
+							<div class="right">
+								<a class="{% if app.request.query.get('report') == spy_report.id or (not app.request.query.has('report') and loop.index == 1) %}active{% endif %}"
+								   href="{{ path('spy_reports', {'report': spy_report.id}) }}"></a>
+							</div>
+						</div>
+					{% endfor %}
+				</div>
+			{% else %}
+				<p>Il n\'y a aucun rapport d\'espionnage dans vos archives.</p>
+			{% endif %}
+		</div>
+	</div>
+</div>

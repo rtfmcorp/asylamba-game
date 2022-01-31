@@ -1,0 +1,51 @@
+{% set pev_begin = 0 %}
+{% set pev_difference = 0 %}
+{% set pev_end = 0 %}
+
+{% for i in (0, 11) %}
+	{% set pev_begin = pev_begin + total_in_begin[i] * get_ship_info(i, 'pev') %}
+	{% set pev_difference = pev_difference + difference[i] * get_ship_info(i, 'pev') %}
+	{% set pev_end = pev_end + total_at_end[i] * get_ship_info(i, 'pev') %}
+{% endfor %}
+
+<div class="dammage">
+	<table>
+		<tr>
+			<td>Evolution des PEV</td>
+			<td>{{ pev_begin == 0 ? '—' : pev_begin }}</td>
+			<td>{{ pev_difference == 0 ? '—' : pev_difference }}</td>
+			<td>{{ pev_end == 0 ? '—' : pev_end }}</td>
+		</tr>
+	</table>
+</div>
+
+<div class="dammage">
+	<table>
+		{% for i in range(0, 11) %}
+			<tr>
+				<td>{{ get_ship_info(i, 'name') }}</td>
+				<td>
+					{%- if total_in_begin[i] > 0 -%}
+						<span>{{ total_in_begin[i] }}</span>
+					{%- else -%}
+						—
+					{%- endif -%}
+				</td>
+				<td>
+					{%- if difference[i] > 0 -%}
+						<span>{{ difference[i] }}</span>
+					{%- else -%}
+						—
+					{%- endif -%}
+				</td>
+				<td>
+					{%- if total_at_end[i] > 0 -%}
+						<span>{{ total_at_end[i] }}</span>
+					{%- else -%}
+						—
+					{%- endif -%}
+				</td>
+			</tr>
+		{% endfor %}
+	</table>
+</div>

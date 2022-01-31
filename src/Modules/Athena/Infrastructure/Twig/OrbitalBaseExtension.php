@@ -4,6 +4,7 @@ namespace App\Modules\Athena\Infrastructure\Twig;
 
 use App\Classes\Library\Game;
 use App\Classes\Library\Utils;
+use App\Modules\Artemis\Model\SpyReport;
 use App\Modules\Athena\Helper\OrbitalBaseHelper;
 use App\Modules\Athena\Model\OrbitalBase;
 use App\Modules\Athena\Model\Transaction;
@@ -29,7 +30,9 @@ class OrbitalBaseExtension extends AbstractExtension
 			new TwigFilter('base_type', fn (OrbitalBase $orbitalBase) => PlaceResource::get($orbitalBase->typeOfBase, 'name')),
 			new TwigFilter('scalar_base_type', fn (string $type) => PlaceResource::get($type, 'name')),
 			new TwigFilter('base_storage_percent', fn (OrbitalBase $orbitalBase) => $this->orbitalBaseHelper->getStoragePercent($orbitalBase)),
-			new TwigFilter('base_coords', fn(OrbitalBase $orbitalBase) => Game::formatCoord($orbitalBase->getXSystem(), $orbitalBase->getYSystem(), $orbitalBase->getPosition(), $orbitalBase->getSector()))
+			new TwigFilter('base_coords', fn(OrbitalBase $orbitalBase) => Game::formatCoord($orbitalBase->getXSystem(), $orbitalBase->getYSystem(), $orbitalBase->getPosition(), $orbitalBase->getSector())),
+			// @TODO Factorize that coords call
+			new TwigFilter('spy_report_coords', fn(SpyReport $spyReport) => Game::formatCoord($spyReport->xPosition, $spyReport->yPosition, $spyReport->position, $spyReport->rSector)),
 		];
 	}
 

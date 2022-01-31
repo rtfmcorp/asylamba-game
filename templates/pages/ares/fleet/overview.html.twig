@@ -1,39 +1,5 @@
 {% extends 'layouts/ares/fleet.html.twig' %}
 
 {% block content %}
-	# set d'orbitale base
-	$obsets = [];
-	for ($i = 0; $i < $session->get('playerBase')->get('ob')->size(); $i++) {
-	$obsets[$i] = array();
-
-	$obsets[$i]['info'] = [];
-	$obsets[$i]['fleets'] = [];
-	$obsets[$i]['dock'] = [];
-
-	$obsets[$i]['info']['id'] = $session->get('playerBase')->get('ob')->get($i)->get('id');
-	$obsets[$i]['info']['name'] = $session->get('playerBase')->get('ob')->get($i)->get('name');
-	$obsets[$i]['info']['type'] = $session->get('playerBase')->get('ob')->get($i)->get('type');
-	}
-
-	# commander manager : yours
-	$commanders = $commanderManager->getPlayerCommanders($session->get('playerId'), [Commander::AFFECTED, Commander::MOVING], ['c.rBase' => 'DESC']);
-
-	for ($i = 0; $i < count($obsets); $i++) {
-	foreach ($commanders as $commander) {
-	if ($commander->rBase == $obsets[$i]['info']['id']) {
-	$obsets[$i]['fleets'][] = $commander;
-	}
-	}
-	}
-	# ship in dock
-	$playerBases = $orbitalBaseManager->getPlayerBases($session->get('playerId'));
-
-	for ($i = 0; $i < count($obsets); $i++) {
-	foreach ($playerBases as $orbitalBase) {
-	if ($orbitalBase->rPlace == $obsets[$i]['info']['id']) {
-	$obsets[$i]['dock'] = $orbitalBase->shipStorage;
-	}
-	}
-	}
-	include $componentPath . 'fleet/overview.php
+	{{ include('components/fleet/overview.html.twig') }}
 {% endblock content %}

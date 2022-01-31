@@ -70,4 +70,74 @@ class SpyReport {
 	public $typeOfSystem;
 
 	public function getId() { return $this->id; }
+
+	public function isNotCaught(): bool
+	{
+		return self::TYP_NOT_CAUGHT === $this->type;
+	}
+
+	public function isAnonymouslyCaught(): bool
+	{
+		return self::TYP_ANONYMOUSLY_CAUGHT === $this->type;
+	}
+
+	public function isCaught(): bool
+	{
+		return self::TYP_CAUGHT === $this->type;
+	}
+
+	public function hasSpottedFleets(): bool
+	{
+		return self::STEP_FLEET < $this->success;
+	}
+
+	public function hasSpottedArmies(): bool
+	{
+		return self::STEP_ARMY < $this->success;
+	}
+
+	public function hasSpottedMovements(): bool
+	{
+		return self::STEP_MOVEMENT < $this->success;
+	}
+
+	public function hasSpottedCommanders(): bool
+	{
+		return self::STEP_COMMANDER < $this->success;
+	}
+
+	public function hasSpottedPevs(): bool
+	{
+		return self::STEP_PEV < $this->success;
+	}
+
+	public function hasSpottedDocks(): bool
+	{
+		return self::STEP_DOCK < $this->success;
+	}
+
+	public function hasSpottedResourcesStorage(): bool
+	{
+		return self::STEP_RESOURCES < $this->success;
+	}
+
+	public function hasSpottedPoints(): bool
+	{
+		return self::STEP_POINT < $this->success;
+	}
+
+	public function hasSpottedAntiSpy(): bool
+	{
+		return self::STEP_ANITSPY < $this->success;
+	}
+
+	public function hasSpottedCommercialRoutesIncome(): bool
+	{
+		return self::STEP_RC < $this->success;
+	}
+
+	public function hasShipsInStorage(): bool
+	{
+		return \array_sum(\unserialize($this->shipsInStorage)) > 0;
+	}
 }

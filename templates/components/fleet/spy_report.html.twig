@@ -1,0 +1,165 @@
+{% set affected = constant('App\\Modules\\Ares\\Model\\Commander::AFFECTED') %}
+
+<div class="component size3 space">
+	<div class="head skin-1">
+		{# @TODO move the default NPC avatar to a constant #}
+		<img src="{{ asset('media/' ~ (spy_report.rEnemy == 0 ? 'commander/big/t1-c0' : ('avatar/medium/' ~ spy_report.enemyAvatar)) ~ '.png') }}" alt="'{{ spy_report.enemyName }}" />
+		<h2>{{ spy_report.placeName }}</h2>
+		<em>{{ spy_report.enemyName }}</em>
+	</div>
+	<div class="fix-body">
+		<div class="body">
+			<div class="situation-content color{{ spy_report.placeColor }} place1">
+				<div class="toolbar">
+					<span>
+						Opération de {{ spy_report.price|number }}
+						<img class="icon-color" src="{{ asset('media/resources/credit.png') }}" alt="crédits">
+					</span>
+					<span>
+						{% if spy_report.isNotCaught %}
+							L'ennemi ne sait rien
+						{% elseif spy_report.isAnonymouslyCaught %}
+							L'ennemi ne vous soupçonne pas
+						{% elseif spy_report.isCaught %}
+							L'ennemi vous a vu
+						{% endif %}
+					</span>
+					<span>{{ spy_report.success }} % de réussite de l'espionnage</span>
+					<a href="{{ path('delete_spy_report', {'id': spy_report.id}) }}" class="hb" title="supprimer le rapport">&#215;</a>
+				</div>
+
+				<span class="line-help line-1">I</span>
+				<span class="line-help line-2">II</span>
+
+				{% set vanguard_position = 0 %}
+				{% set rear_position = 0 %}
+
+				{% set vanguard_positions = get_base_type_info(spy_report.typeOfOrbitalBase, 'l-line-position') %}
+				{% set rear_positions = get_base_type_info(spy_report.typeOfOrbitalBase, 'r-line-position') %}
+				{% set commanders = spy_report.commanders|unserialize %}
+
+				{% if spy_report.hasSpottedFleets %}
+					{% for commander in commanders %}
+						<span class="commander full show-army position-{{ commander.line }}-{{ (commander.line == 1 ? vanguard_positions[vanguard_position] : rear_positions[rear_position]) }}"
+							  data-army="{{ (spy_report.hasSpottedArmies ? commander.army : range(0, 11)|map(v => -1))|json_encode }}">
+							<img src="{{ asset('media/map/fleet/army' ~ (spy_report.hasSpottedMovements and commander.statement != affected ? '-away' : '') ~ '.png') }}" alt="plein" />
+							<span class="info">
+								{% if spy_report.hasSpottedCommanders %}
+									{{ get_commander_rank(commander.level) }} <strong>{{ commander.name }}</strong><br />'
+								{% else %}
+									Commandant inconnu<br />
+								{% endif %}
+								{% if spy_report.hasSpottedPevs %}
+									{{ commander.pev }} Pev
+								{% else %}
+									??? Pev
+								{% endif %}
+								{% if spy_report.hasSpottedMovements and commander.statement != affected %}
+									<br />&#8594; déplacement
+								{% endif %}
+							</span>
+						</span>
+
+						{% if commander.line == 1 %}
+							{% set vanguard_position = vanguard_position + 1 %}
+						{% else %}
+							{% set rear_position = rear_position + 1 %}
+						{% endif %}
+					{% endfor %}
+				{% endif %}
+
+				{% set positions = vanguard_position < vanguard_positions|length ? range(vanguard_position, vanguard_positions|length - 1) : [] %}
+				{% for i in positions %}
+					<span class="commander empty position-1-{{ vanguard_positions[i] }}">
+						<img src="{{ asset('media/map/fleet/army-' ~ (spy_report.hasSpottedFleets ? 'empty' : 'unknown') ~ '.png') }}" alt="vide" />'
+					</span>
+				{% endfor %}
+
+
+				{% set positions = rear_position < rear_positions|length ? range(rear_position, rear_positions|length - 1) : [] %}
+				{% for i in positions %}
+					<span class="commander empty position-2-{{ rear_positions[i] }}">
+						<img src="{{ asset('media/map/fleet/army-' ~ (spy_report.hasSpottedFleets ? 'empty' : 'unknown') ~ '.png') }}" alt="vide" />'
+					</span>
+				{% endfor %}
+
+				{% if spy_report.typeOfBase is not constant('App\\Modules\\Gaia\\Model\\Place::TYP_EMPTY') %}
+					<span class="commander {{ (spy_report.hasSpottedFleets and spy_report.hasShipsInStorage ? 'full' : 'empty') }} show-army position-3"
+						data-army="{{ (spy_report.hasSpottedDocks ? spy_report.shipsInStorage|unserialize : range(0, 11)|map(v => -1))|json_encode }}">
+						<img src="{{ asset('media/orbitalbase/dock1.png') }}" alt="chantier" />
+					</span>
+				{% endif %}
+
+				<div class="stellar">
+					<div class="info top">
+						{{ get_base_type_info(spy_report.typeOfBase, 'name') }}<br />
+						<strong>{{ spy_report.placeName }}</strong><br />
+						{% if spy_report.hasSpottedPoints %}
+							{{ spy_report.points|number }}
+						{% else %}
+							???
+						{% endif %}
+						points
+					</div>
+					<div class="info middle">
+						coordonnées<br />
+						<strong>
+							<a href="{{ path('map', {'place': spy_report.rPlace }) }}">
+								{{- spy_report|spy_report_coords -}}
+							</a>
+						</strong>
+					</div>
+					<img src="{{ asset('media/orbitalbase/place1-' ~ get_place_demography(place) ~ '.png') }}" alt="planète" />
+
+					<div class="info bottom">
+						<strong>{{ (place.population * 1000000)|number }}</strong> habitants<br />
+						<strong>{{ place.coefResources }}</strong> % coeff. ressource<br />
+						<strong>{{ get_place_technosphere_improvement_coeff(place) }}</strong> % de bonus scientifique
+					</div>
+				</div>
+
+				<div class="attack-link">
+					<a href="{{ path('map', {'place': spy_report.rPlace}) }}">Attaquer la planète</a>
+					</div>
+				</div>
+
+			<div class="situation-info">
+				<div class="item">
+					Ressources dans les entrepôts
+					<span class="value">
+						{% if spy_report.hasSpottedResourcesStorage %}
+							{{- spy_report.resources -}}
+						{% else %}
+							???
+						{% endif %}
+						<img class="icon-color" src="{{ asset('media/resources/resource.png') }}" alt="ressources">
+					</span>
+				</div>
+
+				<div class="item">
+					Investissement dans le contre-espionnage
+					<span class="value">
+						{% if spy_report.hasSpottedAntiSpy %}
+							{{- spy_report.antiSpyInvest -}}
+						{% else %}
+							???
+						{% endif %}
+						<img class="icon-color" src="{{ asset('media/resources/credit.png') }}" alt="crédits">
+					</span>
+				</div>
+
+				<div class="item">
+					Revenus des routes commerciales
+					<span class="value">
+						{% if spy_report.hasSpottedCommercialRoutesIncome %}
+							{{- spy_report.commercialRouteIncome -}}
+						{% else %}
+							???
+						{% endif %}
+					 	<img class="icon-color" src="{{ asset('media/resources/credit.png') }}" alt="crédits">
+					</span>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

@@ -20,6 +20,7 @@ class FormatterExtension extends AbstractExtension
 			new TwigFilter('lite_seconds', fn (int $seconds) => Chronos::secondToFormat($seconds, 'lite')),
 			new TwigFilter('large_seconds', fn (int $seconds) => Chronos::secondToFormat($seconds, 'large')),
 			new TwigFilter('date', fn (string $date) => Chronos::transform($date)),
+			new TwigFilter('unserialize', fn (string $data) => \unserialize($data)),
 		];
 	}
 

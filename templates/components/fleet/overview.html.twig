@@ -1,0 +1,116 @@
+<div class="component size3 table-fleet">
+	<div class="head skin-1">
+		<h1>Aperçu des armées</h1>
+	</div>
+	<div class="fix-body">
+		<div class="body">
+			<table>
+				<tr>
+					<th class="base"></th>
+					<th class="large"></th>
+					{% for i in range(0, 11) %}
+						<th><span>{{ get_ship_info(i, 'codeName') }}</span></th>
+					{% endfor %}
+					<th><span>PEV</span></th>
+				</tr>
+
+				{% set total_ships = range(0, 11)|map(v => 0) %}
+
+				{% for base in obsets %}
+
+					{% set total_ships_base = range(0, 11)|map(v => 0) %}
+	
+					<tr>
+						<td rowspan="{{ base.fleets|length + 2 }}" class="base">
+							<a href="{{ path('map', {'place': base.info.id}) }}">
+								{{ get_base_type_info(base.info.type, 'name') }}<br />
+								<strong>{{ base.info.name }}</strong>
+							</a>
+						</td>
+	
+						<td class="large">
+							<a href="{{ path('switchbase', {'baseId': base.info.id, 'page': 'dock1'}) }}">
+								Vaisseaux dans les hangars
+							</a>
+						</td>
+						{% set line_pev = 0 %}
+	
+						{% for i in range(0, total_ships_base|length - 1) %}
+							<td {% if i == 6 %}class="sep"{% endif %}>
+								<span {% if base.dock[i] == 0 %}class="zero-value"{% endif %}>
+									{{- base.dock[i] -}}
+								</span>
+							</td>
+
+							{% set line_pev = line_pev + get_ship_info(i, 'pev') * base.dock[i] %}
+							
+							{% set total_ships = {(i): total_ships[i] + base.dock[i]} + total_ships %}
+							{% set total_ships_base = {(i): (total_ships_base[i] + base.dock[i])} + total_ships_base %}
+						{% endfor %}
+						<td>{{ line_pev }}</td>
+					</tr>
+
+					{% for commander in base.fleets %}
+						{% set commander_ships = commander.nbrShipByType %}
+						{% set line_pev = 0 %}
+
+						<tr>
+							<td class="large">
+								<a href="{{ path('fleet_headquarters', {'commander': commander.id}) }}">
+									{{ commander|commander_rank }} <strong>{{ commander.name }}</strong>
+								</a>
+							</td>
+							{% for i in range(0, total_ships_base|length - 1) %}
+								<td {% if i == 6 %}class="sep"{% endif %}>
+									<span {% if commander_ships[i] == 0 %}class="zero-value"{% endif %}>
+										{{- commander_ships[i] -}}
+									</span>
+								</td>
+
+								{% set line_pev = line_pev + get_ship_info(i, 'pev') * commander_ships[i] %}
+
+								{% set total_ships = {(i): total_ships[i] + commander_ships[i]} + total_ships %}
+								{% set total_ships_base = {(i): total_ships_base[i] + commander_ships[i]} + total_ships_base %}
+							{% endfor %}
+							<td>{{ line_pev }}</td>
+						</tr>
+					{% endfor %}
+
+					<tr class="total">
+						<td class="large">Total sur la planète</td>
+						{% set line_pev = 0 %}
+	
+						{% for i in range(0, total_ships_base|length - 1) %}
+							<td {% if i == 6 %}class="sep"{% endif %}>
+								<span {% if total_ships_base[i] == 0 %}class="zero-value"{% endif %}>
+									{{- total_ships_base[i] -}}
+								</span>
+							</td>
+	
+							{% set line_pev = line_pev + get_ship_info(i, 'pev') * total_ships_base[i] %}
+						{% endfor %}
+						<td>{{ line_pev }}</td>
+					</tr>
+				{% endfor %}
+
+				<tr>
+					<td class="base"></td>
+					<td class="large">Total général</td>
+					
+					{% set line_pev = 0 %}
+					
+					{% for i in range(0, total_ships|length - 1) %}
+						<td {% if i == 6 %}class="sep"{% endif %}>
+							<span {% if total_ships[i] == 0 %}class="zero-value"{% endif %}>
+								{{- total_ships[i] -}}
+							</span>
+						</td>
+
+						{% set line_pev = line_pev + get_ship_info(i, 'pev') * total_ships[i] %}
+					{% endfor %}
+					<td>{{ line_pev }}</td>
+				</tr>
+			</table>
+		</div>
+	</div>
+</div>

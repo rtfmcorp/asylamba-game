@@ -1,38 +1,13 @@
 {% extends 'layouts/ares/fleet.html.twig' %}
 
 {% block content %}
-	# loading des objets
-	if ($request->query->get('mode') === 'archived') {
-	$archived = Report::ARCHIVED;
-	} else {
-	$archived = Report::STANDARD;
-	}
+	{{ include('components/fleet/combat_reports.html.twig') }}
 
-	$rebels = (bool) $request->cookies->get('p'. Params::SHOW_REBEL_REPORT, Params::$params[Params::SHOW_REBEL_REPORT]);
-
-	$report_listReport =
-	($request->cookies->get('p'. Params::SHOW_ATTACK_REPORT, Params::$params[Params::SHOW_ATTACK_REPORT]))
-	? $liveReportManager->getAttackReportsByMode($session->get('playerId'), $rebels, $archived)
-	: $liveReportManager->getDefenseReportsByMode($session->get('playerId'), $rebels, $archived)
-	;
-	$type_listReport = 1;
-	include $componentPath . 'fleet/list-report.php
-
-	# report component
-	if ($request->query->has('report')) {
-	$report = $reportManager->get($request->query->get('report'));
-
-	if (($report->rPlayerAttacker == $session->get('playerId') || $report->rPlayerDefender == $session->get('playerId'))) {
-	$attacker_report = $playerManager->get($report->rPlayerAttacker);
-	$defender_report = $playerManager->get($report->rPlayerDefender);
-
-	include $componentPath . 'fleet/report.php
-	include $componentPath . 'fleet/manage-report.php
-	} else {
-	throw new ErrorException('Ce rapport ne vous appartient pas ou n\'existe pas');
-	}
-	} else {
-	include $componentPath . 'default.php
-	include $componentPath . 'default.php
-	}
+	{% if report is not null %}
+		{{ include('components/fleet/combat_report.html.twig', { report, report_attacker, report_defender }) }}
+		{{ include('components/fleet/manage_combat_report.html.twig', { report }) }}
+	{% else %}
+		{{ include('molecules/common/default.html.twig') }}
+		{{ include('molecules/common/default.html.twig') }}
+	{% endif %}
 {% endblock content %}
