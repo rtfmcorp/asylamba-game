@@ -13,3 +13,7 @@ logout:
 params:
     path: /params
     controller: App\Shared\Infrastructure\Controller\ParamsController
+
+switch_param:
+    path: /param
+    controller: App\Shared\Infrastructure\Controller\SwitchParam

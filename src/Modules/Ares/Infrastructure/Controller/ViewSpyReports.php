@@ -23,7 +23,7 @@ class ViewSpyReports extends AbstractController
 		return $this->render('pages/ares/fleet/spy_reports.html.twig', [
 			'spy_reports' => $this->getSpyReports($currentPlayer, $spyReportManager),
 			'focused_spy_report' => $focusedSpyReport,
-			'focused_spy_report_place' => $placeManager->get($focusedSpyReport->rPlace),
+			'focused_spy_report_place' => $focusedSpyReport ? $placeManager->get($focusedSpyReport->rPlace) : null,
 		]);
 	}
 

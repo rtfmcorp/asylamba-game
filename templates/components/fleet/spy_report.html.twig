@@ -45,7 +45,7 @@
 							<img src="{{ asset('media/map/fleet/army' ~ (spy_report.hasSpottedMovements and commander.statement != affected ? '-away' : '') ~ '.png') }}" alt="plein" />
 							<span class="info">
 								{% if spy_report.hasSpottedCommanders %}
-									{{ get_commander_rank(commander.level) }} <strong>{{ commander.name }}</strong><br />'
+									{{ get_commander_rank(commander.level) }} <strong>{{ commander.name }}</strong><br />
 								{% else %}
 									Commandant inconnu<br />
 								{% endif %}
