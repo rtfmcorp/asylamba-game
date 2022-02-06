@@ -1,3 +1,4 @@
+{% apply spaceless %}
 <div class="header"
 	 data-sector-color="{{ places[0].sectorColor }}"
 	 data-distance="{{ get_place_distance(default_base, places[0])|number }}">
@@ -191,3 +192,4 @@
 		</ul>
 	</div>
 </div>
+{% endapply %}

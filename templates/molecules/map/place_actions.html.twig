@@ -1,4 +1,6 @@
 {% set travel_time = get_travel_time(default_base, place)|lite_seconds %}
+
+{% apply spaceless %}
 <div class="column act">
 	<div class="top">
 		{% if place.typeOfPlace == 1 %}
@@ -274,3 +276,4 @@
 		{% endif %}
 	</div>
 </div>
+{% endapply %}
