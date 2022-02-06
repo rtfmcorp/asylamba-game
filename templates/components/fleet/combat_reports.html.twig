@@ -1,0 +1,63 @@
+<div class="component report">
+	<div class="head skin-2">
+		<h2>Archives Militaires</h2>
+	</div>
+	<div class="fix-body">
+		<div class="body">
+			<div class="tool">
+				<span>
+					<a href="{{ path('switch_param', {'param': constant('App\\Classes\\Container\\Params::SHOW_ATTACK_REPORT')}) }}" class="active">
+						{{- (app.request.cookies.get('p' ~ constant('App\\Classes\\Container\\Params::SHOW_ATTACK_REPORT'), default_parameters[constant('App\\Classes\\Container\\Params::SHOW_ATTACK_REPORT')]) ? 'Rapports d\'attaque' : 'Rapports de défense') -}}
+					</a>
+				</span>
+				<span>
+					{% set show_rebel_report = app.request.cookies.get(
+						'p' ~ constant('App\\Classes\\Container\\Params::SHOW_REBEL_REPORT'),
+						default_parameters[constant('App\\Classes\\Container\\Params::SHOW_REBEL_REPORT')]
+					) %}
+					<a href="{{ path('switch_param', {'param': constant('App\\Classes\\Container\\Params::SHOW_REBEL_REPORT')}) }}"
+					   class="hb lt {% if show_rebel_report %}active{% endif %}"
+					   title="{{ show_rebel_report ? 'masquer' : 'afficher' }} les rapports contre des rebelles">
+						R
+					</a>
+				</span>
+				<span>
+					<a href="{{ path('delete_all_combat_reports') }}" class="hb lt" title="supprimer tout les rapports">&#215;</a>
+				</span>
+			</div>
+
+			{% if combat_reports|length > 0 %}
+				<div class="set-item">
+					{% for report in combat_reports %}
+						{% set report_data = report.typeOfReport(current_player.rColor) %}
+
+						<div class="item">
+							<div class="left">
+								{# @TODO Seems that previously a report could also use colorA #}
+								<img class="color{{ report.colorD }}" src="{{ asset('media/map/action/' ~ report_data.img) }}" alt="" />
+							</div>
+
+							<div class="center">
+								<strong>{{ report_data.title }}</strong>
+								{{- report.dFight|date -}}
+							</div>
+
+							<div class="right">
+								<a {% if app.request.query.get('report') == report.id %}class="active"{% endif %}
+								   href="{{ path('fleet_archives', {'report': report.id}) }}"></a>
+							</div>
+						</div>
+					{% endfor %}
+				</div>
+			{% else %}
+				<p>Il n'y a aucun rapport de combat dans vos archives militaires.</p>
+			{% endif %}
+
+			{% if app.request.query.get('mode') == 'archived' %}
+				<a class="more-button" href="{{ path('fleet_archives') }}">Voir tous les rapports</a>
+			{% else %}
+				<a class="more-button" href="{{ path('fleet_archives', {'mode': 'archived'}) }}">Voir les archives des rapports</a>
+			{% endif %}
+		</div>
+	</div>
+</div>

@@ -1,0 +1,13 @@
+{% extends 'layouts/ares/fleet.html.twig' %}
+
+{% block content %}
+	{{ include('components/fleet/combat_reports.html.twig') }}
+
+	{% if report is not null %}
+		{{ include('components/fleet/combat_report.html.twig', { report, report_attacker, report_defender }) }}
+		{{ include('components/fleet/manage_combat_report.html.twig', { report }) }}
+	{% else %}
+		{{ include('molecules/common/default.html.twig') }}
+		{{ include('molecules/common/default.html.twig') }}
+	{% endif %}
+{% endblock content %}

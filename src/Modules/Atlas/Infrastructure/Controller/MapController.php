@@ -50,7 +50,7 @@ class MapController extends AbstractController
 
 		if (null !== $defaultPosition['system']) {
 			$places = $placeManager->getSystemPlaces($defaultPosition['system']);
-			$placesIds = array_map(fn (SpyReport $spyReport) => $spyReport->id, $places);
+			$placesIds = array_map(fn (Place $place) => $place->id, $places);
 
 
 			$spyReportManager->newSession();

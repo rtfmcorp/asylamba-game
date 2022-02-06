@@ -36,6 +36,7 @@ class ViewOverview extends AbstractController
 			'minimal_change_level' => $this->getParameter('athena.obm.change_type_min_level'),
 			'capital_change_level' => $this->getParameter('athena.obm.capital_min_level'),
 			'capitals_count' => $this->getCapitalsCount($request->getSession()),
+			'building_resource_refund' => $this->getParameter('athena.building.building_queue_resource_refund'),
 		]);
 	}
 

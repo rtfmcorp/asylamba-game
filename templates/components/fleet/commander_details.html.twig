@@ -1,0 +1,103 @@
+<div class="component">
+	<div class="head skin-1"></div>
+	<div class="fix-body">
+		<div class="body">
+			{% if commander.isAffected %}
+				<div class="tool">
+					<span><a href="{{ path('empty_commander', {'id': commander.id}) }}">Retirer tous les vaisseaux</a></span>
+					<span><a href="{{ path('fire_commander', {'id': commander.id}) }}" class="hb lt" title="licencier l'officier">&#215;</a></span>
+					<span><a href="{{ path('affect_commander', {'id': commander.id}) }}" class="hb lt" title="remettre dans l'école">E</a></span>
+				</div>
+			{% endif %}
+
+			<div class="number-box">
+				<span class="label">État de l'officier</span>
+				{% if commander.isInSchool %}
+					<span class="value">À l'école</span>
+				{% elseif commander.isAffected %}
+					<span class="value">À quai</span>
+				{% elseif commander.isMoving %}
+					<span class="value">En mission</span>
+				{% else %}
+					<span class="value">Tombé au combat</span>
+				{% endif %}
+			</div>
+
+			{% if commander.isMoving %}
+				<div class="number-box">
+					<span class="label">Mission</span>
+					{% if commander.isTransferring %}
+						<span class="value">Déplacement</span>
+						</div>
+					<div class="number-box">
+						<span class="label">Vers</span>
+						<span class="value">{{ commander.destinationPlaceName }}</span>
+					{% elseif commander.isLooting %}
+						<span class="value">Pillage</span>
+						</div>
+					<div class="number-box">
+						<span class="label">Cible</span>
+						<span class="value">{{ commander.destinationPlaceName }}</span>
+					{% elseif commander.isInvading %}
+						<span class="value">Colonisation</span>
+						</div>
+					<div class="number-box">
+						<span class="label">Cible</span>
+						<span class="value">{{ commander.destinationPlaceName }}</span>
+					{% elseif commander.isComingBack %}
+						<span class="value">Retour victorieux</span>
+						</div>
+					<div class="number-box">
+						<span class="label">Ressources transportées</span>
+						<span class="value">{{ commander.resources|number }}</span>
+					{% endif %}
+				</div>
+			{% endif %}
+
+			<hr />
+
+			<div class="number-box grey">
+				<span class="label">Nom</span>
+				<span class="value">{{ commander.name }}</span>
+			</div>
+			<div class="number-box">
+				<span class="label">Victoire{{ commander.palmares|plural }}</span>
+				<span class="value">{{ commander.palmares }}</span>
+			</div>
+			<div class="number-box grey">
+				<span class="label">Grade</span>
+				<span class="value">{{ commander|commander_rank }}</span>
+			</div>
+
+			{% if commander.isAffected or commander.isMoving or commander.isInSchool %}
+				<div class="number-box grey">
+					<span class="label">Expérience</span>
+					{% set missing_experience = get_commander_missing_experience(commander) %}
+					{% set percent = (commander.experience - missing_experience / 2)|percent(missing_experience - missing_experience / 2) %}
+					<span class="value">{{ commander.experience|number }} / {{ missing_experience|number }}</span>
+					<span title="{{ percent}} %" class="progress-bar hb bl">
+						<span class="content" style="width: {{ percent }}%;"></span>
+					</span>
+				</div>
+			{% endif %}
+
+			<hr />
+
+			<div class="number-box grey">
+				<span class="label">Salaire de l'officier</span>
+				<span class="value">
+					{{- (commander.level * constant('App\\Modules\\Ares\\Model\\Commander::LVLINCOMECOMMANDER'))|number -}}
+					<img class="icon-color" src="{{ asset('media/resources/credit.png') }}" alt="crédits">
+				</span>
+			</div>
+
+			<div class="number-box grey">
+				<span class="label">Frais d'entretien des vaisseaux</span>
+				<span class="value">
+					{{- get_fleet_cost(commander)|number -}}
+					<img class="icon-color" src="{{ asset('media/resources/credit.png') }}" alt="crédits">
+				</span>
+			</div>
+		</div>
+	</div>
+</div>

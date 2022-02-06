@@ -1,3 +1,4 @@
+{% apply spaceless %}
 <div class="header"
 	 data-sector-color="{{ places[0].sectorColor }}"
 	 data-distance="{{ get_place_distance(default_base, places[0])|number }}">
@@ -33,7 +34,7 @@
 					<a href="#" class="openplace" data-target="{{ position }}">
 						<strong>{{ position }}</strong>
 						{% if place.typeOfPlace == 1 %}
-							<img class="land" src="{{ asset('media/map/place/place' ~ place.typeOfPlace ~ '-' ~ get_place_demography(place.population) ~ '.png') }}" />
+							<img class="land" src="{{ asset('media/map/place/place' ~ place.typeOfPlace ~ '-' ~ get_place_demography(place) ~ '.png') }}" />
 						{% else %}
 							{% if place.resources > 10000000 %}
 								{% set size = 3 %}
@@ -61,9 +62,9 @@
 						{% set reports = spy_reports|filter(r => r.rPlace == place.id) %}
 						{% if reports|length > 0 %}
 							{% set report = reports[0] %}
-							<a href="{{ path('spy_report', {'id': report.id}) }}"
+							<a href="{{ path('spy_reports', {'report': report.id}) }}"
 							   class="last-spy-link hb"
-							   title="voir le rapport d\'espionnage le plus récent"
+							   title="voir le rapport d'espionnage le plus récent"
 							>
 								<img src="{{ asset('media/map/spy/last-spy.png') }}" alt="" />
 							</a>
@@ -96,10 +97,10 @@
 								'label': 'Défense',
 								'values': [
 									0,
-									constant('App\\Modules\\Atlas\\Model\\Place::DNG_CASUAL'),
-									constant('App\\Modules\\Atlas\\Model\\Place::DNG_EASY'),
-									constant('App\\Modules\\Atlas\\Model\\Place::DNG_MEDIUM'),
-									constant('App\\Modules\\Atlas\\Model\\Place::DNG_HARD'),
+									constant('App\\Modules\\Gaia\\Model\\Place::DNG_CASUAL'),
+									constant('App\\Modules\\Gaia\\Model\\Place::DNG_EASY'),
+									constant('App\\Modules\\Gaia\\Model\\Place::DNG_MEDIUM'),
+									constant('App\\Modules\\Gaia\\Model\\Place::DNG_HARD'),
 								],
 								'coeff': place.maxDanger,
 								'media_path': asset('media/resources/defense.png'),
@@ -191,3 +192,4 @@
 		</ul>
 	</div>
 </div>
+{% endapply %}

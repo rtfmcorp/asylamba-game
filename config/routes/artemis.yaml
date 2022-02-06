@@ -1,0 +1,11 @@
+delete_all_spy_reports:
+    path: /spy-reports/delete-all
+    controller: App\Modules\Artemis\Infrastructure\Controller\SpyReport\DeleteAllReports
+
+delete_spy_report:
+    path: /spy-reports/{id}/delete
+    controller: App\Modules\Artemis\Infrastructure\Controller\SpyReport\DeleteReport
+
+spy:
+    path: /spy
+    controller: App\Modules\Artemis\Infrastructure\Controller\SpyReport\Spy

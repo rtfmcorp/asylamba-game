@@ -23,9 +23,10 @@
 							<img src="{{ asset('media/map/fleet/' ~ (commander.isAffected ? 'army' : 'army-away') ~ '.png') }}" alt="plein" />
 							<span class="info">
 								{{ commander|commander_rank }} <strong>{{ commander.name }}</strong><br />
-								 {{ commander.pev  }}Pev
+								{{ commander.pev  }} Pev
 								{% if commander.isMoving() %}
 									<br />&#8594;
+									{# @TODO implement a shorter version #}
 									{{ commander|mission_label }}
 								{% endif %}
 							</span>

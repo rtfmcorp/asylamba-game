@@ -21,3 +21,7 @@ put_commander_in_school:
 change_commander_position:
     path: /{id}/change-position
     controller: App\Modules\Ares\Infrastructure\Controller\AffectCommander
+
+cancel_fleet_move:
+    path: /{id}/cancel-mission
+    controller: App\Modules\Ares\Infrastructure\Controller\CancelMission

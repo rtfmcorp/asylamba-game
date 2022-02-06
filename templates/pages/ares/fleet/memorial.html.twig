@@ -1,0 +1,27 @@
+{% extends 'layouts/ares/fleet.html.twig' %}
+
+{% block content %}
+	{{ include('molecules/fleet/memorial_description.html.twig') }}
+
+	{% for commander in commanders %}
+		{% if loop.index < 6 %}
+			{{ include('components/fleet/commander_details.html.twig', { commander }) }}
+		{% else %}
+			{{ include('molecules/common/default.html.twig') }}
+		{% endif %}
+	{% endfor %}
+
+	{#
+	if (isset($commander_commanderDetail) && count($commander_commanderDetail) > 0) {
+	} else {
+	include $componentPath . 'default.php
+	include $componentPath . 'default.php
+	}
+
+	if (isset($commander_shortMemorial) && count($commander_shortMemorial) > 0) {
+	}
+	} else {
+	$response->redirect('404');
+	}
+	#}
+{% endblock %}

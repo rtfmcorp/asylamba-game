@@ -1,0 +1,11 @@
+delete_all_combat_reports:
+    path: /delete-all
+    controller: App\Modules\Ares\Infrastructure\Controller\CombatReport\DeleteAllReports
+
+archive_combat_report:
+    path: /{id}/archive
+    controller: App\Modules\Ares\Infrastructure\Controller\CombatReport\ArchiveReport
+
+delete_combat_report:
+    path: /{id}/delete
+    controller: App\Modules\Ares\Infrastructure\Controller\CombatReport\DeleteReport

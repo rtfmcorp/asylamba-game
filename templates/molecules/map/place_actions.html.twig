@@ -1,33 +1,29 @@
 {% set travel_time = get_travel_time(default_base, place)|lite_seconds %}
+
+{% apply spaceless %}
 <div class="column act">
 	<div class="top">
 		{% if place.typeOfPlace == 1 %}
-			{% set can_attack = can_player_attack_place(current_player, place) %}
-			{% set can_move = can_player_move_to_place(current_player, place, default_base) %}
-			{% set can_trade = can_orbital_base_trade_with_place(default_base, place) %}
-			{% set can_spy = can_spy(current_player, place) %}
-			{% set can_recycle = can_recycle(current_player, place) %}
-
-			<a href="#" class="actionbox-sh {% if can_attack == false %}grey{% endif %}" data-target="1">
+			<a href="#" class="actionbox-sh {% if can_player_attack_place(current_player, place) == false %}grey{% endif %}" data-target="1">
 				<img src="{{ asset('media/map/action/loot.png') }}" alt="" />
 			</a>
-			<a href="#" class="actionbox-sh {% if can_attack == false %}grey{% endif %}" data-target="2">
+			<a href="#" class="actionbox-sh {% if can_player_attack_place(current_player, place) == false %}grey{% endif %}" data-target="2">
 				<img src="{{ asset('media/map/action/colo.png') }}" alt="" />
 			</a>
 
-			<a href="#" class="actionbox-sh {% if can_move == false %}grey{% endif %}" data-target="3">
+			<a href="#" class="actionbox-sh {% if can_player_move_to_place(current_player, place, default_base) == false %}grey{% endif %}" data-target="3">
 				<img src="{{ asset('media/map/action/move.png') }}" alt="" />
 			</a>
 
-			<a href="#" class="actionbox-sh {% if can_trade == false %}grey{% endif %}" data-target="4">
+			<a href="#" class="actionbox-sh {% if can_orbital_base_trade_with_place(default_base, place) == false %}grey{% endif %}" data-target="4">
 				<img src="{{ asset('media/map/action/rc.png') }}" alt="" />
 			</a>
 
-			<a href="#" class="actionbox-sh {% if can_spy == false %}grey{% endif %}" data-target="5">
+			<a href="#" class="actionbox-sh {% if can_spy(current_player, place) == false %}grey{% endif %}" data-target="5">
 				<img src="{{ asset('media/map/action/spy.png') }}" alt="" />
 			</a>
 		{% else %}
-			<a href="#" class="actionbox-sh {% if can_recycle == false %}grey{% endif %}" data-target="1">
+			<a href="#" class="actionbox-sh {% if can_recycle(current_player, place)  == false %}grey{% endif %}" data-target="1">
 				<img src="{{ asset('media/orbitalbase/recycler.png') }}" alt="">
 			</a>
 		{% endif %}
@@ -101,7 +97,7 @@
 								{% if place.rPlayer == 0 %}
 									Coût : <span class="price">{{ colonization_cost|number }}</span>
 									<img src="{{ asset('media/resources/credit.png') }}" class="icon-color" alt="" /><br />
-									<a class="button" href="#" data-url="{{ path('colonize', 'commanderId': '{id}', 'placeId': place.id) }}">Lancer la colonisation</a>
+									<a class="button" href="#" data-url="{{ path('colonize', {'commanderId': '{id}', 'placeId': place.id}) }}">Lancer la colonisation</a>
 								{% else %}
 									Coût : <span class="price">{{ conquest_cost|number }}</span>
 									<img src="{{ asset('media/resources/credit.png') }}" class="icon-color" alt="" /><br />
@@ -142,7 +138,7 @@
 								<a class="button" href="#" data-url="{{ path('move_fleet', {'commanderId': '{id}', 'placeId': place.id}) }}">Lancer la mission</a>
 							</div>
 						</div>
-					{% else %}
+					{% endif %}
 				</div>
 			</div>
 
@@ -185,7 +181,7 @@
 
 							{% if commercial_route_data.proposed == true %}
 								<a href="{{ path('spatioport') }}" class="button">Annuler la proposition</a>
-							{% elseif commercial_route_data.not_accepted = true %}
+							{% elseif commercial_route_data.not_accepted == true %}
 								<a href="{{ path('spatioport') }}" class="button">Accepter la proposition</a>
 							{% elseif commercial_route_data.stand_by == true %}
 								<span class="button">C\'est la guerre.</span>
@@ -220,7 +216,7 @@
 							'Grand impact': 5000
 						} %}
 
-						{% for label in prices %}
+						{% for label in prices|keys %}
 							{% set price = prices[label] %}
 							<a href="{{ path('spy', {'baseId': place.id, price}) }}" class="spy-button">
 								<span class="label">{{ label }}</span>
@@ -242,12 +238,12 @@
 			<div class="box" data-id="1">
 				<h2>Envoyer des recycleurs</h2>
 				<div class="box-content">
-					{% if place.sectorColor != current_player.rColor || place.sectorColor == 0 %}
+					{% if place.sectorColor != current_player.rColor or place.sectorColor == 0 %}
 						Vous ne pouvez envoyer des recycleurs que dans des secteurs non-revendiqués ou contrôlés par votre faction.
-					{% elseif place.typeOfPlace == constant('App\\Modules\\Atlas\\Model\\Place::EMPTYZONE') %}
-						Cette endroit regorgait autrefois de ressources ou de gaz mais de nombreux recycleurs sont déjà passés par là et n\'ont laissé que le vide de l\'espace.
+					{% elseif place.typeOfPlace == constant('App\\Modules\\Gaia\\Model\\Place::EMPTYZONE') %}
+						Cette endroit regorgait autrefois de ressources ou de gaz mais de nombreux recycleurs sont déjà passés par là et n\'ont laissé que le vide de l'espace.
 					{% elseif current_base.levelRecycling == 0 %}
-						Vous devez disposer d\'un centre de recyclage.
+						Vous devez disposer d'un centre de recyclage.
 					{% else %}
 						{% set total_ships = get_building_info(
 							constant('App\\Modules\\Athena\\Resource\\OrbitalBaseResource::EMPTYZONE'),
@@ -280,3 +276,4 @@
 		{% endif %}
 	</div>
 </div>
+{% endapply %}

@@ -12,6 +12,10 @@ class TravellerExtension extends AbstractExtension
 	public function getFilters(): array
 	{
 		return [
+			new TwigFilter('travel_spent_time', fn (TravellerInterface $traveller, bool $reversed = false) => $reversed
+				? Utils::interval($traveller->getArrivalDate(), Utils::now(), 's')
+				: Utils::interval($traveller->getDepartureDate(), Utils::now(), 's'),
+			),
 			new TwigFilter('travel_remaining_time', fn (TravellerInterface $traveller) => Utils::interval(
 				Utils::now(),
 				$traveller->getArrivalDate(),
