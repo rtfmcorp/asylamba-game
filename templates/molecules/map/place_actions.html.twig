@@ -152,7 +152,7 @@
 					{% elseif default_base.levelSpatioport == 0 %}
 						Il vous faut un spatioport pour proposer une route commerciale.
 					{% elseif place.levelSpatioport == 0 %}
-						Le joueur ne dispose pas d\'un spatioport.
+						Le joueur ne dispose pas d'un spatioport.
 					{% else %}
 						{% set commercial_route_data = get_commercial_route_data(default_base, place) %}
 						{% set distance = get_place_distance(default_base, place) %}
@@ -161,7 +161,7 @@
 						{% set income = get_route_income(default_base, place, distance, route_sector_bonus, route_color_bonus) %}
 
 						<div class="rc">
-							<img src="{{ asset('media/map/place/place' ~ place.typeOfBase ~ '-' ~ get_place_demography(place) ~ '.png') }}" alt="" class="planet" />
+							<img src="{{ asset('media/map/place/place' ~ place.typeOfPlace ~ '-' ~ get_place_demography(place) ~ '.png') }}" alt="" class="planet" />
 
 							<span class="label-box">
 								<span class="key">Revenu par relève</span>
@@ -184,7 +184,7 @@
 							{% elseif commercial_route_data.not_accepted == true %}
 								<a href="{{ path('spatioport') }}" class="button">Accepter la proposition</a>
 							{% elseif commercial_route_data.stand_by == true %}
-								<span class="button">C\'est la guerre.</span>
+								<span class="button">C'est la guerre.</span>
 							{% else %}
 								{% if price > current_player.credit %}
 									<span class="button">Vous n\'avez pas assez de crédits.</span>
@@ -240,7 +240,7 @@
 					{% if place.sectorColor != current_player.rColor or place.sectorColor == 0 %}
 						Vous ne pouvez envoyer des recycleurs que dans des secteurs non-revendiqués ou contrôlés par votre faction.
 					{% elseif place.typeOfPlace == constant('App\\Modules\\Gaia\\Model\\Place::EMPTYZONE') %}
-						Cette endroit regorgait autrefois de ressources ou de gaz mais de nombreux recycleurs sont déjà passés par là et n\'ont laissé que le vide de l'espace.
+						Cet endroit regorgait autrefois de ressources ou de gaz mais de nombreux recycleurs sont déjà passés par là et n\'ont laissé que le vide de l'espace.
 					{% elseif current_base.levelRecycling == 0 %}
 						Vous devez disposer d'un centre de recyclage.
 					{% else %}
