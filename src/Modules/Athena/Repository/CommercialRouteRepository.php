@@ -5,6 +5,7 @@ namespace App\Modules\Athena\Repository;
 use App\Classes\Entity\AbstractRepository;
 
 use App\Modules\Athena\Model\CommercialRoute;
+use App\Modules\Athena\Model\OrbitalBase;
 use App\Modules\Demeter\Model\Color;
 use App\Modules\Zeus\Model\Player;
 
@@ -72,6 +73,42 @@ class CommercialRouteRepository extends AbstractRepository {
 		$commercialRoute = $this->format($row);
 		$this->unitOfWork->addObject($commercialRoute);
 		return $commercialRoute;
+	}
+
+	public function searchCandidates(int $playerId, OrbitalBase $orbitalBase, array $factions, int $minDistance, int $maxDistance): array
+	{
+		$qr = $this->connection->prepare('SELECT
+			pa.rColor AS playerColor,
+			pa.avatar AS playerAvatar,
+			pa.name AS playerName,
+			ob.name AS baseName,
+			ob.rPlace AS rPlace,
+			(FLOOR(SQRT(POW(? - s.xPosition, 2) + POW(? - s.yPosition, 2)))) AS distance
+			FROM orbitalBase AS ob
+			LEFT JOIN player AS pa
+			ON ob.rPlayer = pa.id
+			LEFT JOIN place AS p
+			ON ob.rPlace = p.id
+			LEFT JOIN system AS s
+			ON p.rSystem = s.id
+			LEFT JOIN sector AS se
+			ON s.rSector = se.id
+			WHERE
+			pa.id != ?
+			AND ob.levelSpatioport > 0
+			AND (FLOOR(SQRT(POW(? - s.xPosition, 2) + POW(? - s.yPosition, 2)))) >= ?
+			AND (FLOOR(SQRT(POW(? - s.xPosition, 2) + POW(? - s.yPosition, 2)))) <= ?
+			AND pa.rColor in (' . implode(',', $factions) . ')
+			ORDER BY distance DESC
+			LIMIT 0, 40'
+		);
+		$qr->execute([
+			$orbitalBase->xSystem, $orbitalBase->ySystem,
+			$playerId,
+			$orbitalBase->xSystem, $orbitalBase->ySystem, $minDistance,
+			$orbitalBase->xSystem, $orbitalBase->ySystem, $maxDistance
+		]);
+		return $qr->fetchAll();
 	}
 
 	public function getAllPlayerRoutes(Player $player): array

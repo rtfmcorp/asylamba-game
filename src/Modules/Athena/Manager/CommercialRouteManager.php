@@ -37,6 +37,7 @@ class CommercialRouteManager
 	 *  operational: int,
 	 *  stand_by: int,
 	 *  total: int,
+	 *  total_income: int,
 	 *  max: int
 	 * }
 	 **/
@@ -55,13 +56,16 @@ class CommercialRouteManager
 		$nCRWaitingForMe = 0;
 		$nCROperational = 0;
 		$nCRInStandBy = 0;
+		$totalIncome = 0;
 
+		/** @var CommercialRoute $route */
 		foreach ($routes as $route) {
 			if ($route->getStatement() == CommercialRoute::PROPOSED AND $route->getPlayerId1() == $session->get('playerId')) {
 				$nCRWaitingForOther++;
 			} elseif ($route->getStatement() == CommercialRoute::PROPOSED AND $route->getPlayerId1() != $session->get('playerId')) {
 				$nCRWaitingForMe++;
 			} elseif ($route->getStatement() == CommercialRoute::ACTIVE) {
+				$totalIncome += $route->getIncome();
 				$nCROperational++;
 			} elseif ($route->getStatement() == CommercialRoute::STANDBY) {
 				$nCRInStandBy++;
@@ -74,6 +78,7 @@ class CommercialRouteManager
 			'operational' => $nCROperational,
 			'stand_by' => $nCRInStandBy,
 			'total' => $nCROperational + $nCRInStandBy + $nCRWaitingForOther,
+			'total_income' => $totalIncome,
 			'max' => $this->orbitalBaseHelper->getBuildingInfo(
 				OrbitalBaseResource::SPATIOPORT,
 				'level',
@@ -81,6 +86,11 @@ class CommercialRouteManager
 				'nbRoutesMax'
 			),
 		];
+	}
+
+	public function searchCandidates(int $playerId, OrbitalBase $orbitalBase, array $factions, int $minDistance, int $maxDistance): array
+	{
+		return $this->entityManager->getRepository(CommercialRoute::class)->searchCandidates($playerId, $orbitalBase, $factions, $minDistance, $maxDistance);
 	}
 
 	// @TODO use an appropriate DTO for this

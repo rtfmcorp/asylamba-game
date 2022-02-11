@@ -1,0 +1,7 @@
+propose_route:
+    path: /routes/propose
+    controller: App\Modules\Athena\Infrastructure\Base\Building\ViewGenerator
+
+cancel_route:
+    path: /bases/{baseId}/routes/{id}/cancel
+    controller: App\Modules\Athena\Infrastructure\Base\Building\ViewGenerator

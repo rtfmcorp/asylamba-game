@@ -37,3 +37,7 @@ loot:
 colonize:
     path: /colonize
     controller: App\Modules\Ares\Infrastructure\Controller\ViewMemorial
+
+conquer:
+    path: /colonize
+    controller: App\Modules\Ares\Infrastructure\Controller\ViewMemorial

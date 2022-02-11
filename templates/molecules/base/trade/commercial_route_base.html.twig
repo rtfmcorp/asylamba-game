@@ -1,0 +1,7 @@
+<div class="base">
+	<img src="{{ asset('media/map/place/place1-' ~ get_planet_size(population) ~ '.png') }}" alt="{{ base_name }}" class="place" />
+	{{ scalar_base_type(base_type) }}
+	<a href="{{ path('map', {'place': base_id }) }}">{{ base_name }}</a><br />
+	de <a href="{{ path('embassy', {'player': player_id }) }}">{{ player_name }}</a><br />
+	{{ population|number }} millions de population
+</div>

@@ -158,7 +158,7 @@
 						{% set distance = get_place_distance(default_base, place) %}
 
 						{% set price = get_route_price(distance) %}
-						{% set price = get_route_income(default_base, place, distance, route_sector_bonus, route_color_bonus) %}
+						{% set income = get_route_income(default_base, place, distance, route_sector_bonus, route_color_bonus) %}
 
 						<div class="rc">
 							<img src="{{ asset('media/map/place/place' ~ place.typeOfBase ~ '-' ~ get_place_demography(place) ~ '.png') }}" alt="" class="planet" />
@@ -186,8 +186,7 @@
 							{% elseif commercial_route_data.stand_by == true %}
 								<span class="button">C\'est la guerre.</span>
 							{% else %}
-
-								{% if price > current_place.credit %}
+								{% if price > current_player.credit %}
 									<span class="button">Vous n\'avez pas assez de crédits.</span>
 								{% elseif commercial_route_data.slots < get_building_info(constant('App\\Modules\\Athena\\Resource\\OrbitalBaseResource::SPATIOPORT'), 'level', current_base.levelSpatioport, 'nbRoutesMax') %}
 									<a href="{{ path('propose_route', {'sourceBase': default_base.id, 'destinationBase': place.id }) }}" class="button">

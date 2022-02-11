@@ -158,4 +158,19 @@ class CommercialRoute {
 		$this->population2 = $var;
 		return $this;
 	 }
+
+	 public function isProposed(): bool
+	 {
+		 return self::PROPOSED === $this->statement;
+	 }
+
+	 public function isActive(): bool
+	 {
+		 return self::ACTIVE === $this->statement;
+	 }
+
+	 public function isInStandBy(): bool
+	 {
+		 return self::STANDBY === $this->statement;
+	 }
 }

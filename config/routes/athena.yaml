@@ -2,6 +2,10 @@ financial:
     resource: './athena/financial.yaml'
     prefix: /financial
 
+trade:
+    resource: './athena/trade.yaml'
+    prefix: /trade
+
 switchbase:
     path: /switchbase/{baseId}/{page}
     controller: App\Modules\Athena\Infrastructure\Controller\Base\SwitchBase
@@ -77,7 +81,7 @@ trade_market:
 
 spatioport:
     path: /spatioport
-    controller: App\Modules\Athena\Infrastructure\Controller\Base\Building\RefineryController
+    controller: App\Modules\Athena\Infrastructure\Controller\Base\Building\ViewSpatioport
 
 school:
     path: /school
