@@ -130,6 +130,7 @@
 			</div>
 		{% endif %}
 	{% else %}
+		{% dump routes %}
 		{% for route in routes %}
 			{% if route.isProposed and route.playerId2 == current_player.id %}
 				{% set origin_base = include('molecules/base/trade/commercial_route_base.html.twig', {
@@ -160,7 +161,7 @@
 								{% if route.price > current_player.credit %}
 									<span><a href="#">pas assez de crédits pour accepter</a></span>
 								{% elseif routes_data.total >= routes_data.max %}
-									<span><a href="#">pas d\'emplacement libre pour accepter</a></span>
+									<span><a href="#">pas d'emplacement libre pour accepter</a></span>
 								{% else %}
 									{% set price = route.price %}
 									{# @TODO move this calculation in a dedicated service #}
@@ -169,7 +170,7 @@
 									{% endif %}
 									<span><a href="{{ path('accept_commercial_route', {'baseId': route.rOrbitalBaseLinked, 'id': route.id}) }}">accepter pour {{ price|number }} crédits</a></span>
 								{% endif %}
-								<span><a href="{{ path('refuse_commercial_route', {'baseId': route.rOrbitalBaseLinked, 'id': route.id }) }}" class="hb lt" title="refuser l'offre">x</a></span>
+								<span><a href="{{ path('t', {'baseId': route.rOrbitalBaseLinked, 'id': route.id }) }}" class="hb lt" title="refuser l'offre">x</a></span>
 							</div>
 
 							<div class="number-box grey">
@@ -181,9 +182,9 @@
 
 							<div class="rc {% if not route.isActive %}no-tax{% endif %}" style="height: {{ (370 + route.distance) }}px;">
 								{% if route.playerId1 == current_player.id %}
-									{{ destination_base }}
+									{{ destination_base|raw }}
 								{% else %}
-									{{ origin_base }}
+									{{ origin_base|raw }}
 								{% endif %}
 
 								<ul class="general">
@@ -216,15 +217,15 @@
 									{% if not route.isProposed %}
 										<li>
 											En service depuis<br />
-											{{ route.dCreation|date }}
+											{{ route.dCreation|date|raw }}
 										</li>
 									{% endif %}
 								</ul>
 
 								{% if route.playerId1 == current_player.id %}
-									{{ origin_base }}
+									{{ origin_base|raw }}
 								{% else %}
-									{{ destination_base }}
+									{{ destination_base|raw }}
 								{% endif %}
 							</div>
 						</div>
@@ -261,9 +262,9 @@
 						<div class="body">
 							<div class="tool">
 								{% if route.isProposed %}
-									<span><a href="{{ path('cancel_route', {'baseId': current_base.id, 'route': route.id}) }}">annuler la proposition commerciale</a></span>
+									<span><a href="{{ path('cancel_route', {'baseId': current_base.id, 'id': route.id}) }}">annuler la proposition commerciale</a></span>
 								{% else %}
-									<span><a href="{{ path('delete_route', {'baseId': current_base.id, 'route': route.id}) }}">démanteler la route commerciale</a></span>
+									<span><a href="{{ path('delete_route', {'baseId': current_base.id, 'id': route.id}) }}">démanteler la route commerciale</a></span>
 								{% endif %}
 							</div>
 
@@ -282,9 +283,9 @@
 
 							<div class="rc {% if not route.isActive %}no-tax{% endif %}" style="height: {{ (370 + route.distance) }}px;">
 								{% if route.playerId1 == current_player.id %}
-									{{ destination_base }}
+									{{ destination_base|raw }}
 								{% else %}
-									{{ origin_base }}
+									{{ origin_base|raw }}
 								{% endif %}
 
 								<ul class="general">
@@ -311,14 +312,14 @@
 									{% if not route.isProposed %}
 										<li>
 											En service depuis <br />
-											{{ route.dCreation|date }}
+											{{ route.dCreation|date|raw }}
 										</li>
 									{% endif %}
 								</ul>
 								{% if route.playerId1 == current_player.id %}
-									{{ origin_base }}
+									{{ origin_base|raw }}
 								{% else %}
-									{{ destination_base }}
+									{{ destination_base|raw }}
 								{% endif %}
 							</div>
 						</div>

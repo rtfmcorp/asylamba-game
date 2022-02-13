@@ -1,7 +1,19 @@
 propose_route:
     path: /routes/propose
-    controller: App\Modules\Athena\Infrastructure\Base\Building\ViewGenerator
+    controller: App\Modules\Athena\Infrastructure\Controller\Trade\ProposeRoute
 
 cancel_route:
     path: /bases/{baseId}/routes/{id}/cancel
-    controller: App\Modules\Athena\Infrastructure\Base\Building\ViewGenerator
+    controller: App\Modules\Athena\Infrastructure\Controller\Trade\CancelRoute
+
+delete_route:
+    path: /bases/{baseId}/routes/{id}/cancel
+    controller: App\Modules\Athena\Infrastructure\Controller\Trade\DeleteRoute
+
+accept_commercial_route:
+    path: /bases/{baseId}/routes/{id}/accept
+    controller: App\Modules\Athena\Infrastructure\Controller\Trade\AcceptRoute
+
+refuse_commercial_route:
+    path: /bases/{baseId}/routes/{id}/refuse
+    controller: App\Modules\Athena\Infrastructure\Controller\Trade\RefuseRoute

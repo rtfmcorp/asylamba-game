@@ -29,8 +29,8 @@ class ViewSpatioport extends AbstractController
 
 		return $this->render('pages/athena/spatioport.html.twig', [
 			'routes' => array_merge(
-				$commercialRouteManager->getByBase($currentPlayer->getId()),
-				$commercialRouteManager->getByDistantBase($currentPlayer->getId())
+				$commercialRouteManager->getByBase($currentBase->getId()),
+				$commercialRouteManager->getByDistantBase($currentBase->getId())
 			),
 			'routes_data' => $commercialRouteManager->getBaseCommercialData($currentBase),
 			'player_commercial_income_bonus' => $session->get('playerBonus')->get(PlayerBonus::COMMERCIAL_INCOME),

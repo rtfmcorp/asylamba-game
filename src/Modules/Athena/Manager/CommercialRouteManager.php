@@ -77,7 +77,7 @@ class CommercialRouteManager
 			'waiting_for_other' => $nCRWaitingForOther,
 			'operational' => $nCROperational,
 			'stand_by' => $nCRInStandBy,
-			'total' => $nCROperational + $nCRInStandBy + $nCRWaitingForOther,
+			'total' => $nCROperational + $nCRInStandBy + $nCRWaitingForOther + $nCRWaitingForMe,
 			'total_income' => $totalIncome,
 			'max' => $this->orbitalBaseHelper->getBuildingInfo(
 				OrbitalBaseResource::SPATIOPORT,

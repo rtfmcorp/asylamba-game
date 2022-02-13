@@ -212,10 +212,10 @@
 				<div class="number-box">
 					<span class="label">Routes commerciales</span>
 					<span class="value">
-						{{ orbital_base.commercialRoutesData.operational }} / {{ orbital_base.commercialRoutesData.max }}
+						{{ orbital_base.commercialRoutesData.total }} / {{ orbital_base.commercialRoutesData.max }}
 					</span>
 
-					{% set percent = ((orbital_base.commercialRoutesData.operational / orbital_base.commercialRoutesData.max) * 100)|number %}
+					{% set percent = ((orbital_base.commercialRoutesData.total / orbital_base.commercialRoutesData.max) * 100)|number %}
 					<span class="progress-bar hb bl" title="remplissage : {{ percent }}%">
 						<span style="width:{{ percent }}%;" class="content"></span>
 					</span>

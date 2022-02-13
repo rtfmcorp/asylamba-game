@@ -114,11 +114,11 @@
 					{% for notification in current_player_notifications %}
 					<div class="notif unreaded" data-notif-id="{{ notification.id }}">
 						<h4 class="read-notif switch-class-parent" data-class="open">{{ notification.title }}</h4>
-						<div class="content">{{ notification.content }}</div>
+						<div class="content">{{ notification.content|raw }}</div>
 						<div class="footer">
 							<a class="ajax-action" data-ajax-target="{{ path('archive_notification', {'id': notification.id }) }}">archiver</a> ou
 							<a class="ajax-action" data-ajax-target="{{ path('delete_notification', {'id': notification.id }) }}">supprimer</a><br />
-							— {{ notification.dSending|date }}
+							— {{ notification.dSending|date|raw }}
 							</div>
 						</div>
 					{% endfor %}
