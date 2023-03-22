@@ -1,6 +1,17 @@
 ---
 services:
-    artemis.spy_report_manager:
-        class: Asylamba\Modules\Artemis\Manager\SpyReportManager
-        arguments:
-            - "@database"
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: true
+
+    _instanceof:
+        Symfony\Component\Messenger\Handler\MessageHandlerInterface:
+            tags:
+                - { name: 'messenger.message_handler', bus: 'messenger.default_bus' }
+
+    #Asylamba\Modules\Artemis\Handler\:
+    #    resource: '%root_path%/system/Modules/Artemis/Handler/*'
+
+    Asylamba\Modules\Artemis\Manager\:
+        resource: '%root_path%/system/Modules/Artemis/Manager/*'

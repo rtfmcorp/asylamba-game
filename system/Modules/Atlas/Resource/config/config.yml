@@ -1,23 +1,26 @@
 ---
 services:
-    atlas.faction_ranking_manager:
-        class: Asylamba\Modules\Atlas\Manager\FactionRankingManager
-        arguments:
-            - "@database"
-            
-    atlas.player_ranking_manager:
-        class: Asylamba\Modules\Atlas\Manager\PlayerRankingManager
-        arguments:
-            - "@database"
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: true
 
-    atlas.ranking_manager:
-        class: Asylamba\Modules\Atlas\Manager\RankingManager
+    _instanceof:
+        Symfony\Component\Messenger\Handler\MessageHandlerInterface:
+            tags:
+                - { name: 'messenger.message_handler', bus: 'messenger.default_bus' }
+
+    Asylamba\Modules\Atlas\Handler\:
+        resource: '%root_path%/system/Modules/Atlas/Handler/*'
+
+    Asylamba\Modules\Atlas\Handler\PlayerRankingHandler:
         arguments:
-            - "@entity_manager"
-            - "@atlas.player_ranking_manager"
-            - "@atlas.faction_ranking_manager"
-            - "@demeter.color_manager"
-            - "@hermes.conversation_manager"
-            - "@hermes.conversation_message_manager"
-            - "@zeus.player_manager"
-            - "@athena.orbital_base_helper"
+            $dataAnalysis: '%data_analysis%'
+
+    Asylamba\Modules\Atlas\Manager\:
+        resource: '%root_path%/system/Modules/Atlas/Manager/*'
+
+    Asylamba\Modules\Atlas\Manager\RankingManager:
+        arguments:
+            $pointsToWin: '%points_to_win%'
+            $jeanMiId: '%id_jeanmi%'

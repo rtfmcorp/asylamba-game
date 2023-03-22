@@ -17,13 +17,12 @@ use Asylamba\Classes\Database\Database;
 
 use Asylamba\Modules\Hermes\Model\RoadMap;
 
-class RoadMapManager extends Manager {
+class RoadMapManager extends Manager
+{
 	protected $managerType = '_RoadMap';
 
-	/**
-	 * @param Database $database
-	 */
-	public function __construct(Database $database) {
+	public function __construct(Database $database)
+	{
 		parent::__construct($database);
 	}
 	

@@ -2,7 +2,7 @@
 # require
 use Asylamba\Modules\Demeter\Resource\ColorResource;
 
-$session = $this->getContainer()->get('session_wrapper');
+$session = $this->getContainer()->get(\Asylamba\Classes\Library\Session\SessionWrapper::class);
 
 echo '<div class="component profil">';
 	echo '<div class="head skin-1">';

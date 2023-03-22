@@ -12,92 +12,62 @@
 namespace Asylamba\Modules\Athena\Manager;
 
 use Asylamba\Classes\Entity\EntityManager;
-use Asylamba\Classes\Scheduler\RealTimeActionScheduler;
 
+use Asylamba\Classes\Library\DateTimeConverter;
+use Asylamba\Modules\Athena\Message\RecyclingMissionMessage;
 use Asylamba\Modules\Athena\Model\RecyclingMission;
+use Symfony\Component\Messenger\MessageBusInterface;
 
 class RecyclingMissionManager
 {
-	/** @var EntityManager **/
-	protected $entityManager;
-	/** @var RealTimeActionScheduler **/
-	protected $realtimeActionScheduler;
-
-	/**
-	 * @param EntityManager $entityManager
-	 * @param RealTimeActionScheduler $realtimeActionScheduler
-	 */
-	public function __construct(EntityManager $entityManager, RealTimeActionScheduler $realtimeActionScheduler)
-	{
-		$this->entityManager = $entityManager;
-		$this->realtimeActionScheduler = $realtimeActionScheduler;
+	public function __construct(
+		protected EntityManager $entityManager,
+		protected MessageBusInterface $messageBus,
+	) {
 	}
 	
-	public function scheduleMissions()
+	public function scheduleMissions(): void
 	{
 		$missions = $this->entityManager->getRepository(RecyclingMission::class)->getAll();
-		
+
+		/** @var RecyclingMission $mission */
 		foreach ($missions as $mission) {
-			$this->realtimeActionScheduler->schedule(
-				'athena.orbital_base_manager',
-				'uRecycling',
-				$mission,
-				$mission->uRecycling
-			);
+			$this->messageBus->dispatch(new RecyclingMissionMessage($mission->id), [DateTimeConverter::to_delay_stamp($mission->uRecycling)]);
 		}
 	}
-	
-	/**
-	 * @param int $id
-	 * @return RecyclingMission
-	 */
-	public function get($id)
+
+	public function get(int $id): ?RecyclingMission
 	{
 		return $this->entityManager->getRepository(RecyclingMission::class)->get($id);
 	}
-	
-	/**
-	 * @param int $baseId
-	 * @return array
-	 */
-	public function getBaseMissions($baseId)
+
+	public function getBaseMissions($baseId): array
 	{
 		return $this->entityManager->getRepository(RecyclingMission::class)->getBaseMissions($baseId);
 	}
-	
-	/**
-	 * @param int $baseId
-	 * @return array
-	 */
-	public function getBaseActiveMissions($baseId)
+
+	public function getBaseActiveMissions(int $baseId): array
 	{
 		return $this->entityManager->getRepository(RecyclingMission::class)->getBaseActiveMissions($baseId);
 	}
 
-	/**
-	 * @param RecyclingMission $recyclingMission
-	 */
-	public function add(RecyclingMission $recyclingMission)
+	public function add(RecyclingMission $recyclingMission): void
 	{
 		$this->entityManager->persist($recyclingMission);
 		$this->entityManager->flush($recyclingMission);
-		
-		$this->realtimeActionScheduler->schedule(
-			'athena.orbital_base_manager',
-			'uRecycling',
-			$recyclingMission,
-			$recyclingMission->uRecycling
+
+		$this->messageBus->dispatch(
+			new RecyclingMissionMessage($recyclingMission->id),
+			[DateTimeConverter::to_delay_stamp($recyclingMission->uRecycling)]
 		);
 	}
-	
-	/**
-	 * @param int $baseId
-	 */
-	public function removeBaseMissions($baseId)
+
+	public function removeBaseMissions(int $baseId): void
 	{
-		foreach ($this->getBaseActiveMissions($baseId) as $mission) {
-			$this->realtimeActionScheduler->cancel($mission, $mission->uRecycling);
-		}
+		// @TODO handle properly cancellations
+		//foreach ($this->getBaseActiveMissions($baseId) as $mission) {
+			//$this->realtimeActionScheduler->cancel($mission, $mission->uRecycling);
+		//}
 		$this->entityManager->getRepository(RecyclingMission::class)->removeBaseMissions($baseId);
 	}
 }

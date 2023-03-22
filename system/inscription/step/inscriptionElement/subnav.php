@@ -1,6 +1,8 @@
 <?php
 
-$session = $this->getContainer()->get('session_wrapper');
+$container = $this->getContainer();
+$session = $this->getContainer()->get(\Asylamba\Classes\Library\Session\SessionWrapper::class);
+$mediaPath = $container->getParameter('media');
 
 echo '<div id="inscription-subnav">';
 	echo '<div class="bind"></div>';
@@ -11,9 +13,9 @@ echo '<div id="inscription-subnav">';
 			}
 		echo '</h2>';
 		if ($session->get('inscription')->exist('avatar')) {
-			echo '<img src="' . MEDIA . 'avatar/big/' . $session->get('inscription')->get('avatar') . '.png" alt="" />';
+			echo '<img src="' . $mediaPath . 'avatar/big/' . $session->get('inscription')->get('avatar') . '.png" alt="" />';
 		} else {
-			echo '<img src="' . MEDIA . 'avatar/big/empty.png" alt="" />';
+			echo '<img src="' . $mediaPath . 'avatar/big/empty.png" alt="" />';
 		}
 		echo '<span class="level">1</span>';
 		echo '<span class="experience">';

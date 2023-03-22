@@ -11,12 +11,14 @@ use Asylamba\Classes\Library\Format;
 use Asylamba\Modules\Athena\Resource\OrbitalBaseResource;
 use Asylamba\Modules\Zeus\Model\PlayerBonus;
 
-$orbitalBaseHelper = $this->getContainer()->get('athena.orbital_base_helper');
-$session = $this->getContainer()->get('session_wrapper');
+$container = $this->getContainer();
+$mediaPath = $container->getParameter('media');
+$orbitalBaseHelper = $this->getContainer()->get(\Asylamba\Modules\Athena\Helper\OrbitalBaseHelper::class);
+$session = $this->getContainer()->get(\Asylamba\Classes\Library\Session\SessionWrapper::class);
 
 echo '<div class="component building">';
 	echo '<div class="head skin-1">';
-		echo '<img src="' . MEDIA . 'orbitalbase/storage.png" alt="" />';
+		echo '<img src="' . $mediaPath . 'orbitalbase/storage.png" alt="" />';
 		echo '<h2>' . $orbitalBaseHelper->getBuildingInfo(OrbitalBaseResource::STORAGE, 'frenchName') . '</h2>';
 		echo '<em>Niveau ' . $ob_storage->getLevelStorage() . '</em>';
 	echo '</div>';
@@ -27,7 +29,7 @@ echo '<div class="component building">';
 				echo '<span class="label">ressources en stock</span>';
 				echo '<span class="value">';
 					echo Format::numberFormat($ob_storage->getResourcesStorage());
-					echo ' <img alt="ressources" src="' . MEDIA . 'resources/resource.png" class="icon-color">';
+					echo ' <img alt="ressources" src="' . $mediaPath . 'resources/resource.png" class="icon-color">';
 				echo '</span>';
 				$storageSpace = $orbitalBaseHelper->getBuildingInfo(OrbitalBaseResource::STORAGE, 'level', $ob_storage->getLevelStorage(), 'storageSpace');
 				$storageBonus = $session->get('playerBonus')->get(PlayerBonus::REFINERY_STORAGE);
@@ -72,7 +74,7 @@ echo '<div class="component">';
 							if ($storageBonus > 0) {
 								echo '<span class="bonus">+' . Format::numberFormat(($storageSpace * $storageBonus / 100)) . '</span>';
 							}
-							echo '<img class="icon-color" src="' . MEDIA . 'resources/resource.png" alt="ressources" />';
+							echo '<img class="icon-color" src="' . $mediaPath . 'resources/resource.png" alt="ressources" />';
 						echo '</span>';
 					echo '</li>';
 				}

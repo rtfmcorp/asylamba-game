@@ -318,6 +318,7 @@ CREATE TABLE `place` (
   `maxDanger` tinyint(3) UNSIGNED DEFAULT '0',
   `uPlace` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 DELIMITER $$
 CREATE TRIGGER `savePlaceChange` BEFORE UPDATE ON `place` FOR EACH ROW BEGIN
 	IF NEW.rPlayer != OLD.rPlayer THEN

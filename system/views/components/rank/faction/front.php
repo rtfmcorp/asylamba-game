@@ -9,7 +9,9 @@
 
 use Asylamba\Modules\Demeter\Resource\ColorResource;
 
-$factionRankingManager = $this->getContainer()->get('atlas.faction_ranking_manager');
+$container = $this->getContainer();
+$mediaPath = $container->getParameter('media');
+$factionRankingManager = $this->getContainer()->get(\Asylamba\Modules\Atlas\Manager\FactionRankingManager::class);
 
 $factionRankingManager->changeSession($FACTION_RANKING_FRONT);
 $f = $factionRankingManager->get(0);
@@ -28,7 +30,7 @@ echo '<div class="component profil">';
 
 			echo '<div class="profil-flag color-' . $f->rFaction . '">';
 				echo '<img ';
-					echo 'src="' . MEDIA . 'ally/big/color' . $f->rFaction . '.png" ';
+					echo 'src="' . $mediaPath . 'ally/big/color' . $f->rFaction . '.png" ';
 					echo 'alt="" ';
 				echo '/>';
 			echo '</div>';

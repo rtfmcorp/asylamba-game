@@ -9,10 +9,10 @@ use Asylamba\Classes\Exception\ErrorException;
 use Asylamba\Classes\Exception\FormException;
 use Asylamba\Modules\Athena\Model\RecyclingMission;
 
-$session = $this->getContainer()->get('session_wrapper');
+$session = $this->getContainer()->get(\Asylamba\Classes\Library\Session\SessionWrapper::class);
 $request = $this->getContainer()->get('app.request');
-$orbitalBaseManager = $this->getContainer()->get('athena.orbital_base_manager');
-$recyclingMissionManager = $this->getContainer()->get('athena.recycling_mission_manager');
+$orbitalBaseManager = $this->getContainer()->get(\Asylamba\Modules\Athena\Manager\OrbitalBaseManager::class);
+$recyclingMissionManager = $this->getContainer()->get(\Asylamba\Modules\Athena\Manager\RecyclingMissionManager::class);
 
 for ($i = 0; $i < $session->get('playerBase')->get('ob')->size(); $i++) { 
 	$verif[] = $session->get('playerBase')->get('ob')->get($i)->get('id');
@@ -26,7 +26,7 @@ if ($missionId !== FALSE AND !empty($rPlace) AND in_array($rPlace, $verif)) {
 		if (($mission = $recyclingMissionManager->get($missionId)) !== null && $mission->statement = RecyclingMission::ST_ACTIVE && $mission->rBase === $rPlace) {
 			$mission->statement = RecyclingMission::ST_BEING_DELETED;
 			$session->addFlashbag('Ordre de mission annulé.', Flashbag::TYPE_SUCCESS);
-			$this->getContainer()->get('entity_manager')->flush($mission);
+			$this->getContainer()->get(\Asylamba\Classes\Entity\EntityManager::class)->flush($mission);
 		} else {
 			throw new ErrorException('impossible de supprimer la mission.');
 		}

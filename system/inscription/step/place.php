@@ -1,6 +1,9 @@
 <?php
 
-$session = $this->getContainer()->get('session_wrapper');
+$container = $this->getContainer();
+$session = $this->getContainer()->get(\Asylamba\Classes\Library\Session\SessionWrapper::class);
+$appRoot = $container->getParameter('app_root');
+$componentPath = $container->getParameter('component');
 
 # background paralax
 echo '<div id="background-paralax" class="profil"></div>';
@@ -12,8 +15,8 @@ include 'inscriptionElement/subnav.php';
 # contenu spécifique
 echo '<div id="content">';
 
-	echo '<form action="' . APP_ROOT . 'inscription/step-4" method="post" >';
-		include COMPONENT . 'invisible.php';
+	echo '<form action="' . $appRoot . 'inscription/step-4" method="post" >';
+		include $componentPath . 'invisible.php';
 		echo '<div class="component inscription color' . $session->get('inscription')->get('ally') . '">';
 			echo '<div class="head">';
 				echo '<h1>Localisation</h1>';
@@ -34,8 +37,8 @@ echo '<div id="content">';
 			echo '<div class="fix-body">';
 				echo '<div class="body">';
 
-					$galaxyConfiguration = $this->getContainer()->get('gaia.galaxy_configuration');
-					$sectors = $this->getContainer()->get('gaia.sector_manager')->getAll();
+					$galaxyConfiguration = $this->getContainer()->get(\Asylamba\Modules\Gaia\Galaxy\GalaxyConfiguration::class);
+					$sectors = $this->getContainer()->get(\Asylamba\Modules\Gaia\Manager\SectorManager::class)->getAll();
 					$rate = 750 / $galaxyConfiguration->galaxy['size'];
 
 					echo '<div class="tactical-map reactive">';

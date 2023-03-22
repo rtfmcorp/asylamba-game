@@ -3,6 +3,9 @@
 use Asylamba\Classes\Library\Format;
 use Asylamba\Classes\Library\Chronos;
 
+$container = $this->getContainer();
+$mediaPath = $container->getParameter('media');
+
 echo '<div class="component panel-info">';
 	echo '<div class="head"></div>';
 	echo '<div class="fix-body">';
@@ -15,15 +18,15 @@ echo '<div class="component panel-info">';
 			echo '<div class="table"><table>';
 				echo '<tr>';
 					echo '<td class="hb lt" title="coût de recherche en ressource">coût en ressource</td>';
-					echo '<td>' . Format::numberFormat($resource) . ' <img src="' .  MEDIA. 'resources/resource.png" alt="ressource" class="icon-color" /></td>';
+					echo '<td>' . Format::numberFormat($resource) . ' <img src="' .  $mediaPath. 'resources/resource.png" alt="ressource" class="icon-color" /></td>';
 				echo '</tr>';
 				echo '<tr>';
 					echo '<td class="hb lt" title="coût de recherche en crédit">coût en crédit</td>';
-					echo '<td>' . Format::numberFormat($credit) . ' <img src="' .  MEDIA. 'resources/credit.png" alt="credit" class="icon-color" /></td>';
+					echo '<td>' . Format::numberFormat($credit) . ' <img src="' .  $mediaPath. 'resources/credit.png" alt="credit" class="icon-color" /></td>';
 				echo '</tr>';
 				echo '<tr>';
 					echo '<td class="hb lt" title="temps de recherche (heures:minutes:secondes)">temps</td>';
-					echo '<td>' . Chronos::secondToFormat($time, 'lite') . ' <img src="' .  MEDIA. 'resources/time.png" alt="relève" class="icon-color" /></td>';
+					echo '<td>' . Chronos::secondToFormat($time, 'lite') . ' <img src="' .  $mediaPath. 'resources/time.png" alt="relève" class="icon-color" /></td>';
 				echo '</tr>';
 				echo '<tr>';
 					echo '<td class="hb lt" title="points que rapporte la recherche de la technologie au joueur">points</td>';
@@ -37,7 +40,7 @@ echo '<div class="component panel-info">';
 				echo 'Technosphère, niv. ' . $technosphere . '<br />';
 				foreach ($researchList as $research) {
 					echo $research[0] . ', niv. ' . $research[1];
-					echo $research[2] ? '<img class="requierement" src="' . MEDIA . 'resources/check.png" alt="" />' : NULL;
+					echo $research[2] ? '<img class="requierement" src="' . $mediaPath . 'resources/check.png" alt="" />' : NULL;
 					echo '<br />';
 				}
 			echo '</p>';

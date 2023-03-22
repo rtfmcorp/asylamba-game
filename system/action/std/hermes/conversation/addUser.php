@@ -8,11 +8,11 @@ use Asylamba\Modules\Hermes\Model\ConversationUser;
 use Asylamba\Modules\Hermes\Model\ConversationMessage;
 
 $request = $this->getContainer()->get('app.request');
-$session = $this->getContainer()->get('session_wrapper');
-$conversationManager = $this->getContainer()->get('hermes.conversation_manager');
-$conversationMessageManager = $this->getContainer()->get('hermes.conversation_message_manager');
-$conversationUserManager = $this->getContainer()->get('hermes.conversation_user_manager');
-$playerManager = $this->getContainer()->get('zeus.player_manager');
+$session = $this->getContainer()->get(\Asylamba\Classes\Library\Session\SessionWrapper::class);
+$conversationManager = $this->getContainer()->get(\Asylamba\Modules\Hermes\Manager\ConversationManager::class);
+$conversationMessageManager = $this->getContainer()->get(\Asylamba\Modules\Hermes\Manager\ConversationMessageManager::class);
+$conversationUserManager = $this->getContainer()->get(\Asylamba\Modules\Hermes\Manager\ConversationUserManager::class);
+$playerManager = $this->getContainer()->get(\Asylamba\Modules\Zeus\Manager\PlayerManager::class);
 
 $conversation 	= $request->query->get('conversation');
 $recipients 	= $request->request->get('recipients');

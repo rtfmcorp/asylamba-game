@@ -1,4 +1,7 @@
 <?php
+
+$container = $this->getContainer();
+
 echo '<!DOCTYPE html>';
 echo '<html lang="fr">';
 
@@ -6,8 +9,8 @@ echo '<head>';
 	echo '<title>500 — Expansion</title>';
 
 	echo '<meta charset="utf-8" />';
-	echo '<meta name="description" content="' . APP_DESCRIPTION . '" />';
-	echo '<link rel="stylesheet" media="screen" type="text/css" href="' . CSS . 'notfound/main.css" />';
+	echo '<meta name="description" content="' . $container->getParameter('app_description') . '" />';
+	echo '<link rel="stylesheet" media="screen" type="text/css" href="' . $container->getParameter('css') . 'notfound/main.css" />';
 echo '</head>';
 
 echo '<body>';
@@ -18,7 +21,7 @@ echo '<body>';
 	echo '</div>';
 
 	echo '<div class="boxlink">';
-		echo '<a href="' . APP_ROOT . 'profil">revenir vers la page principale</a>';
+		echo '<a href="' . $container->getParameter('app_root') . 'profil">revenir vers la page principale</a>';
 		echo '<a href="' . $this->getContainer()->getParameter('getout_root') . '">où allez jeter un oeil au site</a>';
 		echo '<a href="' . $this->getContainer()->getParameter('getout_root') . 'blog">où peut-être au blog</a>';
 	echo '</div>';

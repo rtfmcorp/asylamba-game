@@ -5,7 +5,7 @@ ini_set('MAX_EXECUTION_TIME', -1);
 
 require_once('vendor/autoload.php');
 
-use Asylamba\Classes\Worker\Worker;
+use Asylamba\Classes\Kernel\WorkerKernel;
 
 // The first index is the script name
 array_shift($argv);
@@ -17,7 +17,14 @@ foreach($argv as $arg)
 	$options[substr($data[0], 2)] = $data[1];
 }
 
-define("P_TYPE", 'worker');
+const P_TYPE = 'worker';
+const ASM_UMODE = true;
 
-$worker = new Worker($options['process']);
+$projectDir = __DIR__;
+
+$dotenv = new Symfony\Component\Dotenv\Dotenv();
+$dotenv->usePutenv(false);
+$dotenv->load($projectDir.'/.env');
+
+$worker = new WorkerKernel($options['process'] ?? 'blabla', $projectDir);
 $worker->boot();

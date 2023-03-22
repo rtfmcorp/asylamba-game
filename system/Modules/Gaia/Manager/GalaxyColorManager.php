@@ -4,35 +4,24 @@ namespace Asylamba\Modules\Gaia\Manager;
 
 use Asylamba\Classes\Database\Database;
 
-class GalaxyColorManager {
-	/** @var Database **/
-	protected $database;
-	/** @var boolean **/
-	protected $mustApply = true;
-	/** @var array **/
-	protected $availableFactions;
-	/** @var int **/
-	protected $limitConquestSector;
-	
+class GalaxyColorManager
+{
+	protected bool $mustApply = true;
+
+	public function __construct(
+		protected Database $database,
+		protected array $availableFactions,
+		protected int $limitConquestSector
+	) {
+	}
+
 	public function apply() {
 		$this->mustApply = true;
 	}
-	
+
 	public function mustApply()
 	{
 		return $this->mustApply;
-	}
-
-	/**
-	 * @param Database $database
-	 * @param array $availableFactions
-	 * @param int $limitConquestSector
-	 */
-	public function __construct(Database $database, $availableFactions, $limitConquestSector)
-	{
-		$this->database = $database;
-		$this->availableFactions = $availableFactions;
-		$this->limitConquestSector = $limitConquestSector;
 	}
 	
 	public function applyAndSave() {

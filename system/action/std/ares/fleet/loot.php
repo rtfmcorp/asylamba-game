@@ -15,20 +15,20 @@ use Asylamba\Classes\Exception\ErrorException;
 
 $request = $this->getContainer()->get('app.request');
 $response = $this->getContainer()->get('app.response');
-$session = $this->getContainer()->get('session_wrapper');
-$commanderManager = $this->getContainer()->get('ares.commander_manager');
-$placeManager = $this->getContainer()->get('gaia.place_manager');
-$playerManager = $this->getContainer()->get('zeus.player_manager');
-$colorManager = $this->getContainer()->get('demeter.color_manager');
-$sectorManager = $this->getContainer()->get('gaia.sector_manager');
-$tutorialHelper = $this->getContainer()->get('zeus.tutorial_helper');
+$session = $this->getContainer()->get(\Asylamba\Classes\Library\Session\SessionWrapper::class);
+$commanderManager = $this->getContainer()->get(\Asylamba\Modules\Ares\Manager\CommanderManager::class);
+$placeManager = $this->getContainer()->get(\Asylamba\Modules\Gaia\Manager\PlaceManager::class);
+$playerManager = $this->getContainer()->get(\Asylamba\Modules\Zeus\Manager\PlayerManager::class);
+$colorManager = $this->getContainer()->get(\Asylamba\Modules\Demeter\Manager\ColorManager::class);
+$sectorManager = $this->getContainer()->get(\Asylamba\Modules\Gaia\Manager\SectorManager::class);
+$tutorialHelper = $this->getContainer()->get(\Asylamba\Modules\Zeus\Helper\TutorialHelper::class);
 
 $commanderId = $request->query->get('commanderid');
 $placeId = $request->query->get('placeid');
 
 if ($commanderId !== FALSE AND $placeId !== FALSE) {
 	$place = $placeManager->get($placeId);
-	if (($player = $playerManager->get($place->rPlayer)) === null) {
+	if (null === $place->rPlayer || ($player = $playerManager->get($place->rPlayer)) === null) {
 		if (($commander = $commanderManager->get($commanderId)) !== null && $commander->rPlayer === $session->get('playerId')) {
 			if ($place !== null) {
 				if ($place->typeOfPlace == Place::TERRESTRIAL) {
@@ -81,7 +81,7 @@ if ($commanderId !== FALSE AND $placeId !== FALSE) {
 		} else {
 			throw new ErrorException('Ce commandant ne vous appartient pas ou n\'existe pas.');
 		}
-	} elseif ($player->level > 1 || $player->statement >= Player::DELETED) {
+	} elseif ($player->level > 1 || $player->statement >= \Asylamba\Modules\Zeus\Model\Player::DELETED) {
 		if (($commander = $commanderManager->get($commanderId)) !== null && $commander->rPlayer === $session->get('playerId')) {
 			if ($place !== null) {
 				$color = $colorManager->get($session->get('playerInfo')->get('color'));
@@ -128,4 +128,4 @@ if ($commanderId !== FALSE AND $placeId !== FALSE) {
 	throw new ErrorException('Manque de précision sur le commandant ou la position.');
 }
 
-$this->getContainer()->get('entity_manager')->flush();
+$this->getContainer()->get(\Asylamba\Classes\Entity\EntityManager::class)->flush();

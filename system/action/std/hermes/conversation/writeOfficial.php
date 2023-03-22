@@ -7,10 +7,10 @@ use Asylamba\Modules\Hermes\Model\ConversationUser;
 
 $request = $this->getContainer()->get('app.request');
 $response = $this->getContainer()->get('app.response');
-$session = $this->getContainer()->get('session_wrapper');
-$parser = $this->getContainer()->get('parser');
-$conversationManager = $this->getContainer()->get('hermes.conversation_manager');
-$conversationMessageManager = $this->getContainer()->get('hermes.conversation_message_manager');
+$session = $this->getContainer()->get(\Asylamba\Classes\Library\Session\SessionWrapper::class);
+$parser = $this->getContainer()->get(\Asylamba\Classes\Library\Parser::class);
+$conversationManager = $this->getContainer()->get(\Asylamba\Modules\Hermes\Manager\ConversationManager::class);
+$conversationMessageManager = $this->getContainer()->get(\Asylamba\Modules\Hermes\Manager\ConversationMessageManager::class);
 
 $content = $parser->parse($request->request->get('message'));
 

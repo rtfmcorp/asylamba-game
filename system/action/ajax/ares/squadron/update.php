@@ -14,9 +14,9 @@ use Asylamba\Modules\Ares\Model\Commander;
 use Asylamba\Classes\Exception\ErrorException;
 use Asylamba\Classes\Exception\FormException;
 
-$session = $this->getContainer()->get('session_wrapper');
+$session = $this->getContainer()->get(\Asylamba\Classes\Library\Session\SessionWrapper::class);
 $request = $this->getContainer()->get('app.request');
-$tutorialHelper = $this->getContainer()->get('zeus.tutorial_helper');
+$tutorialHelper = $this->getContainer()->get(\Asylamba\Modules\Zeus\Helper\TutorialHelper::class);
 
 for ($i = 0; $i < $session->get('playerBase')->get('ob')->size(); $i++) { 
 	$verif[] = $session->get('playerBase')->get('ob')->get($i)->get('id');
@@ -41,9 +41,9 @@ if (count($newSquadron) !== 12) {
 	throw new FormException('Pas assez d\'informations pour assigner un vaisseau.');
 }
 
-$orbitalBaseManager = $this->getContainer()->get('athena.orbital_base_manager');
+$orbitalBaseManager = $this->getContainer()->get(\Asylamba\Modules\Athena\Manager\OrbitalBaseManager::class);
 
-$commander = $this->getContainer()->get('ares.commander_manager')->get($commanderID);
+$commander = $this->getContainer()->get(\Asylamba\Modules\Ares\Manager\CommanderManager::class)->get($commanderID);
 
 if (($base = $orbitalBaseManager->get($baseID)) === null || $commander === null || $commander->rBase !== $baseID || $commander->statement !== Commander::AFFECTED) {
 	throw new ErrorException('Erreur dans les références du commandant ou de la base.');
@@ -94,4 +94,4 @@ if ($session->get('playerInfo')->get('stepDone') === false && $session->get('pla
 $base->shipStorage = $baseSHIP;
 $commander->getSquadron($squadronID)->arrayOfShips = $squadronSHIP;
 
-$this->getContainer()->get('entity_manager')->flush();
+$this->getContainer()->get(\Asylamba\Classes\Entity\EntityManager::class)->flush();

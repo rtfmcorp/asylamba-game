@@ -4,8 +4,8 @@ use Asylamba\Modules\Zeus\Model\Player;
 use Asylamba\Classes\Exception\ErrorException;
 
 $request = $this->getContainer()->get('app.request');
-$session = $this->getContainer()->get('session_wrapper');
-$topicManager = $this->getContainer()->get('demeter.forum_topic_manager');
+$session = $this->getContainer()->get(\Asylamba\Classes\Library\Session\SessionWrapper::class);
+$topicManager = $this->getContainer()->get(\Asylamba\Modules\Demeter\Manager\Forum\ForumTopicManager::class);
 
 $id 		= $request->query->get('id');
 

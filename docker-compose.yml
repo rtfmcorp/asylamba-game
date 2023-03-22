@@ -1,0 +1,89 @@
+version: "3"
+networks:
+    asylamba:
+        driver: bridge
+    mongo:
+        driver: bridge
+
+volumes:
+    db-data:
+    rabbitmq-data:
+    redis-data:
+
+services:
+    phpmyadmin:
+        container_name: asylamba_phpmyadmin
+        image: nazarpc/phpmyadmin
+        environment:
+            SESSION_TIMEOUT: 86400
+            ABSOLUTE_URI: "https://local.asylamba.com"
+        networks:
+            - asylamba
+        ports:
+            - "8082:80"
+
+    # MYSQL Database
+    mysql:
+        container_name: asylamba_mysql
+        image: mysql:5.7
+        environment:
+            MYSQL_DATABASE: ${MYSQL_DATABASE:-asylamba_game}
+            MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-asylamba}
+            MYSQL_USER: ${MYSQL_USER:-asylamba}
+            MYSQL_PASSWORD: ${MYSQL_PASSWORD:-asylamba}
+        networks:
+            - asylamba
+        ports:
+            - "3306:3306"
+        volumes:
+            # mysql
+            - db-data:/var/lib/mysql
+
+    redis:
+        container_name: asylamba_redis
+        image: redis
+        networks:
+            - asylamba
+        volumes:
+            - redis-data:/data
+        ports:
+            - "6379:6379"
+
+    redisCommander:
+        container_name: asylamba_redis_commander
+        image: rediscommander/redis-commander
+        command: --redis-host redis
+        depends_on:
+            - redis
+        networks:
+            - asylamba
+        ports:
+            - "8081:8081"
+
+    mongodb:
+        container_name: asylamba_mongodb
+        image: mongo
+        networks:
+            - mongo
+
+    feedback-manager:
+        container_name: asylamba_feedback_manager
+        image: citadeltechnologies/feedback-manager
+        environment:
+            MONGO_DBNAME: ${MONGO_DBNAME:-asylamba_feedbacks}
+            MONGO_HOST: ${MONGO_HOST:-asylamba_mongodb}
+            MONGO_PORT: ${MONGO_PORT:-27017}
+        networks:
+            - asylamba
+            - mongo
+
+    rabbitmq:
+        container_name: asylamba_rabbitmq
+        image: rabbitmq:3.9-management-alpine
+        ports:
+            - "5672:5672"
+            - "15672:15672"
+        volumes:
+            - rabbitmq-data:/var/lib/rabbitmq
+        networks:
+            - asylamba

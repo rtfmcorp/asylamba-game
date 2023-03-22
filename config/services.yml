@@ -1,169 +1,251 @@
 ---
+# This file is auto-generated during the composer install
+parameters:
+    # définition des ROOT
+    system_path:		'%root_path%/system'
+    classes_path:       '%system_path%/Classes'
+    
+    modules: 		'%system_path%/Modules/'
+    lib: 			'%classes_path%/lib/'
+    config: 		'%system_path%/config/'
+    event: 		'%system_path%/event/'
+    
+    inscription: 	'%system_path%/inscription/'
+    connection: 	'%system_path%/connection/'
+    
+    action: 		'%system_path%/action/std/'
+    ajax: 			'%system_path%/action/ajax/'
+    
+    api: 			'%system_path%/api/'
+    script:		'%system_path%/script/'
+    buffer:		'%system_path%/buffer/'
+    
+    template: 		'%system_path%/views/templates/'
+    pages: 		'%system_path%/views/pages/'
+    component: 	'%system_path%/views/components/'
+    session_lifetime: 1800
+    log_directory: var/logs
+    log_rotation: 3
+    daily_script_hour: 3
+    gaia.galaxy_configuration.class: Asylamba\Modules\Gaia\Galaxy\GalaxyConfigurationV6
+    game.available_factions: [1, 2, 3, 4, 7]
+    
+    
+    facebook_link: 'https://www.facebook.com/asylamba'
+    google_plus_link: 'https://plus.google.com/+Asylamba-game'
+    twitter_link: 'https://twitter.com/asylamba'
+  
+    # asm constantes
+    asm_umode: true
+  
+    # event constantes
+    event_base: 0 # correspond à une construction (batiment ou vaisseau) dans une base
+    event_outgoing_attack: 1
+    event_incoming_attack: 2
+  
+    # constante de temps pour la mise à jour des événements dans loadEvent.php
+    # 300 s = 5 minutes
+    time_event_update: 300
+  
+    # constantes pour le contre-espionnage
+    antispy_out_of_circle:	0
+    antispy_big_circle:	1
+    antispy_middle_circle: 2
+    antispy_little_circle: 3
+  
+    # pour Game::antiSpyRadius()
+    antispy_display_mode: 0
+    antispy_game_mode: 1
+
+    nb_avatar: 80
+    pam_coeftax: 1
+    rsm_researchquantity: 10
+  
+    # durée en heures avant que le classement total démarre
+    # 2 semaines = 336 h
+    # 20 jours = 480h
+    hours_before_start_of_ranking: 480
+    points_to_win: 2000
+
+
+    publicr: '/public/'
+    css: '%publicr%css/'
+    js: '%publicr%js/'
+    media: '%publicr%media/'
+    log: '%publicr%log/'
+    # active les APIs de confirmation
+    # active la création de personnage au niveau 5
+    highmode: true
+    # active les feuilles de style multiples par faction
+    # note : les style peuvent ne pas être à jour
+    color_style: true
+    # active l'ajout du script analytics
+    analytics: false
+    # active la captation des données d'analyse (TB)
+    data_analysis: false
+    #########
+    # INFOS #
+    #########
+    # défini le nom du tableau de session
+    # note : utile si plusieurs instances cohabitent sur la même machine
+    server_sess: 'server'
+    # défini le titre du serveur (affiché comme titre)
+    app_name: 'Asylamba'
+    # défini le sous-titre du serveur (affiché comme titre)
+    app_subname: 'Expansion Stellaire'
+    # numéro de version de l'app
+    app_version: '2.0.0'
+    # créateurs du projet
+    app_creator: 'Gil Clavien, Jacky Casas, Noé Zufferey'
+    # défini la description du serveur (affichée dans la page)
+    app_description: 'Asylamba, jeu par navigateur'
+    #################
+    # MISCELLANEOUS #
+    #################
+    # définition des ids des différants joueurs systèmes
+    id_gaia: 1
+    id_jeanmi: 2
+    shift_faction: 2
+    # date de début du serveur
+
+
 services:
-    database:
-        class: Asylamba\Classes\Database\Database
-        arguments:
-            - "%database_host"
-            - "%database_name"
-            - "%database_user"
-            - "%database_password"
-            
-    database_admin:
-        class: Asylamba\Classes\Database\DatabaseAdmin
-        arguments:
-            - "%database_host"
-            - "%database_name"
-            - "%database_admin_user"
-            - "%database_admin_password"
-            
-    session_wrapper:
-        class: Asylamba\Classes\Library\Session\SessionWrapper
-        arguments:
-            - "@redis_manager"
-            
-    cyclic_action_scheduler:
-        class: Asylamba\Classes\Scheduler\CyclicActionScheduler
-        arguments:
-            - "@task_manager"
-            - "@load_balancer"
-            - "%daily_script_hour"
-            
-    realtime_action_scheduler:
-        class: Asylamba\Classes\Scheduler\RealTimeActionScheduler
-        arguments:
-            - "@app.container"
-            
-    router:
-        class: Asylamba\Classes\Router\Router
-        arguments:
-            - "@session_wrapper"
-            - "%getout_root"
-        
-    request_factory:
-        class: Asylamba\Classes\Library\Http\RequestFactory
-        
-    response_factory:
-        class: Asylamba\Classes\Library\Http\ResponseFactory
-        arguments:
-            - "@templating.renderer"
-            - "@session_wrapper"
-        
-    client_manager:
-        class: Asylamba\Classes\Daemon\ClientManager
-        arguments:
-            - "@redis_manager"
-            - "@session_wrapper"
-            - "%session_lifetime"
-        
-    templating.renderer:
-        class: Asylamba\Classes\Templating\Renderer
-        arguments:
-            - "@app.container"
-            
-    server:
-        class: Asylamba\Classes\Daemon\Server
-        arguments:
-            - "@app.container"
-            
-    worker_server:
-        class: Asylamba\Classes\Daemon\WorkerServer
-        arguments:
-            - "@app.container"
-            
-    entity_manager:
-        class: Asylamba\Classes\Entity\EntityManager
-        arguments:
-            - "@database"
-            
-    event_dispatcher:
-        class: Asylamba\Classes\Worker\EventDispatcher
-        arguments:
-            - "@app.container"
-            
-    logger:
-        class: "%log_handler"
-        arguments:
-            - "%log_directory"
-            - "%log_rotation"
-            
-    parser:
-        class: Asylamba\Classes\Library\Parser
-        arguments:
-            - "@gaia.place_manager"
-            - "@zeus.player_manager"
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: true
+        bind:
+            $container: '@container'
 
-    api:
-        class: Asylamba\Classes\Worker\API
+    Asylamba\Classes\Database\Database:
+        public: true
         arguments:
-            - "@security"
-            - "%server_id"
-            - "%security_api_key"
-            - "%getout_root"
+            $host: "%database_host%"
+            $name: "%database_name%"
+            $user: "%database_user%"
+            $password: "%database_password%"
+            
+    Asylamba\Classes\Database\DatabaseAdmin:
+        arguments:
+            $host: "%database_host%"
+            $name: "%database_name%"
+            $user: "%database_admin_user%"
+            $password: "%database_admin_password%"
 
-    security:
-        class: Asylamba\Classes\Library\Security
-        arguments:
-            - "@session_wrapper"
-            - "%security_server_key"
-            - "%security_iv"
-        
-    ctc:
-        class: Asylamba\Classes\Worker\CTC
-        arguments:
-            - "@session_wrapper"
-            - "%log_directory"
-            
-    memory_manager:
-        class: Asylamba\Classes\Memory\MemoryManager
-            
-    process_manager:
-        class: Asylamba\Classes\Process\ProcessManager
-        arguments:
-            - "@server"
-            - "@memory_manager"
-            - "@process_gateway"
-            - "%root_path"
-            - "%log_directory"
-            - "%worker_scale"
-            
-    process_gateway:
-        class: Asylamba\Classes\Process\ProcessGateway
-            
-    load_balancer:
-        class: Asylamba\Classes\Process\LoadBalancer
-        arguments:
-            - "@app.container"
-        
-    task_manager:
-        class: Asylamba\Classes\Task\TaskManager
-        arguments:
-            - "@app.container"
-            
-    redis_manager:
-        class: Asylamba\Classes\Redis\RedisManager
-        arguments:
-            - "%redis_host"
-            - "%redis_port"
-            - "%redis_password"
-            - "%redis_timeout"
-        
-    exception_listener:
-        class: Asylamba\Classes\EventListener\ExceptionListener
-        arguments:
-            - "@logger"
-            - "@session_wrapper"
-            - "@database"
+    Asylamba\Classes\EventListener\SchedulerInitListener:
         tags:
-            - {type: "event_listener", event: "core.exception", method: "onCoreException"}
-            - {type: "event_listener", event: "core.error", method: "onCoreError"}
-            
-    process_exception_listener:
-        class: Asylamba\Classes\EventListener\ProcessExceptionListener
+            - { name: 'kernel.event_listener', event: 'app.server_init', method: 'onServerInit' }
+
+    Symfony\Component\Messenger\Bridge\Amqp\Transport\Connection:
+        factory: ['Symfony\Component\Messenger\Bridge\Amqp\Transport\Connection', 'fromDsn']
+        arguments: ['%env(RABBITMQ_DSN)%']
+
+    Symfony\Component\Messenger\Bridge\Amqp\Transport\AmqpReceiver: ~
+
+    Asylamba\Classes\Messenger\SendersLocator:
+        factory: ['Asylamba\Classes\Messenger\SendersLocator', 'instanciate']
+
+    messenger.default_bus:
+        class: Symfony\Component\Messenger\MessageBus
+        factory: ['Asylamba\Classes\Messenger\BusFactory', 'createBus']
         arguments:
-            - "@logger"
-            - "@database"
-            - "@process_gateway"
-            - "%app.name"
+            $handlersLocator: '@messenger.default_bus.messenger.handlers_locator'
         tags:
-            - {type: "event_listener", event: "core.process_exception", method: "onCoreException"}
-            - {type: "event_listener", event: "core.process_error", method: "onCoreError"}
+            - { name: 'messenger.bus' }
+
+    Symfony\Component\Messenger\MessageBusInterface:
+        alias: 'messenger.default_bus'
+
+    Symfony\Component\Messenger\Worker:
+        public: true
+        arguments:
+            $receivers: ['@Symfony\Component\Messenger\Bridge\Amqp\Transport\AmqpReceiver']
+
+    Asylamba\Classes\Library\Session\SessionWrapper: ~
+            
+    Asylamba\Classes\Scheduler\CyclicActionScheduler:
+        public: true
+        arguments:
+            $dailyScriptHour: "%daily_script_hour%"
+            
+    Asylamba\Classes\Router\Router:
+        arguments:
+            $appRoot: '%app_root%'
+            $rootPath: '%root_path%'
+            $getOutRoot: "%getout_root%"
+            $actionPath: '%action%'
+            $ajaxPath: '%ajax%'
+            $connectionPath: '%connection%'
+            $registrationPath: '%inscription%'
+            $bufferPath: '%buffer%'
+            $apiPath: '%api%'
+            $templatePath: '%template%'
+            $scriptPath: '%script%'
+            $pagesPath: '%pages%'
+            $eventPath: '%event%'
+
+    Asylamba\Classes\Library\Http\RequestFactory: ~
+        
+    Asylamba\Classes\Library\Http\ResponseFactory:
+        
+    Asylamba\Classes\Daemon\ClientManager:
+        arguments:
+            $sessionLifetime: "%session_lifetime%"
+        
+    Asylamba\Classes\Templating\Renderer: ~
+            
+    Asylamba\Classes\Daemon\Server:
+        public: true
+        arguments:
+            $statefulManagers: !tagged_iterator app.stateful_manager
+            $serverCycleTimeout: '%server_cycle_timeout%'
+            $port: '%server_port%'
+            $collectionCyclesNumber: '%server_collection_cycles_number%'
+
+    Asylamba\Classes\Entity\EntityManager:
+        public: true
+
+    Asylamba\Classes\Logger\ConsoleLogger: ~
+
+    Asylamba\Classes\Logger\FileLogger:
+        arguments:
+            $logDirectory: "%log_directory%"
+            $logRotation: "%log_rotation%"
+
+    Psr\Log\LoggerInterface: '@Asylamba\Classes\Logger\ConsoleLogger'
+
+    Asylamba\Classes\Library\Parser:
+        arguments:
+            $appRoot: '%app_root%'
+            $mediaPath: '%media%'
+
+    Asylamba\Classes\Worker\API:
+        arguments:
+            $serverId: "%server_id%"
+            $apiKey: "%security_api_key%"
+            $getOutRoot: "%getout_root%"
+
+    Asylamba\Classes\Library\Security:
+        arguments:
+            $serverKey: "%security_server_key%"
+            $iv: "%security_iv%"
+        
+    Asylamba\Classes\Worker\CTC:
+        arguments:
+            $logDirectory: "%log_directory%"
+            
+    Asylamba\Classes\Memory\MemoryManager: ~
+
+    Asylamba\Classes\Redis\RedisManager:
+        arguments:
+            $host: '%env(REDIS_HOST)%'
+            $port: '%env(int:REDIS_PORT)%'
+            $password: '%env(default::REDIS_PASSWORD)%'
+            $timeout: "%redis_timeout%"
+        
+    Asylamba\Classes\EventListener\ExceptionListener:
+        arguments:
+            $templatePath: '%template%'
+        tags:
+            - { name: "kernel.event_listener", event: "core.exception", method: "onCoreException" }
+            - { name: "kernel.event_listener", event: "core.error", method: "onCoreError" }

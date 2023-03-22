@@ -14,7 +14,7 @@ class ColorManagerTest extends \PHPUnit\Framework\TestCase
 	/** @var ColorManager **/
 	protected $manager;
 	
-	public function setUp()
+	public function setUp(): void
 	{
 		$this->manager = new ColorManager(
 			$this->getEntityManagerMock(),

@@ -71,14 +71,28 @@ class CommercialShippingRepository extends AbstractRepository
 		$this->unitOfWork->addObject($commercialShipping);
 		return $commercialShipping;
 	}
-	
-	/**
-	 * @return array
-	 */
-	public function getAll()
+
+	public function getAll(): array
 	{
 		$query = $this->select();
-		
+
+		$data = [];
+		while($row = $query->fetch()) {
+			if (($cs = $this->unitOfWork->getObject(CommercialShipping::class, $row['id'])) !== null) {
+				$data[] = $cs;
+				continue;
+			}
+			$commercialShipping = $this->format($row);
+			$this->unitOfWork->addObject($commercialShipping);
+			$data[] = $commercialShipping;
+		}
+		return $data;
+	}
+
+	public function getMoving(): array
+	{
+		$query = $this->select('WHERE cs.statement != :waiting', ['waiting' => CommercialShipping::ST_WAITING]);
+
 		$data = [];
 		while($row = $query->fetch()) {
 			if (($cs = $this->unitOfWork->getObject(CommercialShipping::class, $row['id'])) !== null) {

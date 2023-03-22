@@ -16,16 +16,10 @@ use Asylamba\Classes\Library\Utils;
 use Asylamba\Modules\Ares\Model\LiveReport;
 use Asylamba\Modules\Athena\Resource\ShipResource;
 
-class FightManager {
-	/** @var CommanderManager **/
-	protected $commanderManager;
-	
-	/**
-	 * @param \Asylamba\Modules\Ares\Manager\CommanderManager $commanderManager
-	 */
-	public function __construct(CommanderManager $commanderManager)
+class FightManager
+{
+	public function __construct(protected CommanderManager $commanderManager)
 	{
-		$this->commanderManager = $commanderManager;
 		self::$currentLine = 3;
 	}
 	

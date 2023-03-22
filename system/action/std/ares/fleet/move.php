@@ -11,11 +11,12 @@ use Asylamba\Classes\Library\DataAnalysis;
 use Asylamba\Modules\Athena\Resource\ShipResource;
 use Asylamba\Classes\Exception\ErrorException;
 
-$commanderManager = $this->getContainer()->get('ares.commander_manager');
-$placeManager = $this->getContainer()->get('gaia.place_manager');
-$sectorManager = $this->getContainer()->get('gaia.sector_manager');
-$database = $this->getContainer()->get('database');
-$session = $this->getContainer()->get('session_wrapper');
+$container = $this->getContainer();
+$commanderManager = $this->getContainer()->get(\Asylamba\Modules\Ares\Manager\CommanderManager::class);
+$placeManager = $this->getContainer()->get(\Asylamba\Modules\Gaia\Manager\PlaceManager::class);
+$sectorManager = $this->getContainer()->get(\Asylamba\Modules\Gaia\Manager\SectorManager::class);
+$database = $this->getContainer()->get(\Asylamba\Classes\Database\Database::class);
+$session = $this->getContainer()->get(\Asylamba\Classes\Library\Session\SessionWrapper::class);
 $request = $this->getContainer()->get('app.request');
 
 $commanderId = $request->query->get('commanderid');
@@ -40,7 +41,7 @@ if ($commanderId !== FALSE AND $placeId !== FALSE) {
 					if ($length <= Commander::DISTANCEMAX || $isFactionSector) {
 						$commanderManager->move($commander, $place->getId(), $commander->rBase, Commander::MOVE, $length, $duration);
 
-						if (DATA_ANALYSIS) {
+						if (true === $container->getParameter('data_analysis')) {
 							$qr = $database->prepare('INSERT INTO 
 								DA_CommercialRelation(`from`, `to`, type, weight, dAction)
 								VALUES(?, ?, ?, ?, ?)'
@@ -73,4 +74,4 @@ if ($commanderId !== FALSE AND $placeId !== FALSE) {
 	throw new ErrorException('Manque de précision sur le commandant ou la position.');
 }
 
-$this->getContainer()->get('entity_manager')->flush();
+$this->getContainer()->get(\Asylamba\Classes\Entity\EntityManager::class)->flush();

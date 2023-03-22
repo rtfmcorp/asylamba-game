@@ -13,85 +13,50 @@
 namespace Asylamba\Modules\Athena\Manager;
 
 use Asylamba\Classes\Entity\EntityManager;
-use Asylamba\Classes\Scheduler\RealTimeActionScheduler;
 
+use Asylamba\Classes\Library\DateTimeConverter;
+use Asylamba\Modules\Athena\Message\Ship\ShipQueueMessage;
 use Asylamba\Modules\Athena\Model\ShipQueue;
+use Symfony\Component\Messenger\MessageBusInterface;
 
-class ShipQueueManager {
-	/** @var EntityManager **/
-	protected $entityManager;
-	/** @var RealTimeActionScheduler **/
-	protected $realtimeActionScheduler;
-
-	/**
-	 * @param EntityManager $entityManager
-	 * @param RealTimeActionScheduler $realtimeActionScheduler
-	 */
-	public function __construct(EntityManager $entityManager, RealTimeActionScheduler $realtimeActionScheduler) {
-		$this->entityManager = $entityManager;
-		$this->realtimeActionScheduler = $realtimeActionScheduler;
+class ShipQueueManager
+{
+	public function __construct(
+		protected EntityManager $entityManager,
+		protected MessageBusInterface $messageBus,
+	) {
 	}
 	
-	public function get($id)
+	public function get($id): ?ShipQueue
 	{
 		return $this->entityManager->getRepository(ShipQueue::class)->get($id);
 	}
-	
-	/**
-	 * @param int $orbitalBaseId
-	 * @return array
-	 */
-	public function getBaseQueues($orbitalBaseId)
+
+	public function getBaseQueues(int $orbitalBaseId): array
 	{
 		return $this->entityManager->getRepository(ShipQueue::class)->getBaseQueues($orbitalBaseId);
 	}
-	
-	/**
-	 * @param int $orbitalBaseId
-	 * @param int $dockType
-	 * @return array
-	 */
-	public function getByBaseAndDockType($orbitalBaseId, $dockType)
+
+	public function getByBaseAndDockType(int $orbitalBaseId, int $dockType): array
 	{
 		return $this->entityManager->getRepository(ShipQueue::class)->getByBaseAndDockType($orbitalBaseId, $dockType);
 	}
-	
-	/**
-	 * @param ShipQueue $shipQueue
-	 */
-	public function add(ShipQueue $shipQueue)
+
+	public function add(ShipQueue $shipQueue): void
 	{
 		$this->entityManager->persist($shipQueue);
 		$this->entityManager->flush($shipQueue);
-		
-		$this->realtimeActionScheduler->schedule(
-			'athena.orbital_base_manager',
-			'uShipQueue' . $shipQueue->dockType,
-			$shipQueue,
-			$shipQueue->dEnd,
-			[
-				'class' => Place::class,
-				'id' => $shipQueue->rOrbitalBase
-			]
-		);
+
+		$this->messageBus->dispatch(new ShipQueueMessage($shipQueue->getId()), [DateTimeConverter::to_delay_stamp($shipQueue->dEnd)]);
 	}
 	
-	public function scheduleActions()
+	public function scheduleActions(): void
 	{
 		$queues = $this->entityManager->getRepository(ShipQueue::class)->getAll();
 		
 		foreach ($queues as $queue)
 		{
-			$this->realtimeActionScheduler->schedule(
-				'athena.orbital_base_manager',
-				'uShipQueue' . $queue->dockType,
-				$queue,
-				$queue->dEnd,
-				[
-					'class' => Place::class,
-					'id' => $queue->rOrbitalBase
-				]
-			);
+			$this->messageBus->dispatch(new ShipQueueMessage($queue->getId()), [DateTimeConverter::to_delay_stamp($queue->dEnd)]);
 		}
 	}
 }

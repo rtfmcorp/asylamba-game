@@ -10,14 +10,13 @@ use Asylamba\Classes\Exception\FormException;
 use Asylamba\Classes\Exception\ErrorException;
 use Asylamba\Modules\Athena\Model\BuildingQueue;
 
-$session = $this->getContainer()->get('session_wrapper');
+$session = $this->getContainer()->get(\Asylamba\Classes\Library\Session\SessionWrapper::class);
 $request = $this->getContainer()->get('app.request');
-$orbitalBaseManager = $this->getContainer()->get('athena.orbital_base_manager');
-$orbitalBaseHelper = $this->getContainer()->get('athena.orbital_base_helper');
-$buildingQueueManager = $this->getContainer()->get('athena.building_queue_manager');
+$orbitalBaseManager = $this->getContainer()->get(\Asylamba\Modules\Athena\Manager\OrbitalBaseManager::class);
+$orbitalBaseHelper = $this->getContainer()->get(\Asylamba\Modules\Athena\Helper\OrbitalBaseHelper::class);
+$buildingQueueManager = $this->getContainer()->get(\Asylamba\Modules\Athena\Manager\BuildingQueueManager::class);
 $buildingResourceRefund = $this->getContainer()->getParameter('athena.building.building_queue_resource_refund');
-$entityManager = $this->getContainer()->get('entity_manager');
-$scheduler = $this->getContainer()->get('realtime_action_scheduler');
+$entityManager = $this->getContainer()->get(\Asylamba\Classes\Entity\EntityManager::class);
 
 for ($i=0; $i < $session->get('playerBase')->get('ob')->size(); $i++) { 
 	$verif[] = $session->get('playerBase')->get('ob')->get($i)->get('id');
@@ -57,13 +56,15 @@ if ($baseId !== FALSE AND $building !== FALSE AND in_array($baseId, $verif)) {
 					$oldDate = $queue->dEnd;
 					$queue->dEnd = Utils::addSecondsToDate($dStart, Utils::interval($queue->dStart, $queue->dEnd, 's'));
 					$queue->dStart = $dStart;
-					
-					$scheduler->reschedule($queue, $queue->dEnd, $oldDate);
+
+					// @TODO handle rescheduling
+					// $scheduler->reschedule($queue, $queue->dEnd, $oldDate);
 
 					$dStart = $queue->dEnd;
 				}
 
-				$scheduler->cancel($buildingQueues[$index], $buildingQueues[$index]->dEnd);
+				// @TODO handle cancellation
+				// $scheduler->cancel($buildingQueues[$index], $buildingQueues[$index]->dEnd);
 				$entityManager->remove($buildingQueues[$index]);
 				$entityManager->flush(BuildingQueue::class);
 

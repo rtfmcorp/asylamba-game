@@ -37,7 +37,8 @@ class Response
 	const STATUS_NOT_FOUND = 404;
 	const STATUS_INTERNAL_SERVER_ERROR = 500;
 
-    public function __construct() {
+    public function __construct()
+	{
         $this->headers = new ParameterBag();
     }
     

@@ -4,6 +4,8 @@ use Asylamba\Modules\Demeter\Resource\ColorResource;
 use Asylamba\Modules\Demeter\Resource\LawResources;
 use Asylamba\Modules\Zeus\Model\Player;
 
+$container = $this->getContainer();
+$mediaPath = $container->getParameter('media');
 # status list
 $status = ColorResource::getInfo($faction->id, 'status');
 
@@ -20,7 +22,7 @@ echo '<div class="component profil">';
 				if (LawResources::getInfo($i, 'department') == $listlaw_status) {
 					echo '<div class="build-item base-type ' . (!LawResources::getInfo($i, 'isImplemented') ? 'disabled' : NULL) .'">';
 						echo '<div class="name">';
-							echo '<img src="' . MEDIA . 'faction/law/common.png" alt="">';
+							echo '<img src="' . $mediaPath . 'faction/law/common.png" alt="">';
 							echo '<strong>' . LawResources::getInfo($i, 'name') . (!LawResources::getInfo($i, 'isImplemented') ? ' <span class="hb" title="cette loi n\'est pas encore fonctionnelle">[?]</span>' : NULL) . '</strong>';
 						echo '</div>';
 

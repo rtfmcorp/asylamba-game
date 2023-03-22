@@ -16,15 +16,10 @@ use Asylamba\Classes\Entity\EntityManager;
 
 use Asylamba\Modules\Ares\Model\Report;
 
-class ReportManager {
-	/** @var EntityManager **/
-	protected $entityManager;
-	
-	/**
-	 * @param EntityManager $entityManager
-	 */
-	public function __construct(EntityManager $entityManager) {
-		$this->entityManager = $entityManager;
+class ReportManager
+{
+	public function __construct(protected EntityManager $entityManager)
+	{
 	}
 	
 	/**

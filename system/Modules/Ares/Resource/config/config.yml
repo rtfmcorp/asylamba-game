@@ -2,45 +2,35 @@
 parameters:
     ares.commander.base_level: 100
     ares.commander.income_level: 200
-    
+
     ares.coeff.move_in_system: 584
     ares.coeff.move_out_of_system: 600
     ares.coeff.move_intersystem: 1000
-    
+
     ares.coeff.colonization_cost: 80000
     ares.coeff.conquest_cost: 150000
-    
+
     ares.loot_limit: 5000
     ares.coeff.loot: 275
     
 services:
-    ares.commander_manager:
-        class: Asylamba\Modules\Ares\Manager\CommanderManager
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: true
+
+    _instanceof:
+        Symfony\Component\Messenger\Handler\MessageHandlerInterface:
+            tags:
+                - { name: 'messenger.message_handler', bus: 'messenger.default_bus' }
+
+    Asylamba\Modules\Ares\Handler\:
+        resource: '%root_path%/system/Modules/Ares/Handler/*'
+
+    Asylamba\Modules\Ares\Manager\:
+        resource: '%root_path%/system/Modules/Ares/Manager/*'
+
+    Asylamba\Modules\Ares\Manager\CommanderManager:
         arguments:
-            - "@entity_manager"
-            - "@ares.fight_manager"
-            - "@ares.report_manager"
-            - "@athena.orbital_base_manager"
-            - "@zeus.player_manager"
-            - "@zeus.player_bonus_manager"
-            - "@gaia.place_manager"
-            - "@demeter.color_manager"
-            - "@hermes.notification_manager"
-            - "@realtime_action_scheduler"
-            - "@event_dispatcher"
-            - "%ares.commander.base_level"
-           
-    ares.fight_manager:
-        class: Asylamba\Modules\Ares\Manager\FightManager
-        arguments:
-            - "@ares.commander_manager"
-            
-    ares.live_report_manager:
-        class: Asylamba\Modules\Ares\Manager\LiveReportManager
-        arguments:
-            - "@entity_manager"
-            
-    ares.report_manager:
-        class: Asylamba\Modules\Ares\Manager\ReportManager
-        arguments:
-            - "@entity_manager"
+            $commanderBaseLevel: "%ares.commander.base_level%"
+            $gaiaId: '%id_gaia%'

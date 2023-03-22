@@ -6,8 +6,8 @@
 use Asylamba\Classes\Exception\ErrorException;
 
 $id = $this->getContainer()->get('app.request')->request->get('id');
-$notificationManager = $this->getContainer()->get('hermes.notification_manager');
-$entityManager = $this->getContainer()->get('entity_manager');
+$notificationManager = $this->getContainer()->get(\Asylamba\Modules\Hermes\Manager\NotificationManager::class);
+$entityManager = $this->getContainer()->get(\Asylamba\Classes\Entity\EntityManager::class);
 
 if ($id) {
 	$notification = $notificationManager->get($id);

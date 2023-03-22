@@ -9,9 +9,9 @@ use Asylamba\Classes\Library\Flashbag;
 use Asylamba\Classes\Exception\ErrorException;
 use Asylamba\Classes\Exception\FormException;
 
-$session = $this->getContainer()->get('session_wrapper');
+$session = $this->getContainer()->get(\Asylamba\Classes\Library\Session\SessionWrapper::class);
 $request = $this->getContainer()->get('app.request');
-$orbitalBaseManager = $this->getContainer()->get('athena.orbital_base_manager');
+$orbitalBaseManager = $this->getContainer()->get(\Asylamba\Modules\Athena\Manager\OrbitalBaseManager::class);
 
 for ($i=0; $i < $session->get('playerBase')->get('ob')->size(); $i++) { 
 	$verif[] = $session->get('playerBase')->get('ob')->get($i)->get('id');
@@ -44,7 +44,7 @@ if ($baseId !== FALSE AND $credit !== FALSE AND $category !== FALSE AND in_array
 				default:
 					throw new ErrorException('modification d\'investissement impossible');
 			}
-			$this->getContainer()->get('entity_manager')->flush($base);
+			$this->getContainer()->get(\Asylamba\Classes\Entity\EntityManager::class)->flush($base);
 		} else {
 			throw new ErrorException('modification d\'investissement impossible - base inconnue');
 		}

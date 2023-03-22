@@ -12,7 +12,9 @@ use Asylamba\Modules\Gaia\Resource\PlaceResource;
 use Asylamba\Classes\Library\Format;
 use Asylamba\Modules\Ares\Resource\CommanderResources;
 
-$sessionToken = $this->getContainer()->get('session_wrapper')->get('token');
+$container = $this->getContainer();
+$sessionToken = $this->getContainer()->get(\Asylamba\Classes\Library\Session\SessionWrapper::class)->get('token');
+$appRoot = $container->getParameter('app_root');
 
 echo '<div class="component size3 table-fleet">';
 	echo '<div class="head skin-1">';
@@ -37,7 +39,7 @@ echo '<div class="component size3 table-fleet">';
 
 					echo '<tr>';
 						echo '<td rowspan="' . (count($base['fleets']) + 2) . '" class="base">';
-							echo '<a href="' . APP_ROOT . 'map/place-' . $base['info']['id'] . '">';
+							echo '<a href="' . $appRoot . 'map/place-' . $base['info']['id'] . '">';
 								echo PlaceResource::get($base['info']['type'], 'name') . '<br />';
 								echo '<strong>' . $base['info']['name'] . '</strong>';
 							echo '</a>';
@@ -70,7 +72,7 @@ echo '<div class="component size3 table-fleet">';
 
 						echo '<tr>';
 							echo '<td class="large">';
-								echo '<a href="' . APP_ROOT . 'fleet/commander-' . $commander->id . '/sftr-4">';
+								echo '<a href="' . $appRoot . 'fleet/commander-' . $commander->id . '/sftr-4">';
 									echo CommanderResources::getInfo($commander->level, 'grade') . ' <strong>' . $commander->name . '</strong>';
 								echo '</a>';
 							echo '</td>';

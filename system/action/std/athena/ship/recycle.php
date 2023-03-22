@@ -10,8 +10,8 @@ use Asylamba\Classes\Exception\ErrorException;
 use Asylamba\Classes\Exception\FormException;
 
 $request = $this->getContainer()->get('app.request');
-$session = $this->getContainer()->get('session_wrapper');
-$orbitalBaseManager = $this->getContainer()->get('athena.orbital_base_manager');
+$session = $this->getContainer()->get(\Asylamba\Classes\Library\Session\SessionWrapper::class);
+$orbitalBaseManager = $this->getContainer()->get(\Asylamba\Modules\Athena\Manager\OrbitalBaseManager::class);
 
 $baseId = $request->query->get('baseid');
 $typeOfShip = $request->query->get('typeofship');
@@ -32,4 +32,4 @@ if ($baseId !== FALSE AND $typeOfShip !== FALSE AND $quantity !== FALSE) {
 } else {
 	throw new FormException('pas assez d\'informations');
 }
-$this->getContainer()->get('entity_manager')->flush($ob);
+$this->getContainer()->get(\Asylamba\Classes\Entity\EntityManager::class)->flush($ob);

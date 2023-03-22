@@ -16,18 +16,29 @@ use Asylamba\Classes\Library\Utils;
 use Asylamba\Classes\Database\Database;
 
 use Asylamba\Modules\Athena\Model\CommercialTax;
+use Asylamba\Modules\Demeter\Model\Color;
 
-class CommercialTaxManager extends Manager {
+class CommercialTaxManager extends Manager
+{
 	protected $managerType = '_CommercialTax';
 
-	/**
-	 * @param Database $database
-	 */
 	public function __construct(Database $database) {
 		parent::__construct($database);
 	}
+
+	public function getFactionsTax(Color $faction, Color $relatedFaction): ?CommercialTax
+	{
+		$statement = $this->database->prepare('SELECT * FROM commercialTax WHERE faction = :faction_id AND relatedFaction = :related_faction_id');
+		$statement->execute([
+			'faction_id' => $faction->getId(),
+			'related_faction_id' => $relatedFaction->getId(),
+		]);
+
+		return (false !== ($result = $statement->fetch())) ? $this->format($result) : null;
+	}
 	
-	public function load($where = array(), $order = array(), $limit = array()) {
+	public function load($where = array(), $order = array(), $limit = array())
+	{
 		$formatWhere = Utils::arrayToWhere($where);
 		$formatOrder = Utils::arrayToOrder($order);
 		$formatLimit = Utils::arrayToLimit($limit);
@@ -55,17 +66,22 @@ class CommercialTaxManager extends Manager {
 			$qr->execute($valuesArray);
 		}
 
-		while($aw = $qr->fetch()) {
-			$ct = new CommercialTax();
-
-			$ct->id = $aw['id'];
-			$ct->faction = $aw['faction'];
-			$ct->relatedFaction = $aw['relatedFaction'];
-			$ct->exportTax = $aw['exportTax'];
-			$ct->importTax = $aw['importTax'];
-			
-			$currentT = $this->_Add($ct);
+		while($data = $qr->fetch()) {
+			$currentT = $this->_Add($this->format($data));
 		}
+	}
+	
+	protected function format(array $data): CommercialTax
+	{
+		$ct = new CommercialTax();
+
+		$ct->id = $data['id'];
+		$ct->faction = $data['faction'];
+		$ct->relatedFaction = $data['relatedFaction'];
+		$ct->exportTax = $data['exportTax'];
+		$ct->importTax = $data['importTax'];
+		
+		return $ct;
 	}
 
 	public function add(CommercialTax $ct) {

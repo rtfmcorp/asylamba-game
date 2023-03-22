@@ -13,12 +13,15 @@ use Asylamba\Classes\Library\Format;
 use Asylamba\Modules\Ares\Resource\CommanderResources;
 use Asylamba\Modules\Athena\Resource\ShipResource;
 
-$commanderManager = $this->getContainer()->get('ares.commander_manager');
-$session = $this->getContainer()->get('session_wrapper');
+$container = $this->getContainer();
+$appRoot = $container->getParameter('app_root');
+$mediaPath = $container->getParameter('media');
+$commanderManager = $this->getContainer()->get(\Asylamba\Modules\Ares\Manager\CommanderManager::class);
+$session = $this->getContainer()->get(\Asylamba\Classes\Library\Session\SessionWrapper::class);
 
 echo '<div class="component report">';
 	echo '<div class="head skin-1">';
-		echo '<img src="' . MEDIA . 'avatar/medium/' . $attacker_report->avatar . '.png" alt="' . $attacker_report->name . '" />';
+		echo '<img src="' . $mediaPath . 'avatar/medium/' . $attacker_report->avatar . '.png" alt="' . $attacker_report->name . '" />';
 		echo '<h2>Attaquant</h2>';
 		echo '<em>' . $attacker_report->name . '</em>';
 	echo '</div>';
@@ -31,7 +34,7 @@ echo '<div class="component report">';
 				echo '<hr />';
 				if ($report->rPlayerAttacker == $session->get('playerId')) {
 					echo '<div class="commander">';
-						echo '<a href="' . APP_ROOT . 'fleet"><img src="' . MEDIA . 'commander/medium/' . $report->avatarA . '.png" alt="' . $report->nameA . '" /></a>';
+						echo '<a href="' . $appRoot . 'fleet"><img src="' . $mediaPath . 'commander/medium/' . $report->avatarA . '.png" alt="' . $report->nameA . '" /></a>';
 						$level = $commanderManager->nbLevelUp($report->levelA, $report->experienceA + $report->expCom);
 						echo '<em>' . CommanderResources::getInfo($report->levelA, 'grade') . ($level > 0 ? ' <span class="bonus">a passé ' . $level . ' grade' . Format::addPlural($level) . '</span>' : NULL) . '</em>';
 						echo '<strong>' . $report->nameA . '</strong>';
@@ -43,7 +46,7 @@ echo '<div class="component report">';
 					echo '</div>';
 				} else {
 					echo '<div class="commander">';
-						echo '<img src="' . MEDIA . 'commander/medium/' . $report->avatarA . '.png" alt="' . $report->nameA . '" />';
+						echo '<img src="' . $mediaPath . 'commander/medium/' . $report->avatarA . '.png" alt="' . $report->nameA . '" />';
 						echo '<em>' . CommanderResources::getInfo($report->levelA, 'grade') . '</em>';
 						echo '<strong>' . $report->nameA . '</strong>';
 						echo '<em>expérience : ---</em>';
@@ -57,7 +60,7 @@ echo '<div class="component report">';
 				echo '</div>';
 				echo '<hr />';
 				echo '<div class="commander">';
-					echo '<img src="' . MEDIA . 'fleet/memorial.png" alt="' . $report->rPlayerDefender . '" />';
+					echo '<img src="' . $mediaPath . 'fleet/memorial.png" alt="' . $report->rPlayerDefender . '" />';
 					echo '<em>' . CommanderResources::getInfo($report->levelA, 'grade') . '</em>';
 					echo '<strong>' . $report->nameA . '</strong>';
 					if ($report->rPlayerAttacker == $session->get('playerId')) {
@@ -114,11 +117,11 @@ echo '</div>';
 echo '<div class="component report">';
 	echo '<div class="head skin-1">';
 		if ($defender_report == FALSE) {
-			echo '<img src="' . MEDIA . 'commander/medium/t1-c0.png" alt="Rebelle" />';
+			echo '<img src="' . $mediaPath . 'commander/medium/t1-c0.png" alt="Rebelle" />';
 			echo '<h2>Défenseur</h2>';
 			echo '<em>Rebelle</em>';
 		} else {
-			echo '<img src="' . MEDIA . 'avatar/medium/' . $defender_report->avatar . '.png" alt="' . $defender_report->name . '" />';
+			echo '<img src="' . $mediaPath . 'avatar/medium/' . $defender_report->avatar . '.png" alt="' . $defender_report->name . '" />';
 			echo '<h2>Défenseur</h2>';
 			echo '<em>' . $defender_report->name . '</em>';
 		}
@@ -132,7 +135,7 @@ echo '<div class="component report">';
 				echo '<hr />';
 				if ($report->rPlayerDefender == $session->get('playerId')) {
 					echo '<div class="commander">';
-						echo '<a href="' . APP_ROOT . 'fleet"><img src="' . MEDIA . 'commander/medium/' . $report->avatarD . '.png" alt="' . $report->nameD . '" /></a>';
+						echo '<a href="' . $appRoot . 'fleet"><img src="' . $mediaPath . 'commander/medium/' . $report->avatarD . '.png" alt="' . $report->nameD . '" /></a>';
 						$level = $commanderManager->nbLevelUp($report->levelD, $report->experienceD + $report->expCom);
 						echo '<em>' . CommanderResources::getInfo($report->levelD, 'grade') . ($level > 0 ? ' <span class="bonus">a passé ' . $level . ' grade</span>' : NULL) . '</em>';
 						echo '<strong>' . $report->nameD . '</strong>';
@@ -146,10 +149,10 @@ echo '<div class="component report">';
 					echo '<div class="commander">';
 						echo '<em>' . CommanderResources::getInfo($report->levelD, 'grade') . '</em>';
 						if ($report->rPlayerDefender == 0) {
-							echo '<img src="' . MEDIA . 'commander/medium/t1-c0.png" alt="' . $report->nameD . '" />';
+							echo '<img src="' . $mediaPath . 'commander/medium/t1-c0.png" alt="' . $report->nameD . '" />';
 							echo '<strong>Rebelle</strong>';
 						} else {
-							echo '<img src="' . MEDIA . 'commander/medium/' . $report->avatarD . '.png" alt="' . $report->nameD . '" />';
+							echo '<img src="' . $mediaPath . 'commander/medium/' . $report->avatarD . '.png" alt="' . $report->nameD . '" />';
 							echo '<strong>' . $report->nameD . '</strong>';
 						}
 						echo '<em>expérience : ---</em>';
@@ -164,7 +167,7 @@ echo '<div class="component report">';
 				echo '<hr />';
 				if ($report->rPlayerDefender == $session->get('playerId')) {
 					echo '<div class="commander">';
-						echo '<img src="' . MEDIA . 'fleet/memorial.png" alt="' . $report->nameD . '" />';
+						echo '<img src="' . $mediaPath . 'fleet/memorial.png" alt="' . $report->nameD . '" />';
 						echo '<em>' . CommanderResources::getInfo($report->levelD, 'grade') . '</em>';
 						echo '<strong>' . $report->nameD . '</strong>';
 						echo '<em>expérience : ' . Format::numberFormat($report->experienceD) . '</em>';
@@ -173,7 +176,7 @@ echo '<div class="component report">';
 					echo '</div>';
 				} else {
 					echo '<div class="commander">';
-						echo '<img src="' . MEDIA . 'fleet/memorial.png" alt="' . $report->nameD . '" />';
+						echo '<img src="' . $mediaPath . 'fleet/memorial.png" alt="' . $report->nameD . '" />';
 						echo '<em>' . CommanderResources::getInfo($report->levelD, 'grade') . '</em>';
 						if ($report->rPlayerDefender == 0) {
 							echo '<strong>Rebelle</strong>';

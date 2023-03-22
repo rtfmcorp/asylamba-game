@@ -15,20 +15,20 @@ use Asylamba\Classes\Exception\FormException;
 use Asylamba\Classes\Exception\ErrorException;
 use Asylamba\Modules\Gaia\Event\PlaceOwnerChangeEvent;
 
-$commanderManager = $this->getContainer()->get('ares.commander_manager');
-$recyclingMissionManager = $this->getContainer()->get('athena.recycling_mission_manager');
-$recyclingLogManager = $this->getContainer()->get('athena.recycling_log_manager');
-$orbitalBaseManager = $this->getContainer()->get('athena.orbital_base_manager');
-$orbitalBaseHelper = $this->getContainer()->get('athena.orbital_base_helper');
-$buildingQueueManager = $this->getContainer()->get('athena.building_queue_manager');
-$playerManager = $this->getContainer()->get('zeus.player_manager');
-$placeManager = $this->getContainer()->get('gaia.place_manager');
-$database = $this->getContainer()->get('database');
+$commanderManager = $this->getContainer()->get(\Asylamba\Modules\Ares\Manager\CommanderManager::class);
+$recyclingMissionManager = $this->getContainer()->get(\Asylamba\Modules\Athena\Manager\RecyclingMissionManager::class);
+$recyclingLogManager = $this->getContainer()->get(\Asylamba\Modules\Athena\Manager\RecyclingLogManager::class);
+$orbitalBaseManager = $this->getContainer()->get(\Asylamba\Modules\Athena\Manager\OrbitalBaseManager::class);
+$orbitalBaseHelper = $this->getContainer()->get(\Asylamba\Modules\Athena\Helper\OrbitalBaseHelper::class);
+$buildingQueueManager = $this->getContainer()->get(\Asylamba\Modules\Athena\Manager\BuildingQueueManager::class);
+$playerManager = $this->getContainer()->get(\Asylamba\Modules\Zeus\Manager\PlayerManager::class);
+$placeManager = $this->getContainer()->get(\Asylamba\Modules\Gaia\Manager\PlaceManager::class);
+$database = $this->getContainer()->get(\Asylamba\Classes\Database\Database::class);
 $request = $this->getContainer()->get('app.request');
-$session = $this->getContainer()->get('session_wrapper');
+$session = $this->getContainer()->get(\Asylamba\Classes\Library\Session\SessionWrapper::class);
 $baseMinLevelForChange = $this->getContainer()->getParameter('athena.obm.change_type_min_level');
 $baseMinLevelForCapital = $this->getContainer()->getParameter('athena.obm.capital_min_level');
-$entityManager = $this->getContainer()->get('entity_manager');
+$entityManager = $this->getContainer()->get(\Asylamba\Classes\Entity\EntityManager::class);
 $eventDispatcher = $this->getContainer()->get('event_dispatcher');
 
 for ($i=0; $i < $session->get('playerBase')->get('ob')->size(); $i++) { 
@@ -60,7 +60,7 @@ if ($baseId !== FALSE AND $type !== FALSE AND in_array($baseId, $verif)) {
 									break;
 								}
 							}
-							if (DATA_ANALYSIS) {
+							if (true === $this->getContainer()->getParameter('data_analysis')) {
 								$qr = $database->prepare('INSERT INTO 
 									DA_BaseAction(`from`, type, opt1, weight, dAction)
 									VALUES(?, ?, ?, ?, ?)'
@@ -88,7 +88,7 @@ if ($baseId !== FALSE AND $type !== FALSE AND in_array($baseId, $verif)) {
 								}
 							}
 
-							if (DATA_ANALYSIS) {
+							if (true === $this->getContainer()->getParameter('data_analysis')) {
 								$qr = $database->prepare('INSERT INTO 
 									DA_BaseAction(`from`, type, opt1, weight, dAction)
 									VALUES(?, ?, ?, ?, ?)'
@@ -132,7 +132,7 @@ if ($baseId !== FALSE AND $type !== FALSE AND in_array($baseId, $verif)) {
 								}
 							}
 
-							if (DATA_ANALYSIS) {
+							if (true === $this->getContainer()->getParameter('data_analysis')) {
 								$qr = $database->prepare('INSERT INTO 
 									DA_BaseAction(`from`, type, opt1, weight, dAction)
 									VALUES(?, ?, ?, ?, ?)'
@@ -445,4 +445,4 @@ if ($baseId !== FALSE AND $type !== FALSE AND in_array($baseId, $verif)) {
 }
 $entityManager->flush();
 $entityManager->getRepository(OrbitalBase::class)->updateBuildingLevels($orbitalBase);
-$eventDispatcher->dispatch(new PlaceOwnerChangeEvent($placeManager->get($orbitalBase->getId())));
+$eventDispatcher->dispatch(new PlaceOwnerChangeEvent($placeManager->get($orbitalBase->getId())), PlaceOwnerChangeEvent::NAME);

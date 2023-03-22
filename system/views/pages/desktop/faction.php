@@ -7,19 +7,21 @@ use Asylamba\Modules\Demeter\Resource\LawResources;
 use Asylamba\Modules\Zeus\Model\Player;
 use Asylamba\Modules\Demeter\Model\Color;
 
-$session = $this->getContainer()->get('session_wrapper');
+$container = $this->getContainer();
+$componentPath = $container->getParameter('component');
+$session = $this->getContainer()->get(\Asylamba\Classes\Library\Session\SessionWrapper::class);
 $request = $this->getContainer()->get('app.request');
 $response = $this->getContainer()->get('app.response');
-$playerManager = $this->getContainer()->get('zeus.player_manager');
-$colorManager = $this->getContainer()->get('demeter.color_manager');
-$factionNewsManager = $this->getContainer()->get('demeter.faction_news_manager');
-$forumMessageManager = $this->getContainer()->get('demeter.forum_message_manager');
-$lawManager = $this->getContainer()->get('demeter.law_manager');
-$voteManager = $this->getContainer()->get('demeter.vote_manager');
-$electionManager = $this->getContainer()->get('demeter.election_manager');
-$candidateManager = $this->getContainer()->get('demeter.candidate_manager');
-$forumTopicManager = $this->getContainer()->get('demeter.forum_topic_manager');
-$sectorManager = $this->getContainer()->get('gaia.sector_manager');
+$playerManager = $this->getContainer()->get(\Asylamba\Modules\Zeus\Manager\PlayerManager::class);
+$colorManager = $this->getContainer()->get(\Asylamba\Modules\Demeter\Manager\ColorManager::class);
+$factionNewsManager = $this->getContainer()->get(\Asylamba\Modules\Demeter\Manager\Forum\FactionNewsManager::class);
+$forumMessageManager = $this->getContainer()->get(\Asylamba\Modules\Demeter\Manager\Forum\ForumMessageManager::class);
+$lawManager = $this->getContainer()->get(\Asylamba\Modules\Demeter\Manager\Law\LawManager::class);
+$voteManager = $this->getContainer()->get(\Asylamba\Modules\Demeter\Manager\Election\VoteManager::class);
+$electionManager = $this->getContainer()->get(\Asylamba\Modules\Demeter\Manager\Election\ElectionManager::class);
+$candidateManager = $this->getContainer()->get(\Asylamba\Modules\Demeter\Manager\Election\CandidateManager::class);
+$forumTopicManager = $this->getContainer()->get(\Asylamba\Modules\Demeter\Manager\Forum\ForumTopicManager::class);
+$sectorManager = $this->getContainer()->get(\Asylamba\Modules\Gaia\Manager\SectorManager::class);
 
 if (($faction = $colorManager->get($session->get('playerInfo')->get('color'))) === null) {
 	$response->redirect('profil');
@@ -34,7 +36,7 @@ include 'defaultElement/movers.php';
 
 # contenu spécifique
 echo '<div id="content">';
-	include COMPONENT . 'publicity.php';
+	include $componentPath . 'publicity.php';
 
 	if (!$request->query->has('view') OR $request->query->get('view') == 'overview') {
 		if ($request->query->get('news') === 'list') {
@@ -45,16 +47,16 @@ echo '<div id="content">';
 			$mode = 'pin';
 		}
 
-		include COMPONENT . 'faction/overview/news.php';
+		include $componentPath . 'faction/overview/news.php';
 
 		$governmentMembers = $playerManager->getGovernmentMembers($session->get('playerInfo')->get('color'));
 
-		include COMPONENT . 'faction/overview/stat.php';
+		include $componentPath . 'faction/overview/stat.php';
 
 		$effectiveLaws = $lawManager->getByFactionAndStatements($faction->id, [Law::EFFECTIVE]);
 		$votingLaws = $lawManager->getByFactionAndStatements($faction->id, [Law::VOTATION]);
 
-		include COMPONENT . 'faction/overview/laws.php';
+		include $componentPath . 'faction/overview/laws.php';
 	} elseif ($request->query->get('view') == 'forum') {
 		if (!$request->query->has('forum')) {
 			# page d'accueil des forums
@@ -95,7 +97,7 @@ echo '<div id="content">';
 					$isStandard_topics = FALSE;
 					$idColum_topics = $i;
 					
-					include COMPONENT . 'faction/forum/topics.php';
+					include $componentPath . 'faction/forum/topics.php';
 				}
 			}
 
@@ -107,7 +109,7 @@ echo '<div id="content">';
 				
 			if ($forumId < 10 || ($forumId >= 10 && $forumId < 20 && $session->get('playerInfo')->get('status') > 2) || ($forumId >= 20 && $forumId < 30 && $session->get('playerInfo')->get('status') == Player::CHIEF)) {
 				# forum component
-				include COMPONENT . 'faction/forum/forum.php';
+				include $componentPath . 'faction/forum/forum.php';
 
 				$where = [
 					'rForum' => $forumId,
@@ -135,7 +137,7 @@ echo '<div id="content">';
 				$isStandard_topics = TRUE;
 				$forum_topics = $forumId;
 
-				include COMPONENT . 'faction/forum/topics.php';
+				include $componentPath . 'faction/forum/topics.php';
 
 				$forumTopicManager->changeSession($S_TOM1);
 			} else {
@@ -176,60 +178,60 @@ echo '<div id="content">';
 						$message_topic[$i] = $forumMessageManager->get($i);
 					}
 
-					include COMPONENT . 'faction/forum/topic.php';
+					include $componentPath . 'faction/forum/topic.php';
 
 					if (in_array($session->get('playerInfo')->get('status'), [Player::CHIEF, Player::WARLORD, Player::TREASURER, Player::MINISTER])) {
-						include COMPONENT . 'faction/forum/manage-topic.php';
+						include $componentPath . 'faction/forum/manage-topic.php';
 					}
 					$forumMessageManager->changeSession($S_FMM1);
 				}
 				$forumTopicManager->changeSession($S_TOM2);
 			} elseif ($request->query->has('mode') && $request->query->get('mode') == 'create') {
 				# créer un topic
-				include COMPONENT . 'faction/forum/createTopic.php';
+				include $componentPath . 'faction/forum/createTopic.php';
 			} else {
-				include COMPONENT . 'default.php';
+				include $componentPath . 'default.php';
 			}
 		}
 	} elseif ($request->query->get('view') == 'data') {
-		include COMPONENT . 'faction/data/nav.php';
+		include $componentPath . 'faction/data/nav.php';
 
 		if (!$request->query->has('mode') OR $request->query->get('mode') == 'financial') {
-			include COMPONENT . 'faction/data/financial/stats.php';
-			include COMPONENT . 'faction/data/financial/sectors-tax.php';
-			include COMPONENT . 'faction/data/financial/donations.php';
+			include $componentPath . 'faction/data/financial/stats.php';
+			include $componentPath . 'faction/data/financial/sectors-tax.php';
+			include $componentPath . 'faction/data/financial/donations.php';
 		} elseif ($request->query->get('mode') == 'trade') {
-			include COMPONENT . 'faction/data/trade/rc-stats.php';
-			include COMPONENT . 'faction/data/trade/tax-out.php';
-			include COMPONENT . 'faction/data/trade/tax-in.php';
+			include $componentPath . 'faction/data/trade/rc-stats.php';
+			include $componentPath . 'faction/data/trade/tax-out.php';
+			include $componentPath . 'faction/data/trade/tax-in.php';
 		} elseif ($request->query->get('mode') == 'war') {
-			include COMPONENT . 'faction/data/war/stats.php';
-			include COMPONENT . 'faction/data/war/reports-attack.php';
-			include COMPONENT . 'faction/data/war/reports-defend.php';
-			include COMPONENT . 'faction/data/war/levels.php';
+			include $componentPath . 'faction/data/war/stats.php';
+			include $componentPath . 'faction/data/war/reports-attack.php';
+			include $componentPath . 'faction/data/war/reports-defend.php';
+			include $componentPath . 'faction/data/war/levels.php';
 		} elseif ($request->query->get('mode') == 'tactical') {
-			include COMPONENT . 'faction/data/tactical/map.php';
-			include COMPONENT . 'faction/data/tactical/sectors.php';
-			include COMPONENT . 'faction/data/tactical/targets.php';
+			include $componentPath . 'faction/data/tactical/map.php';
+			include $componentPath . 'faction/data/tactical/sectors.php';
+			include $componentPath . 'faction/data/tactical/targets.php';
 		} elseif ($request->query->get('mode') == 'diplomacy') {
-			include COMPONENT . 'faction/data/diplomacy/main.php';
-			include COMPONENT . 'faction/data/diplomacy/about.php';
-			include COMPONENT . 'default.php';
+			include $componentPath . 'faction/data/diplomacy/main.php';
+			include $componentPath . 'faction/data/diplomacy/about.php';
+			include $componentPath . 'default.php';
 		} elseif ($request->query->get('mode') == 'law') {
 			$listlaw_status = 6;
-			include COMPONENT . 'faction/data/law/list.php';
+			include $componentPath . 'faction/data/law/list.php';
 			$listlaw_status = 3;
-			include COMPONENT . 'faction/data/law/list.php';
+			include $componentPath . 'faction/data/law/list.php';
 			$listlaw_status = 4;
-			include COMPONENT . 'faction/data/law/list.php';
+			include $componentPath . 'faction/data/law/list.php';
 			$listlaw_status = 5;
-			include COMPONENT . 'faction/data/law/list.php';
+			include $componentPath . 'faction/data/law/list.php';
 		}
 	} elseif ($request->query->get('view') == 'government') {
 		if (in_array($session->get('playerInfo')->get('status'), [Player::CHIEF, Player::WARLORD, Player::TREASURER, Player::MINISTER])) {
 			$senators = $playerManager->getParliamentMembers($faction->id);
 
-			include COMPONENT . 'faction/government/nav.php';
+			include $componentPath . 'faction/government/nav.php';
 
 			if (!$request->query->has('mode') OR $request->query->get('mode') == 'law') {
 				$factionSectors = $sectorManager->getFactionSectors($faction->id);
@@ -241,40 +243,40 @@ echo '<div id="content">';
 					if (LawResources::getInfo($i, 'department') == $session->get('playerInfo')->get('status') AND LawResources::getInfo($i, 'isImplemented')) {
 						$governmentLaw_id = $i;
 						$nbLaws++;
-						include COMPONENT . 'faction/government/law.php';
+						include $componentPath . 'faction/government/law.php';
 					}
 				}
 
 				if (2 - $nbLaws > 0) {
 					for ($i = 0; $i < 2 - $nbLaws; $i++) { 
-						include COMPONENT . 'default.php';
+						include $componentPath . 'default.php';
 					}
 				}
 			} elseif ($request->query->get('mode') == 'news') {
 				$factionNews = $factionNewsManager->getFactionNews($faction->id);
 				
-				include COMPONENT . 'faction/news/list.php';
+				include $componentPath . 'faction/news/list.php';
 
 				if ($request->query->has('news')) {
 					if ($factionNewsManager->get($request->query->get('news')) !== null) {
-						include COMPONENT . 'faction/news/edit.php';
+						include $componentPath . 'faction/news/edit.php';
 					} else {
 						$response->redirect('faction/view-government/mode-news');
 					}
 				} else {
-					include COMPONENT . 'faction/news/create.php';
+					include $componentPath . 'faction/news/create.php';
 				}
 			} elseif ($request->query->get('mode') == 'message') {
-				include COMPONENT . 'faction/government/message.php';
+				include $componentPath . 'faction/government/message.php';
 			} elseif ($request->query->get('mode') == 'description') {
-				include COMPONENT . 'faction/government/description.php';
+				include $componentPath . 'faction/government/description.php';
 			} elseif ($request->query->get('mode') == 'credit') {
-				include COMPONENT . 'faction/government/credit.php';
+				include $componentPath . 'faction/government/credit.php';
 			} elseif ($request->query->get('mode') == 'manage') {
 				$governmentMembers = $playerManager->getGovernmentMembers($faction->id);
 
-				include COMPONENT . 'faction/government/manage/main.php';
-				include COMPONENT . 'default.php';
+				include $componentPath . 'faction/government/manage/main.php';
+				include $componentPath . 'default.php';
 
 			} else {
 				$response->redirect('faction');
@@ -285,18 +287,18 @@ echo '<div id="content">';
 	} elseif ($request->query->get('view') == 'senate') {
 		if (in_array($session->get('playerInfo')->get('status'), [Player::CHIEF, Player::WARLORD, Player::TREASURER, Player::MINISTER, Player::PARLIAMENT])) {
 			$laws = $lawManager->getByFactionAndStatements($faction->id, [Law::VOTATION]);
-			include COMPONENT . 'faction/senate/stats.php';
+			include $componentPath . 'faction/senate/stats.php';
 
 			foreach ($laws as $law) {
-				include COMPONENT . 'faction/senate/law.php';
+				include $componentPath . 'faction/senate/law.php';
 			}
 			if (count($laws) < 1) {
-				include COMPONENT . 'default.php';
+				include $componentPath . 'default.php';
 			}
 
 			$laws = $lawManager->getByFactionAndStatements($faction->id, [Law::EFFECTIVE, Law::OBSOLETE, Law::REFUSED]);
 
-			include COMPONENT . 'faction/senate/historic.php';
+			include $componentPath . 'faction/senate/historic.php';
 		} else {
 			$response->redirect('faction');
 		}
@@ -305,13 +307,13 @@ echo '<div id="content">';
 			if (($election = $electionManager->getFactionLastElection($faction->id)) !== null) {
 				$candidates = $candidateManager->getByElection($election);
 				$nbCandidate = count($candidates);
-				include COMPONENT . 'faction/election/campaign.php';
-				include COMPONENT . 'faction/election/list.php';
+				include $componentPath . 'faction/election/campaign.php';
+				include $componentPath . 'faction/election/list.php';
 
 				if ($request->query->get('candidate') === 'create') {
-					include COMPONENT . 'faction/election/postulate.php';
+					include $componentPath . 'faction/election/postulate.php';
 				} elseif ($request->query->has('candidate') AND ($candidat = $candidateManager->get($request->query->get('candidate'))) !== null) {
-					include COMPONENT . 'faction/election/candidate.php';
+					include $componentPath . 'faction/election/candidate.php';
 
 					$forumTopicManager->load(
 						array(
@@ -336,12 +338,12 @@ echo '<div id="content">';
 							$message_topic[$i] = $forumMessageManager->get($i);
 						}
 
-						include COMPONENT . 'faction/forum/topic.php';
+						include $componentPath . 'faction/forum/topic.php';
 
 						$forumMessageManager->changeSession($S_FMM1);
 					}
 				} else {
-					include COMPONENT . 'default.php';
+					include $componentPath . 'default.php';
 				}
 			} else {
 				$response->redirect('faction');
@@ -359,13 +361,13 @@ echo '<div id="content">';
 
 			if ($faction->regime == Color::DEMOCRATIC) {
 				$nbCandidate = count($candidates);
-				include COMPONENT . 'faction/election/election.php';
+				include $componentPath . 'faction/election/election.php';
 
 				$rElection = $election->id;
-				include COMPONENT . 'faction/election/list.php';
+				include $componentPath . 'faction/election/list.php';
 
 				if ($request->query->has('candidate') AND ($candidat = $candidateManager->get($request->query->get('candidate'))) !== null) {
-					include COMPONENT . 'faction/election/candidate.php';
+					include $componentPath . 'faction/election/candidate.php';
 
 					$forumTopicManager->load(
 						array(
@@ -391,19 +393,19 @@ echo '<div id="content">';
 						}
 
 						$election_topic = TRUE;
-						include COMPONENT . 'faction/forum/topic.php';
+						include $componentPath . 'faction/forum/topic.php';
 
 						$forumMessageManager->changeSession($S_FMM1);
 					}
 				} else {
-					include COMPONENT . 'default.php';
+					include $componentPath . 'default.php';
 				}
 			} elseif ($faction->regime == Color::ROYALISTIC) {
 				$candidat  = $candidates[0];
 				$rElection = $election->id;
 
-				include COMPONENT . 'faction/election/putsch.php';
-				include COMPONENT . 'faction/election/candidate.php';
+				include $componentPath . 'faction/election/putsch.php';
+				include $componentPath . 'faction/election/candidate.php';
 
 				$forumTopicManager->load(
 					array(
@@ -428,12 +430,12 @@ echo '<div id="content">';
 						$message_topic[$i] = $forumMessageManager->get($i);
 					}
 					$election_topic = TRUE;
-					include COMPONENT . 'faction/forum/topic.php';
+					include $componentPath . 'faction/forum/topic.php';
 
 					$forumMessageManager->changeSession($S_FMM1);
 				}
 			} else {
-				include COMPONENT . 'default.php';
+				include $componentPath . 'default.php';
 			}
 		}
 	} elseif ($request->query->get('view') == 'player') {
@@ -467,8 +469,8 @@ echo '<div id="content">';
 			$players_listPlayer[] = $factionPlayer;
 		}
 
-		include COMPONENT . 'faction/player/statPlayer.php';
-		include COMPONENT . 'faction/player/listPlayer.php';
+		include $componentPath . 'faction/player/statPlayer.php';
+		include $componentPath . 'faction/player/listPlayer.php';
 	} else {
 		$response->redirect('faction');
 	}

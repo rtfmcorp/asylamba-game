@@ -7,8 +7,10 @@ use Asylamba\Modules\Athena\Model\OrbitalBase;
 use Asylamba\Modules\Athena\Resource\OrbitalBaseResource;
 use Asylamba\Modules\Gaia\Resource\PlaceResource;
 
+$container = $this->getContainer();
+$mediaPath = $container->getParameter('media');
 $request = $this->getContainer()->get('app.request');
-$orbitalBaseHelper = $this->getContainer()->get('athena.orbital_base_helper');
+$orbitalBaseHelper = $this->getContainer()->get(\Asylamba\Modules\Athena\Helper\OrbitalBaseHelper::class);
 
 $building 		= $request->query->get('building');
 $currentLevel 	= $request->query->get('lvl');
@@ -93,25 +95,25 @@ echo '<div class="component panel-info size2">';
 							}
 						}
 						echo '<td>' . $level . $note . '</td>';
-						echo '<td>' . Format::numberFormat($orbitalBaseHelper->getBuildingInfo($building, 'level', $level, 'resourcePrice')) . ' <img src="' .  MEDIA. 'resources/resource.png" alt="ressources" class="icon-color" /></td>';
-						echo '<td>' . Chronos::secondToFormat($orbitalBaseHelper->getBuildingInfo($building, 'level', $level, 'time'), 'lite') . ' <img src="' .  MEDIA. 'resources/time.png" alt="relève" class="icon-color" /></td>';
+						echo '<td>' . Format::numberFormat($orbitalBaseHelper->getBuildingInfo($building, 'level', $level, 'resourcePrice')) . ' <img src="' .  $mediaPath. 'resources/resource.png" alt="ressources" class="icon-color" /></td>';
+						echo '<td>' . Chronos::secondToFormat($orbitalBaseHelper->getBuildingInfo($building, 'level', $level, 'time'), 'lite') . ' <img src="' .  $mediaPath. 'resources/time.png" alt="relève" class="icon-color" /></td>';
 						switch ($building) {
 							case OrbitalBaseResource::GENERATOR:
 								echo '<td>' . Format::numberFormat($orbitalBaseHelper->getBuildingInfo($building, 'level', $level, 'nbQueues')) . '</td>';
 								break;
 							case OrbitalBaseResource::REFINERY:
-								echo '<td>' . Format::numberFormat(Game::resourceProduction($orbitalBaseHelper->getBuildingInfo($building, 'level', $level, 'refiningCoefficient'), 50)) . ' <img src="' .  MEDIA. 'resources/resource.png" alt="ressources" class="icon-color" /></td>';
+								echo '<td>' . Format::numberFormat(Game::resourceProduction($orbitalBaseHelper->getBuildingInfo($building, 'level', $level, 'refiningCoefficient'), 50)) . ' <img src="' .  $mediaPath. 'resources/resource.png" alt="ressources" class="icon-color" /></td>';
 								break;
 							case OrbitalBaseResource::STORAGE:
-								echo '<td>' . Format::numberFormat($orbitalBaseHelper->getBuildingInfo($building, 'level', $level, 'storageSpace')) . ' <img src="' .  MEDIA. 'resources/resource.png" alt="ressources" class="icon-color" /></td>';
+								echo '<td>' . Format::numberFormat($orbitalBaseHelper->getBuildingInfo($building, 'level', $level, 'storageSpace')) . ' <img src="' .  $mediaPath. 'resources/resource.png" alt="ressources" class="icon-color" /></td>';
 								break;
 							case OrbitalBaseResource::DOCK1:
 								echo '<td>' . Format::numberFormat($orbitalBaseHelper->getBuildingInfo($building, 'level', $level, 'nbQueues')) . '</td>';
-								echo '<td>' . Format::numberFormat($orbitalBaseHelper->getBuildingInfo($building, 'level', $level, 'storageSpace')) . ' <img src="' .  MEDIA. 'resources/pev.png" alt="pev" class="icon-color" /></td>';
+								echo '<td>' . Format::numberFormat($orbitalBaseHelper->getBuildingInfo($building, 'level', $level, 'storageSpace')) . ' <img src="' .  $mediaPath. 'resources/pev.png" alt="pev" class="icon-color" /></td>';
 								break;
 							case OrbitalBaseResource::DOCK2:
 								echo '<td>' . Format::numberFormat($orbitalBaseHelper->getBuildingInfo($building, 'level', $level, 'nbQueues')) . '</td>';
-								echo '<td>' . Format::numberFormat($orbitalBaseHelper->getBuildingInfo($building, 'level', $level, 'storageSpace')) . ' <img src="' .  MEDIA. 'resources/pev.png" alt="pev" class="icon-color" /></td>';
+								echo '<td>' . Format::numberFormat($orbitalBaseHelper->getBuildingInfo($building, 'level', $level, 'storageSpace')) . ' <img src="' .  $mediaPath. 'resources/pev.png" alt="pev" class="icon-color" /></td>';
 								break;
 							case OrbitalBaseResource::TECHNOSPHERE:
 								echo '<td>' . Format::numberFormat($orbitalBaseHelper->getBuildingInfo($building, 'level', $level, 'nbQueues')) . '</td>';

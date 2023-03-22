@@ -3,9 +3,13 @@
 use Asylamba\Classes\Library\Utils;
 use Asylamba\Modules\Hermes\Model\ConversationMessage;
 
+$container = $this->getContainer();
+$componentPath = $container->getParameter('component');
 $request = $this->getContainer()->get('app.request');
-$session = $this->getContainer()->get('session_wrapper');
-$conversationManager = $this->getContainer()->get('hermes.conversation_manager');
+$session = $this->getContainer()->get(\Asylamba\Classes\Library\Session\SessionWrapper::class);
+$conversationManager = $this->getContainer()->get(\Asylamba\Modules\Hermes\Manager\ConversationManager::class);
+$conversationMessageManager = $container->get(\Asylamba\Modules\Hermes\Manager\ConversationMessageManager::class);
+$conversationUserManager = $container->get(\Asylamba\Modules\Hermes\Manager\ConversationUserManager::class);
 
 $page = $request->query->has('page') 
 	? $request->query->get('page')
@@ -42,5 +46,5 @@ if ($conversationManager->size() == 1) {
 
 	$message_listmode = TRUE;
 
-	include COMPONENT . 'conversation/messages.php';
+	include $componentPath . 'conversation/messages.php';
 }

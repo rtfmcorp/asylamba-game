@@ -9,14 +9,14 @@ use Asylamba\Classes\Library\Flashbag;
 use Asylamba\Classes\Exception\ErrorException;
 use Asylamba\Classes\Exception\FormException;
 
-$database = $this->getContainer()->get('database');
-$playerManager = $this->getContainer()->get('zeus.player_manager');
-$conversationManager = $this->getContainer()->get('hermes.conversation_manager');
-$conversationUserManager = $this->getContainer()->get('hermes.conversation_user_manager');
-$conversationMessageManager = $this->getContainer()->get('hermes.conversation_message_manager');
+$database = $this->getContainer()->get(\Asylamba\Classes\Database\Database::class);
+$playerManager = $this->getContainer()->get(\Asylamba\Modules\Zeus\Manager\PlayerManager::class);
+$conversationManager = $this->getContainer()->get(\Asylamba\Modules\Hermes\Manager\ConversationManager::class);
+$conversationUserManager = $this->getContainer()->get(\Asylamba\Modules\Hermes\Manager\ConversationUserManager::class);
+$conversationMessageManager = $this->getContainer()->get(\Asylamba\Modules\Hermes\Manager\ConversationMessageManager::class);
 $response = $this->getContainer()->get('app.response');
 $request = $this->getContainer()->get('app.request');
-$parser = $this->getContainer()->get('parser');
+$parser = $this->getContainer()->get(\Asylamba\Classes\Library\Parser::class);
 
 $recipients = $request->request->get('recipients');
 $content = $request->request->get('content');
@@ -87,7 +87,7 @@ if (!empty($recipients) && !empty($content)) {
 
 				$conversationMessageManager->add($message);
 
-				if (DATA_ANALYSIS) {
+				if (true === $this->getContainer()->getParameter('data_analysis')) {
 					$qr = $database->prepare('INSERT INTO 
 						DA_SocialRelation(`from`, `to`, `type`, `message`, dAction)
 						VALUES(?, ?, ?, ?, ?)'

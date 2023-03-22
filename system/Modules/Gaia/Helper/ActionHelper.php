@@ -6,6 +6,7 @@ use Asylamba\Classes\Library\Chronos;
 use Asylamba\Classes\Library\Game;
 use Asylamba\Classes\Library\Format;
 
+use Asylamba\Modules\Ares\Model\Commander;
 use Asylamba\Modules\Promethee\Model\Technology;
 
 use Asylamba\Modules\Promethee\Resource\TechnologyResource;
@@ -16,49 +17,25 @@ use Asylamba\Modules\Ares\Manager\CommanderManager;
 use Asylamba\Modules\Athena\Manager\CommercialRouteManager;
 use Asylamba\Classes\Library\Session\SessionWrapper;
 
-abstract class ActionHelper {
-	/** @var CommanderManager **/
-	protected $commanderManager;
-	/** @var CommercialRouteManager **/
-	protected $commercialRouteManager;
-	/** @var OrbitalBaseHelper **/
-	protected $orbitalBaseHelper;
-	/** @var int **/
-	protected $routeSectorBonus;
-	/** @var int **/
-	protected $routeColorBonus;
-	/** @var SessionWrapper **/
-	protected $sessionWrapper;
-	/** @var string **/
-	protected $sessionToken;
+abstract class ActionHelper
+{
+	protected string $sessionToken;
 	
-	/**
-	 * @param CommanderManager $commanderManager
-	 * @param CommercialRouteManager $commercialRouteManager
-	 * @param OrbitalBaseHelper $orbitalBaseHelper
-	 * @param int $routeSectorBonus
-	 * @param int $routeColorBonus
-	 * @param SessionWrapper $session
-	 */
 	public function __construct(
-		CommanderManager $commanderManager,
-		CommercialRouteManager $commercialRouteManager,
-		OrbitalBaseHelper $orbitalBaseHelper,
-		$routeSectorBonus,
-		$routeColorBonus,
-		SessionWrapper $session
+		protected CommanderManager $commanderManager,
+		protected CommercialRouteManager $commercialRouteManager,
+		protected OrbitalBaseHelper $orbitalBaseHelper,
+		protected SessionWrapper $sessionWrapper,
+		protected string $rootPath,
+		protected string $mediaPath,
+		protected int $routeSectorBonus,
+		protected int $routeColorBonus,
 	) {
-		$this->commanderManager = $commanderManager;
-		$this->commercialRouteManager = $commercialRouteManager;
-		$this->orbitalBaseHelper = $orbitalBaseHelper;
-		$this->routeSectorBonus = $routeSectorBonus;
-		$this->routeColorBonus = $routeColorBonus;
-		$this->sessionWrapper = $session;
-		$this->sessionToken = $session->get('token');
+		$this->sessionToken = $sessionWrapper->get('token');
 	}
 	
 	public function loot($ob, &$link, &$box, $id, $place, $commanderSession) {
-		$link .= '<a href="#" class="actionbox-sh" data-target="' . $id . '"><img src="' . MEDIA . 'map/action/loot.png" alt="pillage" /></a>';
+		$link .= '<a href="#" class="actionbox-sh" data-target="' . $id . '"><img src="' . $this->mediaPath . 'map/action/loot.png" alt="pillage" /></a>';
 
 		$box .= '<div data-id="' . $id . '" class="act-bull" style="display:' . (($id == 1) ? 'block' : 'none') . ';" >';
 			$box .= '<h5>Effectuer un pillage</h5>';
@@ -82,27 +59,27 @@ abstract class ActionHelper {
 				for ($i = 0; $i < $this->commanderManager->size(); $i++) {
 					if ($this->commanderManager->get($i)->getStatement() == Commander::AFFECTED) {
 						$box .= '<a href="' . Format::actionBuilder('loot', $this->sessionToken, ['commanderid' => $this->commanderManager->get($i)->getId(), 'placeid' => $place->getId(), 'redirect' => $place->getId()]) . '" class="commander">';
-							$box .= '<img class="avatar" src="' . MEDIA . 'commander/small/c1-l1-c' . $this->sessionWrapper->get('playerInfo')->get('color') . '.png" alt="' . $this->commanderManager->get($i)->getName() . '" />';
+							$box .= '<img class="avatar" src="' . $this->mediaPath . 'commander/small/c1-l1-c' . $this->sessionWrapper->get('playerInfo')->get('color') . '.png" alt="' . $this->commanderManager->get($i)->getName() . '" />';
 							$box .= '<span class="label">';
 								$box .= '<strong>' . $this->commanderManager->get($i)->getName() . '</strong><br />';
 								$box .= $this->commanderManager->get($i)->getPev() . ' pev<br />';
-								$box .= Format::numberFormat($this->commanderManager->get($i)->getPev() * COEFFLOOT) . ' de soute';
+								$box .= Format::numberFormat($this->commanderManager->get($i)->getPev() * Commander::COEFFLOOT) . ' de soute';
 							$box .= '</span>';
 							$box .= '<span class="value">';
-								$box .= Chronos::secondToFormat($time, 'lite') . ' <img alt="temps" src="' . MEDIA . 'resources/time.png" class="icon-color">';
+								$box .= Chronos::secondToFormat($time, 'lite') . ' <img alt="temps" src="' . $this->mediaPath . 'resources/time.png" class="icon-color">';
 							$box .= '</span>';
 						$box .= '</a>';
 					}
 				}
 			} else {
-				$box .= '<p class="info">Vous n\'avez aucun commandant en fonction sur ' . $ob->getName() . '. <a href="' . APP_ROOT . 'bases/base-' . $ob->getId() . '/view-school">Affectez un commandant</a> et envoyez un pillage depuis ' . $ob->getName() . '.</p>';
+				$box .= '<p class="info">Vous n\'avez aucun commandant en fonction sur ' . $ob->getName() . '. <a href="' . $this->rootPath . 'bases/base-' . $ob->getId() . '/view-school">Affectez un commandant</a> et envoyez un pillage depuis ' . $ob->getName() . '.</p>';
 			}
 			$this->commanderManager->changeSession($S_COM2);
 		$box .= '</div>';
 	}
 
 	public function conquest($ob, &$link, &$box, $id, $place, $commanderSession, $movingCommandersSession, $technologies) {
-		$link .= '<a href="#" class="actionbox-sh" data-target="' . $id . '"><img src="' . MEDIA . 'map/action/colonize.png" alt="conquête" /></a>';
+		$link .= '<a href="#" class="actionbox-sh" data-target="' . $id . '"><img src="' . $this->mediaPath . 'map/action/colonize.png" alt="conquête" /></a>';
 
 		$box .= '<div data-id="' . $id . '" class="act-bull" style="display:' . (($id == 1) ? 'block' : 'none') . ';" >';
 			$box .= '<h5>Effectuer une conquête</h5>';
@@ -133,7 +110,7 @@ abstract class ActionHelper {
 					}
 					if ($commanderQuantity > 0) {
 						# check si assez de crédits
-						$creditPrice = ($obQuantity + $coloQuantity) * CREDITCOEFFTOCONQUER;
+						$creditPrice = ($obQuantity + $coloQuantity) * Commander::CREDITCOEFFTOCONQUER;
 
 						if ($this->sessionWrapper->get('playerInfo')->get('credit') >= $creditPrice) {
 							# check si assez de points d'attaque
@@ -146,14 +123,14 @@ abstract class ActionHelper {
 							for ($i = 0; $i < $this->commanderManager->size(); $i++) {
 								if ($this->commanderManager->get($i)->getStatement() == Commander::AFFECTED) {
 									$box .= '<a href="' . Format::actionBuilder('conquer', $this->sessionToken, ['commanderid' => $this->commanderManager->get($i)->getId(), 'placeid' => $place->getId(), 'redirect' => $place->getId()]) . '" class="commander">';
-										$box .= '<img class="avatar" src="' . MEDIA . 'commander/small/c1-l1-c' . $this->sessionWrapper->get('playerInfo')->get('color') . '.png" alt="' . $this->commanderManager->get($i)->getName() . '" />';
+										$box .= '<img class="avatar" src="' . $this->mediaPath . 'commander/small/c1-l1-c' . $this->sessionWrapper->get('playerInfo')->get('color') . '.png" alt="' . $this->commanderManager->get($i)->getName() . '" />';
 										$box .= '<span class="label">';
 											$box .= '<strong>' . $this->commanderManager->get($i)->getName() . '</strong><br />';
 											$box .= $this->commanderManager->get($i)->getPev() . ' pev';
 										$box .= '</span>';
 										$box .= '<span class="value">';
-											$box .= Chronos::secondToFormat($time, 'lite') . ' <img alt="temps" src="' . MEDIA . 'resources/time.png" class="icon-color"><br />';
-											$box .= Format::numberFormat($creditPrice) . ' <img alt="credit" src="' . MEDIA . 'resources/credit.png" class="icon-color">';
+											$box .= Chronos::secondToFormat($time, 'lite') . ' <img alt="temps" src="' . $this->mediaPath . 'resources/time.png" class="icon-color"><br />';
+											$box .= Format::numberFormat($creditPrice) . ' <img alt="credit" src="' . $this->mediaPath . 'resources/credit.png" class="icon-color">';
 										$box .= '</span>';
 									$box .= '</a>';
 								}
@@ -162,7 +139,7 @@ abstract class ActionHelper {
 							$box .= '<p class="info">Vous n\'avez pas assez de crédits pour lancer la conquête. Il faut ' . $creditPrice . ' crédits.</p>';
 						}
 					} else {
-						$box .= '<p class="info">Vous n\'avez aucun commandant en fonction sur ' . $ob->getName() . '. <a href="' . APP_ROOT . 'bases/base-' . $ob->getId() . '/view-school">Affectez un commandant</a> et envoyez un pillage depuis ' . $ob->getName() . '.</p>';
+						$box .= '<p class="info">Vous n\'avez aucun commandant en fonction sur ' . $ob->getName() . '. <a href="' . $this->rootPath . 'bases/base-' . $ob->getId() . '/view-school">Affectez un commandant</a> et envoyez un pillage depuis ' . $ob->getName() . '.</p>';
 					}
 					$this->commanderManager->changeSession($S_COM2);
 				} else {
@@ -175,7 +152,7 @@ abstract class ActionHelper {
 	}
 
 	public function colonize($ob, &$link, &$box, $id, $place, $commanderSession, $movingCommandersSession, $technologies) {
-		$link .= '<a href="#" class="actionbox-sh" data-target="' . $id . '"><img src="' . MEDIA . 'map/action/colonize.png" alt="colonisation" /></a>';
+		$link .= '<a href="#" class="actionbox-sh" data-target="' . $id . '"><img src="' . $this->mediaPath . 'map/action/colonize.png" alt="colonisation" /></a>';
 
 		$box .= '<div data-id="' . $id . '" class="act-bull" style="display:' . (($id == 1) ? 'block' : 'none') . ';" >';
 			$box .= '<h5>Effectuer une colonisation</h5>';
@@ -206,7 +183,7 @@ abstract class ActionHelper {
 					}
 					if ($commanderQuantity > 0) {
 						# check si assez de crédits
-						$creditPrice = ($obQuantity + $coloQuantity) * CREDITCOEFFTOCOLONIZE;
+						$creditPrice = ($obQuantity + $coloQuantity) * Commander::CREDITCOEFFTOCOLONIZE;
 
 						if ($this->sessionWrapper->get('playerInfo')->get('credit') >= $creditPrice) {
 							# check si assez de points d'attaque
@@ -219,14 +196,14 @@ abstract class ActionHelper {
 							for ($i = 0; $i < $this->commanderManager->size(); $i++) { 
 								if ($this->commanderManager->get($i)->getStatement() == Commander::AFFECTED) {
 									$box .= '<a href="' . Format::actionBuilder('colonize', $this->sessionToken, ['commanderid' => $this->commanderManager->get($i)->getId(), 'placeid' => $place->getId(), 'redirect' => $place->getId()]) . '" class="commander">';
-										$box .= '<img class="avatar" src="' . MEDIA . 'commander/small/c1-l1-c' . $this->sessionWrapper->get('playerInfo')->get('color') . '.png" alt="' . $this->commanderManager->get($i)->getName() . '" />';
+										$box .= '<img class="avatar" src="' . $this->mediaPath . 'commander/small/c1-l1-c' . $this->sessionWrapper->get('playerInfo')->get('color') . '.png" alt="' . $this->commanderManager->get($i)->getName() . '" />';
 										$box .= '<span class="label">';
 											$box .= '<strong>' . $this->commanderManager->get($i)->getName() . '</strong><br />';
 											$box .= $this->commanderManager->get($i)->getPev() . ' pev';
 										$box .= '</span>';
 										$box .= '<span class="value">';
-											$box .= Chronos::secondToFormat($time, 'lite') . ' <img alt="temps" src="' . MEDIA . 'resources/time.png" class="icon-color"><br />';
-											$box .= Format::numberFormat($creditPrice) . ' <img alt="credit" src="' . MEDIA . 'resources/credit.png" class="icon-color">';
+											$box .= Chronos::secondToFormat($time, 'lite') . ' <img alt="temps" src="' . $this->mediaPath . 'resources/time.png" class="icon-color"><br />';
+											$box .= Format::numberFormat($creditPrice) . ' <img alt="credit" src="' . $this->mediaPath . 'resources/credit.png" class="icon-color">';
 										$box .= '</span>';
 									$box .= '</a>';
 								}
@@ -235,7 +212,7 @@ abstract class ActionHelper {
 							$box .= '<p class="info">Vous n\'avez pas assez de crédits pour envoyer la colonisation. Il faut ' . $creditPrice . ' crédits.</p>';
 						}
 					} else {
-						$box .= '<p class="info">Vous n\'avez aucun commandant en fonction sur ' . $ob->getName() . '. <a href="' . APP_ROOT . 'bases/base-' . $ob->getId() . '/view-school">Affectez un commandant</a> et envoyez un pillage depuis ' . $ob->getName() . '.</p>';
+						$box .= '<p class="info">Vous n\'avez aucun commandant en fonction sur ' . $ob->getName() . '. <a href="' . $this->rootPath . 'bases/base-' . $ob->getId() . '/view-school">Affectez un commandant</a> et envoyez un pillage depuis ' . $ob->getName() . '.</p>';
 					}
 					$this->commanderManager->changeSession($S_COM2);
 				} else {
@@ -248,7 +225,7 @@ abstract class ActionHelper {
 	}
 
 	public function proposeRC($ob, &$link, &$box, $id, $place) {
-		$tmpLink = '<a href="#" class="actionbox-sh" data-target="' . $id . '"><img src="' . MEDIA . 'map/action/proposeRC.png" alt="conquête" /></a>';
+		$tmpLink = '<a href="#" class="actionbox-sh" data-target="' . $id . '"><img src="' . $this->mediaPath . 'map/action/proposeRC.png" alt="conquête" /></a>';
 		
 		# gérer soit l'un soit l'autre
 		$box .= '<div data-id="' . $id . '" class="act-bull" style="display:' . (($id == 1) ? 'block' : 'none') . ';" >';
@@ -276,19 +253,19 @@ abstract class ActionHelper {
 								$box .= '<h5>Route commerciale en suspens</h5>';
 								$box .= '<p>Le joueur n\'a pas encore accepté votre proposition de route commerciale. ';
 								$box .= 'Si vous voulez voir le statut de la route ou annuler votre proposition, rendez-vous dans la ';
-								$box .= '<a href="' . APP_ROOT . 'bases/base-' . $ob->getRPlace() . '/view-commercialplateforme">plateforme commerciale</a>';
+								$box .= '<a href="' . $this->rootPath . 'bases/base-' . $ob->getRPlace() . '/view-commercialplateforme">plateforme commerciale</a>';
 								$box .= '.</p>';
 							} elseif ($notAccepted == TRUE) {
 								$box .= '<h5>Route commerciale en suspens</h5>';
 								$box .= '<p>Ce joueur vous a proposé une route commerciale. ';
 								$box .= 'Si vous voulez l\'accepter ou la refuser, rendez-vous dans la ';
-								$box .= '<a href="' . APP_ROOT . 'bases/base-' . $ob->getRPlace() . '/view-commercialplateforme">plateforme commerciale</a>';
+								$box .= '<a href="' . $this->rootPath . 'bases/base-' . $ob->getRPlace() . '/view-commercialplateforme">plateforme commerciale</a>';
 								$box .= '.</p>';
 							} elseif ($standby == TRUE) {
 								$box .= '<h5>Route commerciale en suspens</h5>';
 								$box .= '<p>En temps de guerre, toutes les transactions entre votre base et la sienne sont bloquées. ';
 								$box .= 'Si vous voulez voir le statut de la route ou y mettre fin, rendez-vous dans la ';
-								$box .= '<a href="' . APP_ROOT . 'bases/base-' . $ob->getRPlace() . '/view-commercialplateforme">plateforme commerciale</a>';
+								$box .= '<a href="' . $this->rootPath . 'bases/base-' . $ob->getRPlace() . '/view-commercialplateforme">plateforme commerciale</a>';
 								$box .= '.</p>';
 							} else {
 								$maxRoute = $this->orbitalBaseHelper->getBuildingInfo(6, 'level', $ob->getLevelCommercialPlateforme(), 'nbRoutesMax');
@@ -303,8 +280,8 @@ abstract class ActionHelper {
 
 									$box .= '<div class="rc">';
 										$box .= '<p>Longueur de la route <strong>' . Format::numberFormat($distance) . ' Al.</strong></p>';
-										$box .= '<p>Coût de la mise en place <strong>' . Format::numberFormat($price) . ' <img alt="credit" src="' . MEDIA . 'resources/credit.png" class="icon-color"></strong></p>';
-										$box .= '<p>Revenu par relève <strong>' . Format::numberFormat($income) . ' <img alt="credit" src="' . MEDIA . 'resources/credit.png" class="icon-color"></strong></p>';
+										$box .= '<p>Coût de la mise en place <strong>' . Format::numberFormat($price) . ' <img alt="credit" src="' . $this->mediaPath . 'resources/credit.png" class="icon-color"></strong></p>';
+										$box .= '<p>Revenu par relève <strong>' . Format::numberFormat($income) . ' <img alt="credit" src="' . $this->mediaPath . 'resources/credit.png" class="icon-color"></strong></p>';
 
 										if ($this->sessionWrapper->get('playerInfo')->get('credit') >= $price) {
 											# bouton actif
@@ -334,7 +311,7 @@ abstract class ActionHelper {
 				}
 			}
 			if ($sendResources == TRUE) {
-				$tmpLink = '<a href="#" class="actionbox-sh" data-target="' . $id . '"><img src="' . MEDIA . 'map/action/sendResource.png" alt="ressources" /></a>';
+				$tmpLink = '<a href="#" class="actionbox-sh" data-target="' . $id . '"><img src="' . $this->mediaPath . 'map/action/sendResource.png" alt="ressources" /></a>';
 				$box .= '<h5>Envoyer des ressources</h5>';
 
 				// ENVOI DE RESSOURCES
@@ -345,8 +322,8 @@ abstract class ActionHelper {
 					$box .= '<p class="info">Pour pouvoir envoyer des ressources, il faut que votre entrepôt soit à ' . OBM_STOCKLIMIT * 100 . '% rempli.</p>';
 				} else {	
 					$box .= '<div class="rc">';
-						$box .= '<p>Ressources en stock <strong>' . Format::numberFormat($currentStorage) . ' <img alt="ressource" src="' . MEDIA . 'resources/resource.png" class="icon-color"></strong></p>';
-						$box .= '<p>Capacité d\'envoi maximum <strong>' . Format::numberFormat($maxResourcesToSend) . ' <img alt="ressource" src="' . MEDIA . 'resources/resource.png" class="icon-color"></strong></p>';
+						$box .= '<p>Ressources en stock <strong>' . Format::numberFormat($currentStorage) . ' <img alt="ressource" src="' . $this->mediaPath . 'resources/resource.png" class="icon-color"></strong></p>';
+						$box .= '<p>Capacité d\'envoi maximum <strong>' . Format::numberFormat($maxResourcesToSend) . ' <img alt="ressource" src="' . $this->mediaPath . 'resources/resource.png" class="icon-color"></strong></p>';
 
 						$box .= '<form action="' . Format::actionBuilder('giveresource', $this->sessionToken, ['baseid' => $ob->getRPlace(), 'otherbaseid' => $place->getId(), 'redirect' => $place->getId()]) . '" method="POST">';
 							$box .= '<p><input type="text" value="0" name="quantity" /></p>';
@@ -361,7 +338,7 @@ abstract class ActionHelper {
 	}
 
 	public function motherShip($ob, &$link, &$box, $id) {
-		$link .= '<a href="#" class="actionbox-sh" data-target="' . $id . '"><img src="' . MEDIA . 'map/action/motherShip.png" alt="vaisseau mère" /></a>';
+		$link .= '<a href="#" class="actionbox-sh" data-target="' . $id . '"><img src="' . $this->mediaPath . 'map/action/motherShip.png" alt="vaisseau mère" /></a>';
 
 		$box .= '<div data-id="' . $id . '" class="act-bull" style="display:' . (($id == 1) ? 'block' : 'none') . ';" >';
 			$box .= '<h5>Envoyer un vaisseau-mère</h5>';
@@ -370,7 +347,7 @@ abstract class ActionHelper {
 	}
 
 	public function move($ob, &$link, &$box, $id, $place, $commanderSession) {
-		$link .= '<a href="#" class="actionbox-sh" data-target="' . $id . '"><img src="' . MEDIA . 'map/action/move.png" alt="flotte" /></a>';
+		$link .= '<a href="#" class="actionbox-sh" data-target="' . $id . '"><img src="' . $this->mediaPath . 'map/action/move.png" alt="flotte" /></a>';
 
 		$box .= '<div data-id="' . $id . '" class="act-bull" style="display:' . (($id == 1) ? 'block' : 'none') . ';" >';
 			$box .= '<h5>Déplacer une flotte</h5>';
@@ -395,13 +372,13 @@ abstract class ActionHelper {
 
 					for ($i = 0; $i < $this->commanderManager->size(); $i++) {
 						$box .= '<a href="' . Format::actionBuilder('movefleet', $this->sessionToken, ['commanderid' => $this->commanderManager->get($i)->getId(), 'placeid' => $place->getId(), 'redirect' => $place->getId()]) . '" class="commander">';
-							$box .= '<img class="avatar" src="' . MEDIA . 'commander/small/c1-l1-c' . $this->sessionWrapper->get('playerInfo')->get('color') . '.png" alt="' . $this->commanderManager->get($i)->getName() . '" />';
+							$box .= '<img class="avatar" src="' . $this->mediaPath . 'commander/small/c1-l1-c' . $this->sessionWrapper->get('playerInfo')->get('color') . '.png" alt="' . $this->commanderManager->get($i)->getName() . '" />';
 							$box .= '<span class="label">';
 								$box .= '<strong>' . $this->commanderManager->get($i)->getName() . '</strong><br />';
 								$box .= $this->commanderManager->get($i)->getPev() . ' pev';
 							$box .= '</span>';
 							$box .= '<span class="value">';
-								$box .= Chronos::secondToFormat($time, 'lite') . ' <img alt="temps" src="' . MEDIA . 'resources/time.png" class="icon-color"><br />';
+								$box .= Chronos::secondToFormat($time, 'lite') . ' <img alt="temps" src="' . $this->mediaPath . 'resources/time.png" class="icon-color"><br />';
 							$box .= '</span>';
 						$box .= '</a>';
 					}

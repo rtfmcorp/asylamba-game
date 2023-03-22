@@ -4,6 +4,9 @@ use Asylamba\Classes\Library\Utils;
 use Asylamba\Classes\Library\Format;
 use Asylamba\Modules\Demeter\Resource\ColorResource;
 
+$container = $this->getContainer();
+$appRoot = $container->getParameter('app_root');
+$mediaPath = $container->getParameter('media');
 $allyInactiveTime = $this->getContainer()->getParameter('zeus.player.ally_inactive_time');
 # listPlayer component
 # in player.demeter package
@@ -44,13 +47,13 @@ echo '<div class="component player size3">';
 
 				foreach ($players as $p) {
 					echo '<div class="player">';
-						echo '<a href="' . APP_ROOT . 'embassy/player-' . $p->getId() . '">';
-							echo '<img src="' . MEDIA . 'avatar/small/' . $p->getAvatar() . '.png" class="picto" alt="' . $p->getName() . '" />';
+						echo '<a href="' . $appRoot . 'embassy/player-' . $p->getId() . '">';
+							echo '<img src="' . $mediaPath . 'avatar/small/' . $p->getAvatar() . '.png" class="picto" alt="' . $p->getName() . '" />';
 						echo '</a>';
 						echo '<span class="title">' . $status[$p->getStatus() - 1] . '</span>';
 						echo '<strong class="name">' . $p->getName() . '</strong>';
 						echo '<span class="experience">' . Format::numberFormat($p->factionPoint) . ' points</span>';
-						if (Utils::interval(Utils::now(), $p->getDLastActivity(), 's') < (TIME_EVENT_UPDATE * 2)) {
+						if (Utils::interval(Utils::now(), $p->getDLastActivity(), 's') < ($container->getParameter('time_event_update') * 2)) {
 							echo '<span class="online hb lt" title="est en ligne actuellement"></span>';
 						} elseif (Utils::interval(Utils::now(), $p->getDLastActivity()) > $allyInactiveTime) {
 							echo '<span class="inactive hb lt" title="ne s\'est plus connecté depuis une semaine"></span>';

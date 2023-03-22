@@ -3,8 +3,8 @@
 
 use Asylamba\Classes\Library\Flashbag;
 
-$notificationManager = $this->getContainer()->get('hermes.notification_manager');
-$session = $this->getContainer()->get('session_wrapper');
+$notificationManager = $this->getContainer()->get(\Asylamba\Modules\Hermes\Manager\NotificationManager::class);
+$session = $this->getContainer()->get(\Asylamba\Classes\Library\Session\SessionWrapper::class);
 
 $nbr = $notificationManager->deleteByRPlayer($session->get('playerId'));
 

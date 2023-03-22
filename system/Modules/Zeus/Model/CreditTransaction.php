@@ -40,8 +40,8 @@ class CreditTransaction {
 
 	public function getFormatedReceiverLink() {
 		return $this->type == CreditTransaction::TYP_PLAYER
-			? APP_ROOT . 'embassy/player-' . $this->rReceiver
-			: APP_ROOT . 'embassy/faction-' . $this->rReceiver;
+			? '/embassy/player-' . $this->rReceiver
+			: '/embassy/faction-' . $this->rReceiver;
 	}
 
 	public function getFormatedReceiverName() {

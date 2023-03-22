@@ -6,14 +6,9 @@ use Asylamba\Classes\Redis\RedisManager;
 
 class SessionWrapper
 {
-	/** @var Session **/
-	protected $currentSession;
-	/** @var RedisManager **/
-	protected $redisManager;
-	
-	/**
-	 * @param RedisManager $redisManager
-	 */
+	protected ?Session $currentSession = null;
+	protected RedisManager $redisManager;
+
 	public function __construct(RedisManager $redisManager)
 	{
 		$this->redisManager = $redisManager;
@@ -24,7 +19,7 @@ class SessionWrapper
 		$this->currentSession = $session;
 	}
 	
-	public function getCurrentSession()
+	public function getCurrentSession(): Session
 	{
 		return $this->currentSession;
 	}
@@ -71,18 +66,18 @@ class SessionWrapper
 		$this->currentSession = null;
 	}
 	
-	public function add($key, $value)
+	public function add($key, $value): void
 	{
 		if ($this->currentSession === null) {
-			return null;
+			return;
 		}
-		return $this->currentSession->add($key, $value);
+		$this->currentSession->add($key, $value);
 	}
 	
-	public function addBase($key, $id, $name, $sector, $system, $img, $type)
+	public function addBase($key, $id, $name, $sector, $system, $img, $type): bool
 	{
 		if ($this->currentSession === null) {
-			return null;
+			return false;
 		}
 		return $this->currentSession->addBase($key, $id, $name, $sector, $system, $img, $type);
 	}
@@ -90,9 +85,9 @@ class SessionWrapper
 	public function addFlashbag($message, $type)
 	{
 		if ($this->currentSession === null) {
-			return null;
+			return;
 		}
-		return $this->currentSession->addFlashbag($message, $type);
+		$this->currentSession->addFlashbag($message, $type);
 	}
 	
 	public function addHistory($path)
@@ -143,15 +138,15 @@ class SessionWrapper
 		return $this->currentSession->exist($key);
 	}
 	
-	public function flushFlashbags()
+	public function flushFlashbags(): void
 	{
 		if ($this->currentSession === null) {
-			return null;
+			return;
 		}
-		return $this->currentSession->flushFlashbags();
+		$this->currentSession->flushFlashbags();
 	}
 	
-	public function getFlashbags()
+	public function getFlashbags(): array
 	{
 		if ($this->currentSession === null) {
 			return [];

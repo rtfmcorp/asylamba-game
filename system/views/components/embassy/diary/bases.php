@@ -7,6 +7,9 @@
 # require
 	# {ob}		ob_diaryBases
 
+$container = $this->getContainer();
+$appRoot = $container->getParameter('app_root');
+
 echo '<div class="component">';
 	echo '<div class="head skin-2">';
 		echo '<h2>Liste des bases</h2>';
@@ -20,7 +23,7 @@ echo '<div class="component">';
 					echo '<span class="label">secteur ' . $ob->getSector() . '</span>';
 
 					echo '<span class="group-link">';
-						echo '<a href="' . APP_ROOT . 'map/place-' . $ob->getId() . '" class="hb lt" title="voir sur la carte">→</a>';
+						echo '<a href="' . $appRoot . 'map/place-' . $ob->getId() . '" class="hb lt" title="voir sur la carte">→</a>';
 					echo '</span>';
 				echo '</div>';
 			}

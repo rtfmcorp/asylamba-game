@@ -1,6 +1,10 @@
 <?php
 
-$session = $this->getContainer()->get('session_wrapper');
+$container = $this->getContainer();
+$session = $this->getContainer()->get(\Asylamba\Classes\Library\Session\SessionWrapper::class);
+$mediaPath = $container->getParameter('media');
+$componentPath = $container->getParameter('component');
+$appRoot = $container->getParameter('app_root');
 
 # background paralax
 echo '<div id="background-paralax" class="profil"></div>';
@@ -12,8 +16,8 @@ include 'inscriptionElement/subnav.php';
 # contenu spécifique
 echo '<div id="content">';
 
-	echo '<form action="' . APP_ROOT . 'inscription/step-3" method="post" >';
-		include COMPONENT . 'invisible.php';
+	echo '<form action="' . $appRoot . 'inscription/step-3" method="post" >';
+		include $componentPath . 'invisible.php';
 		echo '<div class="component inscription color' . $session->get('inscription')->get('ally') . '">';
 			echo '<div class="head">';
 				echo '<h1>Profil</h1>';
@@ -50,7 +54,7 @@ echo '<div id="content">';
 			echo '<div class="fix-body">';
 				echo '<div class="body">';
 					echo '<div class="avatars">';
-						for ($i = 1; $i <= NB_AVATAR; $i++) {
+						for ($i = 1; $i <= $container->getParameter('nb_avatar'); $i++) {
 							if (!in_array($i, array(77, 19))) {
 								$avatar    = $i < 10 ? '00' : '0';
 								$avatar   .= $i . '-' . $session->get('inscription')->get('ally');
@@ -62,11 +66,11 @@ echo '<div id="content">';
 
 						$isLong = FALSE;
 						$cursor = 0;
-						for ($i = 0; $i < (NB_AVATAR - 2); $i++) { 
+						for ($i = 0; $i < ($container->getParameter('nb_avatar') - 2); $i++) {
 							echo '<div class="avatar">';
 								echo '<input type="radio" name="avatar" value="' . $avatars[$i] . '" id="avatar' . $i . '" required />';
 								echo '<label for="avatar' . $i . '">';
-									echo '<img src="' . MEDIA . 'avatar/big/' . $avatars[$i] . '.png" alt="" />';
+									echo '<img src="' . $mediaPath . 'avatar/big/' . $avatars[$i] . '.png" alt="" />';
 								echo '</label>';
 							echo '</div>';
 

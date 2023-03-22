@@ -7,11 +7,11 @@ use Asylamba\Modules\Hermes\Model\ConversationUser;
 use Asylamba\Modules\Hermes\Model\ConversationMessage;
 
 $request = $this->getContainer()->get('app.request');
-$session = $this->getContainer()->get('session_wrapper');
-$database = $this->getContainer()->get('database');
-$parser = $this->getContainer()->get('parser');
-$conversationManager = $this->getContainer()->get('hermes.conversation_manager');
-$conversationMessageManager = $this->getContainer()->get('hermes.conversation_message_manager');
+$session = $this->getContainer()->get(\Asylamba\Classes\Library\Session\SessionWrapper::class);
+$database = $this->getContainer()->get(\Asylamba\Classes\Database\Database::class);
+$parser = $this->getContainer()->get(\Asylamba\Classes\Library\Parser::class);
+$conversationManager = $this->getContainer()->get(\Asylamba\Modules\Hermes\Manager\ConversationManager::class);
+$conversationMessageManager = $this->getContainer()->get(\Asylamba\Modules\Hermes\Manager\ConversationMessageManager::class);
 
 $conversation 	= $request->query->get('conversation');
 $content 		= $request->request->get('content');
@@ -59,7 +59,7 @@ if (!empty($conversation) && !empty($content)) {
 
 				$conversationMessageManager->add($message);
 
-				if (DATA_ANALYSIS) {
+				if (true === $this->getContainer()->getParameter('data_analysis')) {
 					$qr = $database->prepare('INSERT INTO 
 						DA_SocialRelation(`from`, `to`, `type`, `message`, dAction)
 						VALUES(?, ?, ?, ?, ?)'

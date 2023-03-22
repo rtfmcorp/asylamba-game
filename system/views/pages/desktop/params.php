@@ -1,4 +1,6 @@
 <?php
+$container = $this->getContainer();
+$componentPath = $container->getParameter('component');
 # background paralax
 echo '<div id="background-paralax" class="params"></div>';
 
@@ -8,9 +10,9 @@ include 'defaultElement/movers.php';
 
 # contenu spécifique
 echo '<div id="content">';
-	include COMPONENT . 'publicity.php';
-	include COMPONENT . 'params/general.php';
-	include COMPONENT . 'params/display.php';
-	include COMPONENT . 'params/chat.php';
-#	include COMPONENT . 'params/advertisement.php';
+	include $componentPath . 'publicity.php';
+	include $componentPath . 'params/general.php';
+	include $componentPath . 'params/display.php';
+	include $componentPath . 'params/chat.php';
+#	include $componentPath . 'params/advertisement.php';
 echo '</div>';

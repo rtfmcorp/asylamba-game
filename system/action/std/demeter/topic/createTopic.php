@@ -12,11 +12,11 @@ use Asylamba\Modules\Zeus\Resource\TutorialResource;
 use Asylamba\Classes\Exception\FormException;
 
 $request = $this->getContainer()->get('app.request');
-$session = $this->getContainer()->get('session_wrapper');
-$database = $this->getContainer()->get('database');
-$tutorialHelper = $this->getContainer()->get('zeus.tutorial_helper');
-$topicManager = $this->getContainer()->get('demeter.forum_topic_manager');
-$forumMessageManager = $this->getContainer()->get('demeter.forum_message_manager');
+$session = $this->getContainer()->get(\Asylamba\Classes\Library\Session\SessionWrapper::class);
+$database = $this->getContainer()->get(\Asylamba\Classes\Database\Database::class);
+$tutorialHelper = $this->getContainer()->get(\Asylamba\Modules\Zeus\Helper\TutorialHelper::class);
+$topicManager = $this->getContainer()->get(\Asylamba\Modules\Demeter\Manager\Forum\ForumTopicManager::class);
+$forumMessageManager = $this->getContainer()->get(\Asylamba\Modules\Demeter\Manager\Forum\ForumMessageManager::class);
 
 $title = $request->request->get('title');
 $content = $request->request->get('content');
@@ -49,7 +49,7 @@ if ($title !== FALSE AND $content !== FALSE AND $rForum !== FALSE) {
 		$tutorialHelper->setStepDone();
 	}
 
-	if (DATA_ANALYSIS) {
+	if (true === $this->getContainer()->getParameter('data_analysis')) {
 		$qr = $database->prepare('INSERT INTO 
 			DA_SocialRelation(`from`, type, message, dAction)
 			VALUES(?, ?, ?, ?)'

@@ -15,15 +15,10 @@ use Asylamba\Classes\Entity\EntityManager;
 
 use Asylamba\Modules\Gaia\Model\System;
 
-class SystemManager {
-	/** @var EntityManager **/
-	protected $entityManager;
-
-	/**
-	 * @param EntityManager $entityManager
-	 */
-	public function __construct(EntityManager $entityManager) {
-		$this->entityManager = $entityManager;
+class SystemManager
+{
+	public function __construct(protected EntityManager $entityManager)
+	{
 	}
 	
 	/**

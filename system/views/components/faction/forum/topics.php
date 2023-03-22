@@ -7,8 +7,11 @@
 use Asylamba\Modules\Demeter\Resource\ForumResources;
 use Asylamba\Modules\Zeus\Model\Player;
 
+$container = $this->getContainer();
+$appRoot = $container->getParameter('app_root');
+$mediaPath = $container->getParameter('media');
 $request = $this->getContainer()->get('app.request');
-$session = $this->getContainer()->get('session_wrapper');
+$session = $this->getContainer()->get(\Asylamba\Classes\Library\Session\SessionWrapper::class);
 
 # require
 	# int 			forum_topics
@@ -28,20 +31,20 @@ echo '<div class="component report topic nav">';
 	echo '<div class="fix-body">';
 		echo '<div class="body">';
 			if (!$isStandard_topics) {
-				echo '<a href="' . APP_ROOT . 'faction/view-forum/forum-' . $forum_topics . '" class="nav-element">';
-					echo '<img src="' . MEDIA . 'orbitalbase/situation.png" alt="" />';
+				echo '<a href="' . $appRoot . 'faction/view-forum/forum-' . $forum_topics . '" class="nav-element">';
+					echo '<img src="' . $mediaPath . 'orbitalbase/situation.png" alt="" />';
 					echo '<strong>' . ForumResources::getInfo($i, 'name') . '</strong>';
 					echo '<em>' . ForumResources::getInfo($i, 'shortDescription') . '</em>';
 				echo '</a>';
 			}
 
 			if ($archivedMode) {
-				echo '<a class="more-button" href="' . APP_ROOT . 'faction/view-forum/forum-' . $forum_topics . '/">Revenir aux sujets</a>';
+				echo '<a class="more-button" href="' . $appRoot . 'faction/view-forum/forum-' . $forum_topics . '/">Revenir aux sujets</a>';
 			}
 
 			echo '<div class="set-item">';
 				if (!$archivedMode) {
-					echo '<a class="item" href="' . APP_ROOT . 'faction/view-forum/forum-' . $forum_topics . '/mode-create/sftr-2">';
+					echo '<a class="item" href="' . $appRoot . 'faction/view-forum/forum-' . $forum_topics . '/mode-create/sftr-2">';
 						echo '<div class="left">';
 							echo '<span>+</span>';
 						echo '</div>';
@@ -77,7 +80,7 @@ echo '<div class="component report topic nav">';
 							echo '</div>';
 
 							echo '<div class="right">';
-								echo '<a class="' . (($request->query->get('topic') === $t->id)  ? 'active' : NULL) . '" href="' . APP_ROOT . 'faction/view-forum/forum-' . $forum_topics . '/topic-' . $t->id . '/' . ($archivedMode ? 'mode-archived/' : NULL) . 'sftr-2"></a>';
+								echo '<a class="' . (($request->query->get('topic') === $t->id)  ? 'active' : NULL) . '" href="' . $appRoot . 'faction/view-forum/forum-' . $forum_topics . '/topic-' . $t->id . '/' . ($archivedMode ? 'mode-archived/' : NULL) . 'sftr-2"></a>';
 							echo '</div>';
 						echo '</div>';
 					}
@@ -89,7 +92,7 @@ echo '<div class="component report topic nav">';
 			}
 
 			if ($isStandard_topics && !$archivedMode && in_array($session->get('playerInfo')->get('status'), [Player::CHIEF, Player::WARLORD, Player::TREASURER, Player::MINISTER])) {
-				echo '<a class="more-button" href="' . APP_ROOT . 'faction/view-forum/forum-' . $forum_topics . '/mode-archived">Voir les messages archivés</a>';
+				echo '<a class="more-button" href="' . $appRoot . 'faction/view-forum/forum-' . $forum_topics . '/mode-archived">Voir les messages archivés</a>';
 			}
 		echo '</div>';
 		

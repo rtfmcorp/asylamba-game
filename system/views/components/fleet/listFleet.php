@@ -9,7 +9,6 @@
 
 use Asylamba\Modules\Gaia\Resource\PlaceResource;
 use Asylamba\Classes\Library\Format;
-use Asylamba\Classes\Worker\CTR;
 use Asylamba\Classes\Container\Params;
 use Asylamba\Classes\Library\Utils;
 use Asylamba\Modules\Ares\Model\Commander;
@@ -17,9 +16,12 @@ use Asylamba\Modules\Ares\Resource\CommanderResources;
 use Asylamba\Classes\Library\Game;
 use Asylamba\Classes\Library\Chronos;
 
+$container = $this->getContainer();
 $request = $this->getContainer()->get('app.request');
-$session = $this->getContainer()->get('session_wrapper');
+$session = $this->getContainer()->get(\Asylamba\Classes\Library\Session\SessionWrapper::class);
 $sessionToken = $session->get('token');
+$mediaPath = $container->getParameter('media');
+$appRoot = $container->getParameter('app_root');
 
 echo '<div class="component size3 list-fleet">';
 	echo '<div class="head skin-1">';
@@ -31,7 +33,7 @@ echo '<div class="component size3 list-fleet">';
 
 			foreach ($obsets as $base) {
 				echo '<div class="set-fleet">';
-					echo '<img src="' . MEDIA . 'map/place/place' . $base['info']['img'] . '.png" alt="' . $base['info']['name'] . '" class="place" />';
+					echo '<img src="' . $mediaPath . 'map/place/place' . $base['info']['img'] . '.png" alt="' . $base['info']['name'] . '" class="place" />';
 
 					echo '<h2>';
 						echo PlaceResource::get($base['info']['type'], 'name') . ' ';
@@ -47,15 +49,15 @@ echo '<div class="component size3 list-fleet">';
 						echo '<div class="item color' . $commander->playerColor . '">';
 							echo '<div class="left">';
 								if ($commander->rPlayer != $session->get('playerId')) {
-									echo '<img src="' . MEDIA . 'map/action/shield.png" alt="" class="status" />';
+									echo '<img src="' . $mediaPath . 'map/action/shield.png" alt="" class="status" />';
 								} elseif ($commander->statement == Commander::AFFECTED) {
-									echo '<img src="' . MEDIA . 'map/action/anchor.png" alt="" class="status" />';
+									echo '<img src="' . $mediaPath . 'map/action/anchor.png" alt="" class="status" />';
 								} elseif ($commander->statement == Commander::MOVING) {
 									switch ($commander->travelType) {
-										case Commander::MOVE: echo '<img src="' . MEDIA . 'map/action/move.png" alt="" class="status" />'; break;
-										case Commander::LOOT: echo '<img src="' . MEDIA . 'map/action/loot.png" alt="" class="status" />'; break;
-										case Commander::COLO: echo '<img src="' . MEDIA . 'map/action/colo.png" alt="" class="status" />'; break;
-										case Commander::BACK: echo '<img src="' . MEDIA . 'map/action/back.png" alt="" class="status" />'; break;
+										case Commander::MOVE: echo '<img src="' . $mediaPath . 'map/action/move.png" alt="" class="status" />'; break;
+										case Commander::LOOT: echo '<img src="' . $mediaPath . 'map/action/loot.png" alt="" class="status" />'; break;
+										case Commander::COLO: echo '<img src="' . $mediaPath . 'map/action/colo.png" alt="" class="status" />'; break;
+										case Commander::BACK: echo '<img src="' . $mediaPath . 'map/action/back.png" alt="" class="status" />'; break;
 										default: break;
 									}
 								}
@@ -103,35 +105,35 @@ echo '<div class="component size3 list-fleet">';
 									echo '<div class="progress-ship" data-progress-current-time="' . $passeTime . '" data-progress-total-time="' . $totalTime . '" data-progress-reverse="' . ($reversed ? 'true' : 'false') . '">';
 											echo '<div class="bar" style="width: ' . Format::percent($passeTime, $totalTime, FALSE) . '%;">';
 											echo $reversed
-												? '<img src="' . MEDIA . 'map/fleet/ship-reversed.png" alt="" class="ship" />'
-												: '<img src="' . MEDIA . 'map/fleet/ship.png" alt="" class="ship" />';
+												? '<img src="' . $mediaPath . 'map/fleet/ship-reversed.png" alt="" class="ship" />'
+												: '<img src="' . $mediaPath . 'map/fleet/ship.png" alt="" class="ship" />';
 											echo '<span class="time">' . Chronos::secondToFormat($restTime, 'lite') . '</span>';
 										echo '</div>';
 									echo '</div>';
 								} else {
-									echo '<img src="' . MEDIA . 'map/fleet/ship.png" alt="" class="ship" />';
+									echo '<img src="' . $mediaPath . 'map/fleet/ship.png" alt="" class="ship" />';
 								}
 							echo '</div>';
 
 							if ($commander->statement == Commander::MOVING) {
 								echo '<div class="right">';
 									echo $commander->travelType == Commander::BACK
-										? '<img src="' . MEDIA . 'map/place/place1-' . Game::getSizeOfPlanet($commander->startPlacePop) . '.png" alt="" class="cover" />'
-										: '<img src="' . MEDIA . 'map/place/place1-' . Game::getSizeOfPlanet($commander->destinationPlacePop) . '.png" alt="" class="cover" />';
+										? '<img src="' . $mediaPath . 'map/place/place1-' . Game::getSizeOfPlanet($commander->startPlacePop) . '.png" alt="" class="cover" />'
+										: '<img src="' . $mediaPath . 'map/place/place1-' . Game::getSizeOfPlanet($commander->destinationPlacePop) . '.png" alt="" class="cover" />';
 									echo '<span class="top">';
 										echo $reversed
-											? '<a href="' . APP_ROOT . 'map/place-' . $commander->rStartPlace . '">' . $commander->startPlaceName . '</a>'
-											: '<a href="' . APP_ROOT . 'map/place-' . $commander->rDestinationPlace . '">' . $commander->destinationPlaceName . '</a>';
+											? '<a href="' . $appRoot . 'map/place-' . $commander->rStartPlace . '">' . $commander->startPlaceName . '</a>'
+											: '<a href="' . $appRoot . 'map/place-' . $commander->rDestinationPlace . '">' . $commander->destinationPlaceName . '</a>';
 
 										if ($commander->rPlayer != $session->get('playerId')) {
-											echo ' (<a href="' . APP_ROOT . 'embassy/player-' . $commander->rPlayer . '">' . $commander->playerName . '</a>)';
+											echo ' (<a href="' . $appRoot . 'embassy/player-' . $commander->rPlayer . '">' . $commander->playerName . '</a>)';
 										}
 									echo '</span>';
 								echo '</div>';
 							}
 
 							if ($commander->rPlayer == $session->get('playerId')) {
-								echo '<a href="' . APP_ROOT . 'fleet/commander-' . $commander->id . '/sftr-2" class="show-commander ' . ($request->query->has('commander') && $request->query->get('commander') == $commander->id ? 'active' : NULL) . '"></a>';
+								echo '<a href="' . $appRoot . 'fleet/commander-' . $commander->id . '/sftr-2" class="show-commander ' . ($request->query->has('commander') && $request->query->get('commander') == $commander->id ? 'active' : NULL) . '"></a>';
 							}
 						echo '</div>';
 					}

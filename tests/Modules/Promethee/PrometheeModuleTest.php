@@ -11,7 +11,7 @@ class PrometheeModuleTest extends \PHPUnit\Framework\TestCase
 	/** @var PrometheeModule **/
 	protected $module;
 	
-	public function setUp()
+	public function setUp(): void
 	{
 		$this->module = new PrometheeModule($this->getApplicationMock());
 	}

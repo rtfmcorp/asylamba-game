@@ -12,12 +12,14 @@ use Asylamba\Classes\Library\Game;
 use Asylamba\Classes\Library\Format;
 use Asylamba\Modules\Zeus\Model\PlayerBonus;
 
-$orbitalBaseHelper = $this->getContainer()->get('athena.orbital_base_helper');
-$session = $this->getContainer()->get('session_wrapper');
+$container = $this->getContainer();
+$orbitalBaseHelper = $this->getContainer()->get(\Asylamba\Modules\Athena\Helper\OrbitalBaseHelper::class);
+$session = $this->getContainer()->get(\Asylamba\Classes\Library\Session\SessionWrapper::class);
+$mediaPath = $container->getParameter('media');
 
 echo '<div class="component building">';
 	echo '<div class="head skin-1">';
-		echo '<img src="' . MEDIA . 'orbitalbase/refinery.png" alt="" />';
+		echo '<img src="' . $mediaPath . 'orbitalbase/refinery.png" alt="" />';
 		echo '<h2>' . $orbitalBaseHelper->getBuildingInfo(OrbitalBaseResource::REFINERY, 'frenchName') . '</h2>';
 		echo '<em>Niveau ' . $ob_refinery->getLevelRefinery() . '</em>';
 	echo '</div>';
@@ -34,7 +36,7 @@ echo '<div class="component building">';
 					if ($refiningBonus > 0) {
 						echo '<span class="bonus">+' . Format::numberFormat(($production * $refiningBonus / 100)) . '</span>';
 					}
-					echo ' <img alt="ressources" src="' . MEDIA . 'resources/resource.png" class="icon-color">';
+					echo ' <img alt="ressources" src="' . $mediaPath . 'resources/resource.png" class="icon-color">';
 				echo '</span>';
 			echo '</div>';
 
@@ -77,7 +79,7 @@ echo '<div class="component">';
 							if ($refiningBonus > 0) {
 								echo '<span class="bonus">+' . Format::numberFormat(($production * $refiningBonus / 100)) . '</span>';
 							}
-							echo '<img class="icon-color" src="' . MEDIA . 'resources/resource.png" alt="crédits" />';
+							echo '<img class="icon-color" src="' . $mediaPath . 'resources/resource.png" alt="crédits" />';
 						echo '</span>';
 					echo '</li>';
 				}

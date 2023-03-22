@@ -19,47 +19,39 @@ use Asylamba\Modules\Promethee\Helper\TechnologyHelper;
 use Asylamba\Classes\Library\Session\SessionWrapper;
 
 use Asylamba\Modules\Demeter\Resource\ColorResource;
+use Symfony\Contracts\Service\Attribute\Required;
 
 class PlayerBonusManager
 {
-	/** @var LawManager **/
-	protected $lawManager;
-	/** @var ColorManager **/
-	protected $colorManager;
-	/** @var TechnologyManager **/
-	protected $technologyManager;
-	/** @var TechnologyHelper **/
-	protected $technologyHelper;
-	/** @var SessionWrapper **/
-	protected $sessionWrapper;
-	
-	/**
-	 * @param LawManager $lawManager
-	 * @param ColorManager $colorManager
-	 * @param TechnologyManager $technologyManager
-	 * @param TechnologyHelper $technologyHelper
-	 * @param SessionWrapper $session
-	 */
+	protected ColorManager $colorManager;
+	protected TechnologyHelper $technologyHelper;
+	protected TechnologyManager $technologyManager;
+
 	public function __construct(
-		LawManager $lawManager,
-		ColorManager $colorManager,
-		TechnologyManager $technologyManager,
-		TechnologyHelper $technologyHelper,
-		SessionWrapper $session
-	)
+		protected LawManager $lawManager,
+		protected SessionWrapper $sessionWrapper
+	) {
+	}
+
+	#[Required]
+	public function setColorManager(ColorManager $colorManager): void
 	{
-		$this->lawManager = $lawManager;
 		$this->colorManager = $colorManager;
-		$this->technologyManager = $technologyManager;
+	}
+
+	#[Required]
+	public function setTechnologyHelper(TechnologyHelper $technologyHelper): void
+	{
 		$this->technologyHelper = $technologyHelper;
-		$this->sessionWrapper = $session;
+	}
+
+	#[Required]
+	public function setTechnologyManager(TechnologyManager $technologyManager): void
+	{
+		$this->technologyManager = $technologyManager;
 	}
 	
-	/**
-	 * @param Player $player
-	 * @return PlayerBonus
-	 */
-	public function getBonusByPlayer(Player $player)
+	public function getBonusByPlayer(Player $player): PlayerBonus
 	{
 		$playerBonus = new PlayerBonus();
 		$playerBonus->rPlayer = $player->id;

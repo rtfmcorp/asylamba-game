@@ -2,7 +2,6 @@
 
 namespace Asylamba\Classes\EventListener;
 
-use Asylamba\Classes\Logger\AbstractLogger;
 use Asylamba\Classes\Library\Session\SessionWrapper;
 use Asylamba\Classes\Library\Flashbag;
 
@@ -14,31 +13,20 @@ use Asylamba\Classes\Event\ErrorEvent;
 use Asylamba\Classes\Exception\FormException;
 
 use Asylamba\Classes\Database\Database;
+use Psr\Log\LoggerInterface;
+use Psr\Log\LogLevel;
 
-class ExceptionListener {
-	/** @var AbstractLogger **/
-	protected $logger;
-	/** @var SessionWrapper **/
-	protected $sessionWrapper;
-	/** @var Database **/
-	protected $connection;
-	
-	/**
-	 * @param AbstractLogger $logger
-	 * @param Session $session
-	 * @param Database $database
-	 */
-	public function __construct(AbstractLogger $logger, SessionWrapper $session, Database $database)
-	{
-		$this->logger = $logger;
-		$this->sessionWrapper = $session;
-		$this->database = $database;
+class ExceptionListener
+{
+	public function __construct(
+		protected LoggerInterface $logger,
+		protected SessionWrapper $sessionWrapper,
+		protected Database $database,
+		protected string $templatePath,
+	) {
 	}
-	
-	/**
-	 * @param ExceptionEvent $event
-	 */
-	public function onCoreException(ExceptionEvent $event)
+
+	public function onCoreException(ExceptionEvent $event): void
 	{
 		$exception = $event->getException();
 		$this->process(
@@ -47,16 +35,13 @@ class ExceptionListener {
 			$exception->getFile(),
 			$exception->getLine(),
 			($exception instanceof FormException) ? '' : $exception->getTraceAsString(),
-			AbstractLogger::LOG_LEVEL_ERROR,
+			LogLevel::ERROR,
 			($exception instanceof FormException) ? Flashbag::TYPE_FORM_ERROR : Flashbag::TYPE_STD_ERROR,
 			($exception instanceof FormException) ? $exception->getRedirect() : null
 		);
 	}
-	
-	/**
-	 * @param ErrorEvent $event
-	 */
-	public function onCoreError(ErrorEvent $event)
+
+	public function onCoreError(ErrorEvent $event): void
 	{
 		$error = $event->getError();
 		$this->process(
@@ -65,7 +50,7 @@ class ExceptionListener {
 			$error->getFile(),
 			$error->getLine(),
 			$error->getTraceAsString(),
-			AbstractLogger::LOG_LEVEL_CRITICAL,
+			LogLevel::CRITICAL,
 			Flashbag::TYPE_BUG_ERROR
 		);
 	}
@@ -82,7 +67,7 @@ class ExceptionListener {
 	public function process($event, $message, $file, $line, $trace, $level, $flashbagLevel, $redirect = null)
 	{
 		$request = $event->getRequest();
-		$this->logger->log(json_encode([
+		$this->logger->log($level, $message, [
 			'request' => [
 				'method' => $request->getMethod(),
 				'path' => $request->getPath(),
@@ -91,10 +76,9 @@ class ExceptionListener {
 			'session' => [
 				'player_id' => $this->sessionWrapper->get('playerId')
 			],
-			'message' => $message,
 			'file' => $file,
 			'line' => $line
-		]), $level);
+		]);
 		
 		$this->sessionWrapper->addFlashbag($message, $flashbagLevel);
 		
@@ -114,10 +98,9 @@ class ExceptionListener {
 	}
 	
 	/**
-	 * @param Request $request
-	 * @return string
+	 * @return array<string, string>
 	 */
-	public function getRedirection(Request $request, $redirect = null)
+	public function getRedirection(Request $request, string $redirect = null): array
 	{
 		if ($redirect !== null) {
 			return ['redirect' => $redirect];
@@ -135,7 +118,7 @@ class ExceptionListener {
 		// In this case, it means the user is in an error loop
 		if ($nbPaths > 3 && $redirect === $history[$nbPaths - 4]) {
 			return [
-				'template' => TEMPLATE . 'fatal.php'
+				'template' => $this->templatePath . 'fatal.php'
 			];
 		}
 		return ['redirect' => $redirect];

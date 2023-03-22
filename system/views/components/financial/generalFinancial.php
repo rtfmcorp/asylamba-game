@@ -11,7 +11,9 @@
 
 use Asylamba\Classes\Library\Format;
 
-$sessionToken = $this->getContainer()->get('session_wrapper')->get('token');
+$container = $this->getContainer();
+$mediaPath = $container->getParameter('media');
+$sessionToken = $this->getContainer()->get(\Asylamba\Classes\Library\Session\SessionWrapper::class)->get('token');
 
 echo '<div class="component size2 financial">';
 	echo '<div class="head">';
@@ -29,7 +31,7 @@ echo '<div class="component size2 financial">';
 							if ($taxBonus > 0) {
 								echo '<span class="bonus">+' . Format::numberFormat($financial_totalTaxInBonus) . '</span>';
 							}
-							echo '<img class="icon-color" src="' . MEDIA . 'resources/credit.png" alt="crédits" />';
+							echo '<img class="icon-color" src="' . $mediaPath . 'resources/credit.png" alt="crédits" />';
 						'</span>';
 					echo '</li>';
 					echo '<li>';
@@ -39,7 +41,7 @@ echo '<div class="component size2 financial">';
 							if ($rcBonus > 0) {
 								echo '<span class="bonus">+' . Format::numberFormat($financial_totalRouteIncomeBonus) . '</span>';
 							}
-							echo '<img class="icon-color" src="' . MEDIA . 'resources/credit.png" alt="crédits" />';
+							echo '<img class="icon-color" src="' . $mediaPath . 'resources/credit.png" alt="crédits" />';
 						echo '</span>';
 					echo '</li>';
 					echo '<li class="empty"></li>';
@@ -49,7 +51,7 @@ echo '<div class="component size2 financial">';
 						echo '<span class="label">total des recettes</span>';
 						echo '<span class="value">';
 							echo Format::numberFormat($financial_totalIncome);
-							echo '<img class="icon-color" src="' . MEDIA . 'resources/credit.png" alt="crédits" />';
+							echo '<img class="icon-color" src="' . $mediaPath . 'resources/credit.png" alt="crédits" />';
 						echo '</span>';
 					echo '</li>';
 					if ($financial_benefice < 0) {
@@ -57,7 +59,7 @@ echo '<div class="component size2 financial">';
 							echo '<span class="label">perte</span>';
 							echo '<span class="value">';
 								echo Format::numberFormat(abs($financial_benefice));
-								echo '<img class="icon-color" src="' . MEDIA . 'resources/credit.png" alt="crédits" />';
+								echo '<img class="icon-color" src="' . $mediaPath . 'resources/credit.png" alt="crédits" />';
 							echo '</span>';
 						echo '</li>';
 					}
@@ -71,7 +73,7 @@ echo '<div class="component size2 financial">';
 						echo '<span class="label">investissements planétaires</span>';
 						echo '<span class="value">';
 							echo Format::numberFormat($financial_totalInvest);
-							echo '<img class="icon-color" src="' . MEDIA . 'resources/credit.png" alt="crédits" />';
+							echo '<img class="icon-color" src="' . $mediaPath . 'resources/credit.png" alt="crédits" />';
 						echo '</span>';
 					echo '</li>';
 					echo '<li>';
@@ -81,7 +83,7 @@ echo '<div class="component size2 financial">';
 						echo '<span class="label">investissements universitaires</span>';
 						echo '<span class="value">';
 							echo Format::numberFormat($financial_totalInvestUni);
-							echo '<img class="icon-color" src="' . MEDIA . 'resources/credit.png" alt="crédits" />';
+							echo '<img class="icon-color" src="' . $mediaPath . 'resources/credit.png" alt="crédits" />';
 						echo '</span>';
 
 						echo '<form action="' . Format::actionBuilder('updateuniinvest', $sessionToken) . '" method="POST" id="invest-uni">';
@@ -95,7 +97,7 @@ echo '<div class="component size2 financial">';
 						echo '<span class="label">salaire des commandants</span>';
 						echo '<span class="value">';
 							echo Format::numberFormat($financial_totalFleetFees);
-							echo '<img class="icon-color" src="' . MEDIA . 'resources/credit.png" alt="crédits" />';
+							echo '<img class="icon-color" src="' . $mediaPath . 'resources/credit.png" alt="crédits" />';
 						echo '</span>';
 					echo '</li>';
 					# TODO
@@ -103,21 +105,21 @@ echo '<div class="component size2 financial">';
 						echo '<span class="label">entretien des vaisseaux</span>';
 						echo '<span class="value">';
 							echo Format::numberFormat($financial_totalShipsFees);
-							echo '<img class="icon-color" src="' . MEDIA . 'resources/credit.png" alt="crédits" />';
+							echo '<img class="icon-color" src="' . $mediaPath . 'resources/credit.png" alt="crédits" />';
 						echo '</span>';
 					echo '</li>';
 					echo '<li>';
 						echo '<span class="label">redevances aux factions</span>';
 						echo '<span class="value">';
 							echo Format::numberFormat($financial_totalTaxOut);
-							echo '<img class="icon-color" src="' . MEDIA . 'resources/credit.png" alt="crédits" />';
+							echo '<img class="icon-color" src="' . $mediaPath . 'resources/credit.png" alt="crédits" />';
 						echo '</span>';
 					echo '</li>';
 					echo '<li class="strong">';
 						echo '<span class="label">total des charges</span>';
 						echo '<span class="value">';
 							echo Format::numberFormat($financial_totalFess);
-							echo '<img class="icon-color" src="' . MEDIA . 'resources/credit.png" alt="crédits" />';
+							echo '<img class="icon-color" src="' . $mediaPath . 'resources/credit.png" alt="crédits" />';
 						echo '</span>';
 					echo '</li>';
 					if ($financial_benefice >= 0) {
@@ -125,7 +127,7 @@ echo '<div class="component size2 financial">';
 							echo '<span class="label">bénéfice</span>';
 							echo '<span class="value">';
 								echo Format::numberFormat(abs($financial_benefice));
-								echo '<img class="icon-color" src="' . MEDIA . 'resources/credit.png" alt="crédits" />';
+								echo '<img class="icon-color" src="' . $mediaPath . 'resources/credit.png" alt="crédits" />';
 							echo '</span>';
 						echo '</li>';
 					}
@@ -139,21 +141,21 @@ echo '<div class="component size2 financial">';
 						echo '<span class="label">crédits en possession</span>';
 						echo '<span class="value">';
 							echo Format::numberFormat($financial_credit);
-							echo '<img class="icon-color" src="' . MEDIA . 'resources/credit.png" alt="crédits" />';
+							echo '<img class="icon-color" src="' . $mediaPath . 'resources/credit.png" alt="crédits" />';
 						echo '</span>';
 					echo '</li>';
 					echo '<li>';
 						echo '<span class="label">bénéfice</span>';
 						echo '<span class="value">';
 							echo Format::numberFormat($financial_benefice);
-							echo '<img class="icon-color" src="' . MEDIA . 'resources/credit.png" alt="crédits" />';
+							echo '<img class="icon-color" src="' . $mediaPath . 'resources/credit.png" alt="crédits" />';
 						echo '</span>';
 					echo '</li>';
 					echo '<li class="strong">';
 						echo '<span class="label">prévision à la prochaine relève</span>';
 						echo '<span class="value">';
 							echo Format::numberFormat($financial_remains);
-							echo '<img class="icon-color" src="' . MEDIA . 'resources/credit.png" alt="crédits" />';
+							echo '<img class="icon-color" src="' . $mediaPath . 'resources/credit.png" alt="crédits" />';
 						echo '</span>';
 					echo '</li>';
 				echo '</ul>';

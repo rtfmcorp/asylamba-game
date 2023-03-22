@@ -11,37 +11,32 @@
 namespace Asylamba\Modules\Promethee\Manager;
 
 use Asylamba\Classes\Entity\EntityManager;
+use Asylamba\Classes\Library\DateTimeConverter;
+use Asylamba\Modules\Promethee\Message\TechnologyQueueMessage;
 use Asylamba\Modules\Promethee\Model\TechnologyQueue;
-use Asylamba\Classes\Scheduler\RealTimeActionScheduler;
+use Symfony\Component\Messenger\MessageBusInterface;
 
 class TechnologyQueueManager
 {
-	/** @var EntityManager **/
-	protected $entityManager;
-	/** @var RealTimeActionScheduler **/
-	protected $realtimeActionScheduler;
-
-	/**
-	 * @param EntityManager $entityManager
-	 * @param RealTimeActionScheduler $realtimeActionScheduler
-	 */
-	public function __construct(EntityManager $entityManager, RealTimeActionScheduler $realtimeActionScheduler)
-	{
-		$this->entityManager = $entityManager;
-		$this->realtimeActionScheduler = $realtimeActionScheduler;
+	public function __construct(
+		protected EntityManager $entityManager,
+		protected MessageBusInterface $messageBus
+	) {
 	}
 	
 	public function scheduleQueues()
 	{
 		$queues = $this->entityManager->getRepository(TechnologyQueue::class)->getAll();
-		
+
+		/** @var TechnologyQueue $queue */
 		foreach ($queues as $queue) {
-			$this->realtimeActionScheduler->schedule('athena.orbital_base_manager', 'uTechnologyQueue', $queue, $queue->getEndedAt());
+			$this->messageBus->dispatch(
+				new TechnologyQueueMessage($queue->getId()),
+				[DateTimeConverter::to_delay_stamp($queue->getEndedAt())],
+			);
 		}
 	}
-	
-	
-	
+
 	/**
 	 * @param int $id
 	 * @return TechnologyQueue
@@ -61,40 +56,31 @@ class TechnologyQueueManager
 		return $this->entityManager->getRepository(TechnologyQueue::class)->getPlayerTechnologyQueue($playerId, $technology);
 	}
 	
-	/**
-	 * @param int $placeId
-	 * @return array
-	 */
-	public function getPlaceQueues($placeId)
+	public function getPlaceQueues(int $placeId)
 	{
 		return $this->entityManager->getRepository(TechnologyQueue::class)->getPlaceQueues($placeId);
 	}
 	
-	/**
-	 * @param int $playerId
-	 * @return array
-	 */
-	public function getPlayerQueues($playerId)
+	public function getPlayerQueues(int $playerId): array
 	{
 		return $this->entityManager->getRepository(TechnologyQueue::class)->getPlayerQueues($playerId);
 	}
 
-	/**
-	 * @param TechnologyQueue $technologyQueue
-	 */
-	public function add(TechnologyQueue $technologyQueue) {
+	public function add(TechnologyQueue $technologyQueue): void
+	{
 		$this->entityManager->persist($technologyQueue);
 		$this->entityManager->flush($technologyQueue);
-		
-		$this->realtimeActionScheduler->schedule('athena.orbital_base_manager', 'uTechnologyQueue', $technologyQueue, $technologyQueue->getEndedAt());
+
+		$this->messageBus->dispatch(
+			new TechnologyQueueMessage($technologyQueue->getId()),
+			[DateTimeConverter::to_delay_stamp($technologyQueue->getEndedAt())]
+		);
 	}
 	
-	/**
-	 * @param TechnologyQueue $queue
-	 */
-	public function remove(TechnologyQueue $queue)
+	public function remove(TechnologyQueue $queue): void
 	{
-		$this->realtimeActionScheduler->cancel($queue, $queue->getEndedAt());
+		// @TODO handle cancellations
+		// $this->realtimeActionScheduler->cancel($queue, $queue->getEndedAt());
 		
 		$this->entityManager->remove($queue);
 		$this->entityManager->flush($queue);

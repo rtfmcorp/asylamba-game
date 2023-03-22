@@ -4,8 +4,11 @@ use Asylamba\Classes\Library\Chronos;
 use Asylamba\Modules\Hermes\Model\Conversation;
 use Asylamba\Modules\Hermes\Model\ConversationUser;
 
-$conversationManager = $this->getContainer()->get('hermes.conversation_manager');
-$session = $this->getContainer()->get('session_wrapper');
+$container = $this->getContainer();
+$appRoot = $container->getParameter('app_root');
+$mediaPath = $container->getParameter('media');
+$conversationManager = $this->getContainer()->get(\Asylamba\Modules\Hermes\Manager\ConversationManager::class);
+$session = $this->getContainer()->get(\Asylamba\Classes\Library\Session\SessionWrapper::class);
 
 if (!$conversation_listmode) {
 	echo '<div class="component">';
@@ -13,7 +16,7 @@ if (!$conversation_listmode) {
 		echo '<div class="fix-body">';
 			echo '<div class="body">';
 				echo '<div class="set-item">';
-					echo '<a class="item" href="' . APP_ROOT . 'message/conversation-new">';
+					echo '<a class="item" href="' . $appRoot . 'message/conversation-new">';
 						echo '<div class="left">';
 							echo '<span>+</span>';
 						echo '</div>';
@@ -66,12 +69,12 @@ for ($i = 0; $i < $conversationManager->size(); $i++) {
 		$convName[count($convName) - 1] .= ' et <strong>' . $restPlayer . '+</strong>';
 	}
 
-	echo '<a class="conv-item" href="' . APP_ROOT . 'message/mode-' . $display . '/conversation-' . $conv->id . '">';
+	echo '<a class="conv-item" href="' . $appRoot . 'message/mode-' . $display . '/conversation-' . $conv->id . '">';
 		echo '<span class="cover">';
-			echo '<img src="' . MEDIA . 'avatar/small/' . $convAvatar . '.png" alt="" class="picture color' . $convColor . '" />';
+			echo '<img src="' . $mediaPath . 'avatar/small/' . $convAvatar . '.png" alt="" class="picture color' . $convColor . '" />';
 			echo '<span class="number">' . $conv->messages . '</span>';
 			if (strtotime($ownLastView) < strtotime($conv->dLastMessage)) {
-				echo '<span class="new-message"><img src="' . MEDIA . 'common/nav-message.png" alt="" /></span>';
+				echo '<span class="new-message"><img src="' . $mediaPath . 'common/nav-message.png" alt="" /></span>';
 			}
 		echo '</span>';
 
@@ -85,15 +88,15 @@ for ($i = 0; $i < $conversationManager->size(); $i++) {
 }
 
 if ($conversationManager->size() == Conversation::CONVERSATION_BY_PAGE) {
-	echo '<a class="more-item" href="' . APP_ROOT . 'ajax/a-moreconversation/mode-' . $display . '/page-' . (isset($page) ? ($page + 1) : 2) . '">';
+	echo '<a class="more-item" href="' . $appRoot . 'ajax/a-moreconversation/mode-' . $display . '/page-' . (isset($page) ? ($page + 1) : 2) . '">';
 		echo 'Afficher plus de conversations';
 	echo '</a>';
 }
 
 if (!$conversation_listmode) {
 		echo $display == ConversationUser::CS_ARCHIVED
-			? '<a class="common-link" href="' . APP_ROOT . 'message">Retour aux conversations</a>'
-			: '<a class="common-link" href="' . APP_ROOT . 'message/mode-' . ConversationUser::CS_ARCHIVED . '">Voir les conversations archivées</a>';
+			? '<a class="common-link" href="' . $appRoot . 'message">Retour aux conversations</a>'
+			: '<a class="common-link" href="' . $appRoot . 'message/mode-' . ConversationUser::CS_ARCHIVED . '">Voir les conversations archivées</a>';
 			echo '</div>';
 		echo '</div>';
 	echo '</div>';

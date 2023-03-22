@@ -3,7 +3,7 @@
 
 use Asylamba\Classes\Library\Format;
 
-$playerManager = $this->getContainer()->get('zeus.player_manager');
+$playerManager = $this->getContainer()->get(\Asylamba\Modules\Zeus\Manager\PlayerManager::class);
 
 echo '<div class="component player rank">';
 	echo '<div class="head"></div>';

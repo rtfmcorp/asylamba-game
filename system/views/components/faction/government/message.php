@@ -3,7 +3,7 @@
 use Asylamba\Classes\Library\Format;
 use Asylamba\Classes\Library\Parser;
 
-$sessionToken = $this->getContainer()->get('session_wrapper')->get('token');
+$sessionToken = $this->getContainer()->get(\Asylamba\Classes\Library\Session\SessionWrapper::class)->get('token');
 
 echo '<div class="component new-message size2">';
 	echo '<div class="head"></div>';
@@ -17,7 +17,7 @@ echo '<div class="component new-message size2">';
 				echo '</p>';
 				echo '<p class="input input-area">';
 					echo '<span class="wysiwyg" data-id="new-message-wysiwyg">';
-						echo $this->getContainer()->get('parser')->getToolbar();
+						echo $this->getContainer()->get(\Asylamba\Classes\Library\Parser::class)->getToolbar();
 						echo '<textarea name="message" id="new-message-wysiwyg"></textarea>';
 					echo '</span>';
 				echo '</p>';

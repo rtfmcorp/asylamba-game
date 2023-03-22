@@ -6,10 +6,13 @@ use Asylamba\Classes\Library\Chronos;
 use Asylamba\Classes\Library\Format;
 use Asylamba\Modules\Demeter\Resource\ColorResource;
 
-$conversationManager = $this->getContainer()->get('hermes.conversation_manager');
-$conversationMessageManager = $this->getContainer()->get('hermes.conversation_message_manager');
-$parser = $this->getContainer()->get('parser');
-$session = $this->getContainer()->get('session_wrapper');
+$container = $this->getContainer();
+$appRoot = $container->getParameter('app_root');
+$mediaPath = $container->getParameter('media');
+$conversationManager = $this->getContainer()->get(\Asylamba\Modules\Hermes\Manager\ConversationManager::class);
+$conversationMessageManager = $this->getContainer()->get(\Asylamba\Modules\Hermes\Manager\ConversationMessageManager::class);
+$parser = $this->getContainer()->get(\Asylamba\Classes\Library\Parser::class);
+$session = $this->getContainer()->get(\Asylamba\Classes\Library\Session\SessionWrapper::class);
 $sessionToken = $session->get('token');
 
 if (!$message_listmode) {
@@ -23,7 +26,7 @@ if (!$message_listmode) {
 			echo '<div class="body">';
 				if ($conversationManager->get()->type != Conversation::TY_SYSTEM) {
 					echo '<div class="message write">';
-						echo '<img src="' . MEDIA . 'avatar/small/' . $session->get('playerInfo')->get('avatar') . '.png" alt="' . $session->get('playerInfo')->get('pseudo') . '" class="avatar" />';
+						echo '<img src="' . $mediaPath . 'avatar/small/' . $session->get('playerInfo')->get('avatar') . '.png" alt="' . $session->get('playerInfo')->get('pseudo') . '" class="avatar" />';
 						echo '<div class="content">';
 							echo '<form action="' . Format::actionBuilder('writeconversation', $sessionToken, ['conversation' => $conversationManager->get()->id]) . '" method="post">';
 								echo '<div class="wysiwyg" data-id="new-message">';
@@ -52,7 +55,7 @@ for ($i = 0; $i < $conversationMessageManager->size(); $i++) {
 
 	if ($m->type == ConversationMessage::TY_STD) {
 		echo '<div class="message">';
-			echo '<a href="' . APP_ROOT . 'embassy/player-' . $m->rPlayer . '"><img src="' . MEDIA . 'avatar/medium/' . $m->playerAvatar . '.png" alt="' . $m->playerName . '" class="avatar" /></a>';
+			echo '<a href="' . $appRoot . 'embassy/player-' . $m->rPlayer . '"><img src="' . $mediaPath . 'avatar/medium/' . $m->playerAvatar . '.png" alt="' . $m->playerName . '" class="avatar" /></a>';
 			echo '<div class="content">';
 				echo '<p class="text">';
 					echo $m->content;
@@ -71,7 +74,7 @@ for ($i = 0; $i < $conversationMessageManager->size(); $i++) {
 }
 
 if ($conversationMessageManager->size() == ConversationMessage::MESSAGE_BY_PAGE) {
-	echo '<a class="more-item" href="' . APP_ROOT . 'ajax/a-moremessage/conversation-' . $conversationManager->get()->id . '/page-' . (isset($page) ? ($page + 1) : 2) . '">';
+	echo '<a class="more-item" href="' . $appRoot . 'ajax/a-moremessage/conversation-' . $conversationManager->get()->id . '/page-' . (isset($page) ? ($page + 1) : 2) . '">';
 		echo 'Afficher les messages précédents';
 	echo '</a>';
 }

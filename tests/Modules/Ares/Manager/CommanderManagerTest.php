@@ -13,7 +13,7 @@ class CommanderManagerTest extends \PHPUnit\Framework\TestCase
 {
     protected $manager;
     
-    public function setUp()
+    public function setUp(): void
     {
         $this->manager = new CommanderManager(
             $this->getEntityManagerMock(),

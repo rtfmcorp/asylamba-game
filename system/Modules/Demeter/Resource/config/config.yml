@@ -1,55 +1,17 @@
 ---
 services:
-    demeter.candidate_manager:
-        class: Asylamba\Modules\Demeter\Manager\Election\CandidateManager
-        arguments:
-            - "@entity_manager"
-    demeter.election_manager:
-        class: Asylamba\Modules\Demeter\Manager\Election\ElectionManager
-        arguments:
-            - "@entity_manager"
-    demeter.vote_manager:
-        class: Asylamba\Modules\Demeter\Manager\Election\VoteManager
-        arguments:
-            - "@entity_manager"
-    demeter.faction_news_manager:
-        class: Asylamba\Modules\Demeter\Manager\Forum\FactionNewsManager
-        arguments:
-            - "@entity_manager"
-            - "@parser"
-    demeter.forum_message_manager:
-        class: Asylamba\Modules\Demeter\Manager\Forum\ForumMessageManager
-        arguments:
-            - "@database"
-            - "@parser"
-    demeter.forum_topic_manager:
-        class: Asylamba\Modules\Demeter\Manager\Forum\ForumTopicManager
-        arguments:
-            - "@database"
-    demeter.law_manager:
-        class: Asylamba\Modules\Demeter\Manager\Law\LawManager
-        arguments:
-            - "@entity_manager"
-            - "@demeter.vote_law_manager"
-    demeter.vote_law_manager:
-        class: Asylamba\Modules\Demeter\Manager\Law\VoteLawManager
-        arguments:
-            - "@entity_manager"
-    demeter.color_manager:
-        class: Asylamba\Modules\Demeter\Manager\ColorManager
-        arguments:
-            - "@entity_manager"
-            - "@zeus.player_manager"
-            - "@demeter.vote_manager"
-            - "@hermes.conversation_manager"
-            - "@demeter.candidate_manager"
-            - "@demeter.election_manager"
-            - "@demeter.law_manager"
-            - "@hermes.notification_manager"
-            - "@hermes.conversation_message_manager"
-            - "@athena.commercial_tax_manager"
-            - "@gaia.sector_manager"
-            - "@athena.commercial_route_manager"
-            - "@parser"
-            - "@ctc"
-            - "@realtime_action_scheduler"
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: true
+
+    _instanceof:
+        Symfony\Component\Messenger\Handler\MessageHandlerInterface:
+            tags:
+                - { name: 'messenger.message_handler', bus: 'messenger.default_bus' }
+
+    Asylamba\Modules\Demeter\Handler\:
+        resource: '%root_path%/system/Modules/Demeter/Handler/*'
+
+    Asylamba\Modules\Demeter\Manager\:
+        resource: '%root_path%/system/Modules/Demeter/Manager/*'

@@ -4,8 +4,11 @@ use Asylamba\Classes\Library\Format;
 use Asylamba\Modules\Demeter\Resource\ColorResource;
 use Asylamba\Modules\Zeus\Model\CreditTransaction;
 
-$creditTransactionManager = $this->getContainer()->get('zeus.credit_transaction_manager');
-$session = $this->getContainer()->get('session_wrapper');
+$container = $this->getContainer();
+$appRoot = $container->getParameter('app_root');
+$mediaPath = $container->getParameter('media');
+$creditTransactionManager = $this->getContainer()->get(\Asylamba\Modules\Zeus\Manager\CreditTransactionManager::class);
+$session = $this->getContainer()->get(\Asylamba\Classes\Library\Session\SessionWrapper::class);
 
 # load
 $S_CRT_1 = $creditTransactionManager->getCurrentSession();
@@ -27,8 +30,8 @@ echo '<div class="component player rank">';
 				$transaction = $creditTransactionManager->get($i);
 
 				echo '<div class="player color' . $transaction->senderColor . '">';
-					echo '<a href="' . APP_ROOT . 'embassy/player-' . $transaction->rSender . '">';
-						echo '<img src="' . MEDIA . 'avatar/small/' . $transaction->senderAvatar . '.png" alt="' . $transaction->senderName . '" class="picto" />';
+					echo '<a href="' . $appRoot . 'embassy/player-' . $transaction->rSender . '">';
+						echo '<img src="' . $mediaPath . 'avatar/small/' . $transaction->senderAvatar . '.png" alt="' . $transaction->senderName . '" class="picto" />';
 					echo '</a>';
 
 					$status = ColorResource::getInfo($transaction->senderColor, 'status');

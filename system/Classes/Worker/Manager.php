@@ -11,17 +11,13 @@ abstract class Manager {
     /** @var string **/
     protected $managerType = '_Main';
     protected $currentSession;
-    /** @var array **/
-    protected $sessions = array();
-	/** @var Database **/
-	protected $database;
-	
+    protected array $sessions = [];
+
 	/**
 	 * @param Database $database
 	 */
-	public function __construct(Database $database)
+	public function __construct(protected Database $database)
 	{
-		$this->database = $database;
         $this->newSession();
     }
 

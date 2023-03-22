@@ -43,111 +43,45 @@ use Asylamba\Classes\Library\Game;
 use Asylamba\Classes\Container\ArrayList;
 
 use Asylamba\Classes\Exception\ErrorException;
+use Symfony\Contracts\Service\Attribute\Required;
 
-class PlayerManager {
-	/** @var EntityManager **/
-	protected $entityManager;
-	/** @var GalaxyColorManager **/
-	protected $galaxyColorManager;
-	/** @var SectorManager */
-	protected $sectorManager;
-	/** @var NotificationManager **/
-	protected $notificationManager;
-	/** @var OrbitalBaseManager **/
-	protected $orbitalBaseManager;
-	/** @var PlaceManager **/
-	protected $placeManager;
-	/** @var CommanderManager **/
-	protected $commanderManager;
-	/** @var ColorManager **/
-	protected $colorManager;
-	/** @var ResearchManager **/
-	protected $researchManager;
-	/** @var TransactionManager **/
-	protected $transactionManager;
-	/** @var CommercialRouteManager **/
-	protected $commercialRouteManager;
-	/** @var TechnologyManager **/
-	protected $technologyManager;
-	/** @var PlayerBonusManager **/
-	protected $playerBonusManager;
-	/** @var SessionWrapper **/
-	protected $sessionWrapper;
-	/** @var API **/
-	protected $api;
-	/** @var int **/
-	protected $playerBaseLevel;
-	/** @var int **/
-	protected $playerTaxCoeff;
-	/** @var string **/
-	protected $serverId;
-	
-	/**
-	 * @param EntityManager $entityManager
-	 * @param GalaxyColorManager $galaxyColorManager
-	 * @param SectorManager $sectorManager
-	 * @param NotificationManager $notificationManager
-	 * @param OrbitalBaseManager $orbitalBaseManager
-	 * @param PlaceManager $placeManager
-	 * @param CommanderManager $commanderManager
-	 * @param ColorManager $colorManager
-	 * @param ResearchManager $researchManager
-	 * @param TransactionManager $transactionManager
-	 * @param CommercialRouteManager $commercialRouteManager
-	 * @param TechnologyManager $technologyManager
-	 * @param PlayerBonusManager $playerBonusManager
-	 * @param SessionWrapper $session
-	 * @param API $api
-	 * @param int $playerBaseLevel
-	 * @param int $playerTaxCoeff
-	 * @param string $serverId
-	 */
+class PlayerManager
+{
+	protected SectorManager $sectorManager;
+	protected ResearchManager $researchManager;
+
 	public function __construct(
-		EntityManager $entityManager,
-		GalaxyColorManager $galaxyColorManager,
-		SectorManager $sectorManager,
-		NotificationManager $notificationManager,
-		OrbitalBaseManager $orbitalBaseManager,
-		PlaceManager $placeManager,
-		CommanderManager $commanderManager,
-		ColorManager $colorManager,
-		ResearchManager $researchManager,
-		TransactionManager $transactionManager,
-		CommercialRouteManager $commercialRouteManager,
-		TechnologyManager $technologyManager,
-		PlayerBonusManager $playerBonusManager,
-		SessionWrapper $session,
-		API $api,
-		$playerBaseLevel,
-		$playerTaxCoeff,
-		$serverId
-	)
-	{
-		$this->entityManager = $entityManager;
-		$this->galaxyColorManager = $galaxyColorManager;
-		$this->sectorManager = $sectorManager;
-		$this->notificationManager = $notificationManager;
-		$this->orbitalBaseManager = $orbitalBaseManager;
-		$this->placeManager = $placeManager;
-		$this->commanderManager = $commanderManager;
-		$this->colorManager = $colorManager;
-		$this->researchManager = $researchManager;
-		$this->transactionManager = $transactionManager;
-		$this->commercialRouteManager = $commercialRouteManager;
-		$this->technologyManager = $technologyManager;
-		$this->playerBonusManager = $playerBonusManager;
-		$this->sessionWrapper = $session;
-		$this->api = $api;
-		$this->playerBaseLevel = $playerBaseLevel;
-		$this->playerTaxCoeff = $playerTaxCoeff;
-		$this->serverId = $serverId;
+		protected EntityManager $entityManager,
+		protected GalaxyColorManager $galaxyColorManager,
+		protected NotificationManager $notificationManager,
+		protected OrbitalBaseManager $orbitalBaseManager,
+		protected PlaceManager $placeManager,
+		protected CommanderManager $commanderManager,
+		protected CommercialRouteManager $commercialRouteManager,
+		protected TechnologyManager $technologyManager,
+		protected PlayerBonusManager $playerBonusManager,
+		protected SessionWrapper $sessionWrapper,
+		protected API $api,
+		protected int $playerBaseLevel,
+		protected int $playerTaxCoeff,
+		protected int $serverId,
+		protected int $gaiaId,
+	) {
 	}
-	
-	/**
-	 * @param int $playerId
-	 * @return Player
-	 */
-	public function get($playerId)
+
+	#[Required]
+	public function setSectorManager(SectorManager $sectorManager): void
+	{
+		$this->sectorManager = $sectorManager;
+	}
+
+	#[Required]
+	public function setResearchManager(ResearchManager $researchManager): void
+	{
+		$this->researchManager = $researchManager;
+	}
+
+	public function get(int $playerId): Player
 	{
 		if(($player = $this->entityManager->getRepository(Player::class)->get($playerId)) !== null) {
 			if ($this->sessionWrapper->get('playerId') === $player->id) {
@@ -158,20 +92,12 @@ class PlayerManager {
 		return $player;
 	}
 	
-	/**
-	 * @param string $name
-	 * @return Player
-	 */
-	public function getByName($name)
+	public function getByName(string $name): ?Player
 	{
 		return $this->entityManager->getRepository(PLayer::class)->getByName($name);
 	}
-	
-	/**
-	 * @param string $bindKey
-	 * @return Player
-	 */
-	public function getByBindKey($bindKey)
+
+	public function getByBindKey(string $bindKey): ?Player
 	{
 		if(($player = $this->entityManager->getRepository(Player::class)->getByBindKey($bindKey)) !== null) {
 			if ($this->sessionWrapper->get('playerId') === $player->id) {
@@ -182,137 +108,77 @@ class PlayerManager {
 		return $player;
 	}
 	
-	/**
-	 * @param int $id
-	 * @return array
-	 */
-	public function getGodSons($id)
+	public function getGodSons(int $id): array
 	{
 		return $this->entityManager->getRepository(Player::class)->getGodSons($id);
 	}
 	
-	/**
-	 * @param array $ids
-	 * @param array $statements
-	 */
-	public function getByIdsAndStatements($ids, $statements)
+	public function getByIdsAndStatements(array $ids, array $statements): array
 	{
 		return $this->entityManager->getRepository(Player::class)->getByIdsAndStatements($ids, $statements);
 	}
 	
-	/**
-	 * @param array $statements
-	 * @return array
-	 */
-	public function getByStatements($statements)
+	public function getByStatements(array $statements): array
 	{
 		return $this->entityManager->getRepository(Player::class)->getByStatements($statements);
 	}
-	
-	/**
-	 * @return int
-	 */
-	public function countActivePlayers()
+
+	public function countActivePlayers(): int
 	{
 		return $this->entityManager->getRepository(Player::class)->countActivePlayers();
 	}
-	
-	/**
-	 * @return int
-	 */
-	public function countAllPlayers()
+
+	public function countAllPlayers(): int
 	{
 		return $this->entityManager->getRepository(Player::class)->countAllPlayers();
 	}
-	
-	/**
-	 * @param int $factionId
-	 * @param array $statements
-	 * @return array
-	 */
-	public function countByFactionAndStatements($factionId, $statements)
+
+	public function countByFactionAndStatements(int $factionId, array $statements): int
 	{
 		return $this->entityManager->getRepository(Player::class)->countByFactionAndStatements($factionId, $statements);
 	}
-	
-	/**
-	 * @param int $factionId
-	 * @return array
-	 */
-	public function getFactionPlayers($factionId)
+
+	public function getFactionPlayers(int $factionId): array
 	{
 		return $this->entityManager->getRepository(Player::class)->getFactionPlayers($factionId);
 	}
-	
-	/**
-	 * @param int $factionId
-	 * @return array
-	 */
-	public function getFactionPlayersByRanking($factionId)
+
+	public function getFactionPlayersByRanking(int $factionId): array
 	{
 		return $this->entityManager->getRepository(Player::class)->getFactionPlayersByRanking($factionId);
 	}
-	
-	/**
-	 * @param int $factionId
-	 * @return array
-	 */
-	public function getFactionPlayersByName($factionId)
+
+	public function getFactionPlayersByName(int $factionId): array
 	{
 		return $this->entityManager->getRepository(Player::class)->getFactionPlayersByName($factionId);
 	}
-	
-	/**
-	 * @param int $factionId
-	 * @return Player
-	 */
-	public function getFactionAccount($factionId)
+
+	public function getFactionAccount(int $factionId): Player
 	{
 		return $this->entityManager->getRepository(Player::class)->getFactionAccount($factionId);
 	}
-	
-	/**
-	 * @param int $factionId
-	 * @return array
-	 */
-	public function getLastFactionPlayers($factionId)
+
+	public function getLastFactionPlayers(int $factionId): array
 	{
 		return $this->entityManager->getRepository(Player::class)->getLastFactionPlayers($factionId);
 	}
 	
-	/**
-	 * @param int $factionId
-	 * @return array
-	 */
-	public function getParliamentMembers($factionId)
+	public function getParliamentMembers(int $factionId): array
 	{
 		return $this->entityManager->getRepository(Player::class)->getParliamentMembers($factionId);
 	}
 	
-	/**
-	 * @param int $factionId
-	 * @param int $status
-	 * @return Player
-	 */
-	public function getGovernmentMember($factionId, $status)
+	public function getGovernmentMember(int $factionId, int $status): array
 	{
 		return $this->entityManager->getRepository(Player::class)->getGovernmentMember($factionId, $status);
 	}
 
-	/**
-	 * @param int $factionId
-	 * @return array
-	 */
-	public function getGovernmentMembers($factionId)
+	public function getGovernmentMembers(int $factionId): array
 	{
 		return $this->entityManager->getRepository(PLayer::class)->getGovernmentMembers($factionId);
 	}
 	
-	/**
-	 * @param int $factionId
-	 * @return Player
-	 */
-	public function getFactionLeader($factionId)
+	public function getFactionLeader(int $factionId): ?Player
 	{
 		if (($leader = $this->entityManager->getRepository(Player::class)->getFactionLeader($factionId)) !== null) {
 			$this->fill($leader);
@@ -320,30 +186,29 @@ class PlayerManager {
 		return $leader;
 	}
 	
-	public function getActivePlayers()
+	public function getActivePlayers(): array
 	{
 		return $this->entityManager->getRepository(Player::class)->getActivePlayers();
 	}
 
-	public function search($search) {
+	public function search(string $search): array
+	{
 		return $this->entityManager->getRepository(Player::class)->search($search);
 	}
 
-	protected function fill(Player $player) {
+	protected function fill(Player $player): void
+	{
 		if ($this->isSynchronized($player)) {
 			$this->saveSessionData($player);
 		}
 	}
 	
-	public function isSynchronized(Player $player)
+	public function isSynchronized(Player $player): bool
 	{
 		return ($player->getId() === $this->sessionWrapper->get('playerId'));
 	}
 	
-	/**
-	 * @param Player $player
-	 */
-	public function saveSessionData(Player $player)
+	public function saveSessionData(Player $player): void
 	{
 		if(!$this->sessionWrapper->exist('playerInfo')) {
 			$this->sessionWrapper->add('playerInfo', new ArrayList());
@@ -356,12 +221,14 @@ class PlayerManager {
 		$this->sessionWrapper->get('playerInfo')->add('level', $player->getLevel());
 	}
 
-	public function add(Player $player) {
+	public function add(Player $player): void
+	{
 		$this->entityManager->persist($player);
 		$this->entityManager->flush($player);
 	}
 
-	public function kill($playerId) {
+	public function kill(int $playerId): void
+	{
 		$player = $this->get($playerId);
 
 		# API call
@@ -386,7 +253,8 @@ class PlayerManager {
 		$this->entityManager->flush();
 	}
 
-	public function reborn($playerId) {
+	public function reborn(int $playerId): void
+	{
 		$player = $this->get($playerId);
 
 		# sector choice 
@@ -478,68 +346,9 @@ class PlayerManager {
 			$this->kill($player);
 		}
 	}
-	
-	public function updatePlayersCredits()
+
+	public function uCredit(Player $player, array $playerBases, PlayerBonus $playerBonus, array $commanders, $rsmSession, &$factions, $transactions): void
 	{
-		$players = $this->getActivePlayers();
-		$factions = $this->colorManager->getAll();
-		$S_RSM1 = $this->researchManager->getCurrentSession();
-		$now = Utils::now();
-		$repository = $this->entityManager->getRepository(Player::class);
-		$this->entityManager->beginTransaction();
-		
-		foreach ($players as $player) {
-			# update time
-			$hours = Utils::intervalDates($now, $player->uPlayer);
-			$nbHours = count($hours);
-			if ($nbHours === 0) {
-				continue;
-			}
-			$player->uPlayer = $now;
-			# load the bonus
-			$playerBonus = $this->playerBonusManager->getBonusByPlayer($player);
-			$this->playerBonusManager->load($playerBonus);
-
-			# load the researches
-			$S_RSM1 = $this->researchManager->getCurrentSession();
-			$this->researchManager->newSession();
-			$this->researchManager->load(array('rPlayer' => $player->id));
-
-			$bases = $this->orbitalBaseManager->getPlayerBases($player->id);
-			$commanders = $this->commanderManager->getPlayerCommanders(
-				$player->id,
-				[Commander::AFFECTED, Commander::MOVING], 
-				['c.experience' => 'DESC', 'c.statement' => 'ASC']
-			);
-			$researchSession = $this->researchManager->getCurrentSession();
-			$transactions = $this->transactionManager->getPlayerPropositions($player->id, Transaction::TYP_SHIP);
-			
-			$initialCredits = $player->credit;
-			
-			for ($i = 0; $i < $nbHours; $i++) {
-				$this->uCredit(
-					$player,
-					$bases,
-					$playerBonus,
-					$commanders,
-					$researchSession,
-					$factions,
-					$transactions
-				);
-			}
-			$repository->updatePlayerCredits(
-				$player,
-				abs($initialCredits - $player->credit),
-				($initialCredits > $player->credit) ? '-' : '+'
-			);
-			$this->entityManager->clear($player);
-		}
-		$this->researchManager->changeSession($S_RSM1);
-		$this->entityManager->flush(Color::class);
-		$this->entityManager->commit();
-	}
-
-	public function uCredit(Player $player, $playerBases, $playerBonus, $commanders, $rsmSession, &$factions, $transactions) {
 		
 		$popTax = 0; $nationTax = 0;
 		$credits = $player->credit;
@@ -657,7 +466,7 @@ class PlayerManager {
 
 			# on vend le commandant
 			$commander->setStatement(Commander::ONSALE);
-			$commander->setRPlayer(ID_GAIA);
+			$commander->setRPlayer($this->gaiaId);
 
 			# TODO : vendre le commandant au marché 
 			#			(ou alors le mettre en statement COM_DESERT et supprimer ses escadrilles)
@@ -713,7 +522,7 @@ class PlayerManager {
 			}
 			# on vend le commandant car on n'arrive pas à payer la flotte (trash hein)
 			$commander->setStatement(Commander::ONSALE);
-			$commander->setRPlayer(ID_GAIA);
+			$commander->setRPlayer($this->gaiaId);
 
 			$n = new Notification();
 			$n->setRPlayer($player->id);

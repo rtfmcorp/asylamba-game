@@ -9,8 +9,10 @@
 
 use Asylamba\Modules\Demeter\Resource\ColorResource;
 
-$playerRankingManager = $this->getContainer()->get('atlas.player_ranking_manager');
+$playerRankingManager = $this->getContainer()->get(\Asylamba\Modules\Atlas\Manager\PlayerRankingManager::class);
 
+$container = $this->getContainer();
+$mediaPath = $container->getParameter('media');
 $playerRankingManager->changeSession($PLAYER_RANKING_FRONT);
 $p = $playerRankingManager->get(0);
 $status = ColorResource::getInfo($p->color, 'status');
@@ -33,7 +35,7 @@ echo '<div class="component profil">';
 
 			echo '<div class="profil-flag color-' . $p->color . '">';
 				echo '<img ';
-					echo 'src="' . MEDIA . '/avatar/big/' . $p->avatar . '.png" ';
+					echo 'src="' . $mediaPath . '/avatar/big/' . $p->avatar . '.png" ';
 					echo 'alt="avatar de ' . $p->name . '" ';
 				echo '/>';
 			echo '</div>';

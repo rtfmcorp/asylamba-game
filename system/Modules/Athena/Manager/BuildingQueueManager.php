@@ -11,76 +11,45 @@
 */
 namespace Asylamba\Modules\Athena\Manager;
 
+use Asylamba\Classes\Library\DateTimeConverter;
+use Asylamba\Modules\Athena\Message\Building\BuildingQueueMessage;
 use Asylamba\Modules\Athena\Model\BuildingQueue;
 use Asylamba\Classes\Entity\EntityManager;
 
-use Asylamba\Classes\Scheduler\RealTimeActionScheduler;
+use Symfony\Component\Messenger\MessageBusInterface;
 
-class BuildingQueueManager {
-	/** @var EntityManager **/
-	protected $entityManager;
-	/** @var RealTimeActionScheduler **/
-	protected $realtimeActionScheduler;
-	
-	/**
-	 * @param EntityManager $entityManager
-	 * @param RealTimeActionScheduler $realtimeActionScheduler
-	 */
-	public function __construct(EntityManager $entityManager, RealTimeActionScheduler $realtimeActionScheduler) {
-		$this->entityManager = $entityManager;
-		$this->realtimeActionScheduler = $realtimeActionScheduler;
+class BuildingQueueManager
+{
+	public function __construct(
+		protected MessageBusInterface     $messenger,
+		protected EntityManager           $entityManager,
+	) {
 	}
 	
-	/**
-	 * @param int $id
-	 * @return BuildingQueue
-	 */
-	public function get($id)
+	public function get(int $id): BuildingQueue
 	{
 		return $this->entityManager->getRepository(BuildingQueue::class)->get($id);
 	}
 	
-	public function getBaseQueues($baseId)
+	public function getBaseQueues(int $baseId): array
 	{
 		return $this->entityManager->getRepository(BuildingQueue::class)->getBaseQueues($baseId);
 	}
 	
-	/**
-	 * @return array
-	 */
-	public function scheduleActions()
+	public function scheduleActions(): void
 	{
 		$buildingQueues = $this->entityManager->getRepository(BuildingQueue::class)->getAll();
-		
+
+		/** @var BuildingQueue $buildingQueue */
 		foreach ($buildingQueues as $buildingQueue) {
-			$this->realtimeActionScheduler->schedule(
-				'athena.orbital_base_manager',
-				'uBuildingQueue',
-				$buildingQueue,
-				$buildingQueue->dEnd,
-				[
-					'class' => Place::class,
-					'id' => $buildingQueue->rOrbitalBase
-				]
-			);
+			$this->messenger->dispatch(new BuildingQueueMessage($buildingQueue->id), [DateTimeConverter::to_delay_stamp($buildingQueue->getDEnd())]);
 		}
 	}
 
-	/**
-	 * @param BuildingQueue $buildingQueue
-	 */
-	public function add(BuildingQueue $buildingQueue) {
+	public function add(BuildingQueue $buildingQueue): void
+	{
 		$this->entityManager->persist($buildingQueue);
 		$this->entityManager->flush($buildingQueue);
-		$this->realtimeActionScheduler->schedule(
-			'athena.orbital_base_manager',
-			'uBuildingQueue',
-			$buildingQueue,
-			$buildingQueue->dEnd,
-			[
-				'class' => Place::class,
-				'id' => $buildingQueue->rOrbitalBase
-			]
-		);
+		$this->messenger->dispatch(new BuildingQueueMessage($buildingQueue->id), [DateTimeConverter::to_delay_stamp($buildingQueue->getDEnd())]);
 	}
 }

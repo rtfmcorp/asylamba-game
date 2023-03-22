@@ -12,23 +12,26 @@
 
 use Asylamba\Classes\Library\Format;
 
-$token = $this->getContainer()->get('session_wrapper')->get('token');
+$container = $this->getContainer();
+$appRoot = $container->getParameter('app_root');
+$mediaPath = $container->getParameter('media');
+$token = $this->getContainer()->get(\Asylamba\Classes\Library\Session\SessionWrapper::class)->get('token');
 
 echo '<div class="component size3 dock1 admin bugtracker">';
 	echo '<div class="head skin-1">';
-		echo '<img src="' . MEDIA . 'alert/bug.png" alt="" />';
+		echo '<img src="' . $mediaPath . 'alert/bug.png" alt="" />';
 		echo '<h2>Rapports d\'erreur</h2>';
 		echo '<em>' . $listName . '</em>';
 	echo '</div>';
 	echo '<div class="fix-body">';
 		echo '<div class="body">';
 			echo '<div class="tool">';
-				echo '<span><a href="' . APP_ROOT . 'admin/view-bugtracker">voir tous les rapports</a></span>';
-				echo '<span><a href="' . APP_ROOT . 'admin/view-bugtracker/type-' . BugTracker::TYPE_BUG . '">Bug</a></span>';
-				echo '<span><a href="' . APP_ROOT . 'admin/view-bugtracker/type-' . BugTracker::TYPE_ORTHOGRAPH . '">Orth</a></span>';
-				echo '<span><a href="' . APP_ROOT . 'admin/view-bugtracker/type-' . BugTracker::TYPE_DISPLAY . '">Aff</a></span>';
-				echo '<span><a href="' . APP_ROOT . 'admin/view-bugtracker/type-' . BugTracker::TYPE_CALIBRATION . '">Cal</a></span>';
-				echo '<span><a href="' . APP_ROOT . 'admin/view-bugtracker/type-' . BugTracker::TYPE_IMPROVEMENT . '">Amé</a></span>';
+				echo '<span><a href="' . $appRoot . 'admin/view-bugtracker">voir tous les rapports</a></span>';
+				echo '<span><a href="' . $appRoot . 'admin/view-bugtracker/type-' . BugTracker::TYPE_BUG . '">Bug</a></span>';
+				echo '<span><a href="' . $appRoot . 'admin/view-bugtracker/type-' . BugTracker::TYPE_ORTHOGRAPH . '">Orth</a></span>';
+				echo '<span><a href="' . $appRoot . 'admin/view-bugtracker/type-' . BugTracker::TYPE_DISPLAY . '">Aff</a></span>';
+				echo '<span><a href="' . $appRoot . 'admin/view-bugtracker/type-' . BugTracker::TYPE_CALIBRATION . '">Cal</a></span>';
+				echo '<span><a href="' . $appRoot . 'admin/view-bugtracker/type-' . BugTracker::TYPE_IMPROVEMENT . '">Amé</a></span>';
 			echo '</div>';
 
 			echo '<h4>Rapports en attente de traitement</h4>';
@@ -42,7 +45,7 @@ echo '<div class="component size3 dock1 admin bugtracker">';
 				foreach ($bugtracker as $bug) {
 					if ($bug->statement == BugTracker::ST_WAITING) {
 						echo '<tr>';
-							echo '<td><a href="' . APP_ROOT . 'embassy/player-' . $bug->rPlayer . '" class="button hb lt" title="voir le joueur qui a rapporter ce bug">' . $bug->rPlayer . '</td>';
+							echo '<td><a href="' . $appRoot . 'embassy/player-' . $bug->rPlayer . '" class="button hb lt" title="voir le joueur qui a rapporter ce bug">' . $bug->rPlayer . '</td>';
 							echo '<td>' . $bug->dSending . '</td>';
 							echo '<td>' . $bug->url . '<br /><br />' . $bug->message . '</td>';
 							echo '<td>';
@@ -65,7 +68,7 @@ echo '<div class="component size3 dock1 admin bugtracker">';
 				foreach ($bugtracker as $bug) {
 					if ($bug->statement == BugTracker::ST_ARCHIVED) {
 						echo '<tr>';
-							echo '<td><a href="' . APP_ROOT . 'embassy/player-' . $bug->rPlayer . '" class="button hb lt" title="voir le joueur qui a rapporter ce bug">' . $bug->rPlayer . '</td>';
+							echo '<td><a href="' . $appRoot . 'embassy/player-' . $bug->rPlayer . '" class="button hb lt" title="voir le joueur qui a rapporter ce bug">' . $bug->rPlayer . '</td>';
 							echo '<td>' . $bug->dSending . '</td>';
 							echo '<td>' . $bug->url . '<br /><br />' . $bug->message . '</td>';
 							echo '<td>';

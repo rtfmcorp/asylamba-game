@@ -1,16 +1,17 @@
 <?php
 
 $request = $this->getContainer()->get('app.request');
+$registrationPath = $this->getContainer()->getParameter('inscription');
 
 // choix des étapes
 if ($request->query->get('step') == 1 || !$request->query->has('step')) {
 	if (!$request->query->has('bindkey')) {
-		include INSCRIPTION . 'step/ally.php';
+		include $registrationPath . 'step/ally.php';
 	}
 } elseif ($request->query->get('step') == 2) {
-	include INSCRIPTION . 'step/profil.php';
+	include $registrationPath . 'step/profil.php';
 } elseif ($request->query->get('step') == 3) {
-	include INSCRIPTION . 'step/place.php';
+	include $registrationPath . 'step/place.php';
 } elseif ($request->query->get('step') == 4) {
-	include INSCRIPTION . 'step/save.php';
+	include $registrationPath . 'step/save.php';
 }

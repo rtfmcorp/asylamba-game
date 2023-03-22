@@ -1,9 +1,11 @@
 <?php
 
-$playerManager = $this->getContainer()->get('zeus.player_manager');
-$researchManager = $this->getContainer()->get('promethee.research_manager');
+$container = $this->getContainer();
+$componentPath = $container->getParameter('component');
+$playerManager = $this->getContainer()->get(\Asylamba\Modules\Zeus\Manager\PlayerManager::class);
+$researchManager = $this->getContainer()->get(\Asylamba\Modules\Promethee\Manager\ResearchManager::class);
 $request = $this->getContainer()->get('app.request');
-$session = $this->getContainer()->get('session_wrapper');
+$session = $this->getContainer()->get(\Asylamba\Classes\Library\Session\SessionWrapper::class);
 
 # background paralax
 echo '<div id="background-paralax" class="technology"></div>';
@@ -15,7 +17,7 @@ include 'defaultElement/movers.php';
 
 # contenu spécifique
 echo '<div id="content">';
-	include COMPONENT . 'publicity.php';
+	include $componentPath . 'publicity.php';
 	$S_RSM_TECH = $researchManager->getCurrentSession();
 	$researchManager->newSession();
 	$researchManager->load(array('rPlayer' => $session->get('playerId')));
@@ -23,9 +25,9 @@ echo '<div id="content">';
 	if (!$request->query->has('view') OR $request->query->get('view') == 'university') {
 		$player_university = $playerManager->get($session->get('playerId'));
 		$research_university = $researchManager->get(0);
-		include COMPONENT . 'tech/university.php';
+		include $componentPath . 'tech/university.php';
 	} elseif ($request->query->get('view') == 'technos') {
-		include COMPONENT . 'tech/infoTech.php';
+		include $componentPath . 'tech/infoTech.php';
 	} else {
 		$this->getContainer()->redirect('404');
 	}

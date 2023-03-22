@@ -5,8 +5,11 @@ use Asylamba\Modules\Demeter\Resource\ColorResource;
 use Asylamba\Classes\Library\Format;
 use Asylamba\Modules\Demeter\Model\Law\Law;
 
-$playerManager = $this->getContainer()->get('zeus.player_manager');
-$session = $this->getContainer()->get('session_wrapper');
+$container = $this->getContainer();
+$appRoot = $container->getParameter('app_root');
+$mediaPath = $container->getParameter('media');
+$playerManager = $this->getContainer()->get(\Asylamba\Modules\Zeus\Manager\PlayerManager::class);
+$session = $this->getContainer()->get(\Asylamba\Classes\Library\Session\SessionWrapper::class);
 $sessionToken = $session->get('token');
 
 echo '<div class="component profil player">';
@@ -15,7 +18,7 @@ echo '<div class="component profil player">';
 		echo '<div class="body">';
 			echo '<div class="build-item base-type">';
 				echo '<div class="name">';
-					echo '<img src="' . MEDIA . 'faction/law/common.png" alt="">';
+					echo '<img src="' . $mediaPath . 'faction/law/common.png" alt="">';
 					echo '<strong>' . LawResources::getInfo($governmentLaw_id, 'name') . '</strong>';
 				echo '</div>';
 
@@ -28,7 +31,7 @@ echo '<div class="component profil player">';
 						echo '<button class="button">';
 							echo '<span class="text">';
 								echo 'Soumettre au vote<br />';
-								echo 'Coûte ' . Format::number(LawResources::getInfo($governmentLaw_id, 'price') * $nbPlayer) . ' <img class="icon-color" src="' . MEDIA . 'resources/credit.png" alt="crédits"> par relève à la faction';
+								echo 'Coûte ' . Format::number(LawResources::getInfo($governmentLaw_id, 'price') * $nbPlayer) . ' <img class="icon-color" src="' . $mediaPath . 'resources/credit.png" alt="crédits"> par relève à la faction';
 							echo '</span>';
 						echo '</button>';
 					echo '</form>';
@@ -124,7 +127,7 @@ echo '<div class="component profil player">';
 								} else {
 									echo 'Soumettre au vote<br />';
 								}
-								echo 'Coûte ' . Format::number(LawResources::getInfo($governmentLaw_id, 'price')) . ' <img class="icon-color" src="' . MEDIA . 'resources/credit.png" alt="crédits"> à la faction';
+								echo 'Coûte ' . Format::number(LawResources::getInfo($governmentLaw_id, 'price')) . ' <img class="icon-color" src="' . $mediaPath . 'resources/credit.png" alt="crédits"> à la faction';
 							echo '</span>';
 						echo '</button>';
 					echo '</form>';
